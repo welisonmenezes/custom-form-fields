@@ -1,5 +1,7 @@
-export default class Selectors{
+export default class Selector {
 
+	constructor() {}
+	
 	getElements(query, parent) {
 		if(query){
 			const parent = (parent) ? parent : document;
