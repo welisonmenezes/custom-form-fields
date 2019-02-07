@@ -6,5 +6,90 @@
 </head>
 <body>
 	<h1>Custom Form Fields</h1>
+	<form>
+		<div class="f-row">
+			<select>
+				<option value="">Select</option>
+				<option value="Test 1">Test 1</option>
+				<option value="Test 2">Test 2</option>
+				<option value="Test 3">Test 3</option>
+				<option value="Test 4">Test 4</option>
+				<option value="Test 5">Test 5</option>
+			</select>
+		</div>
+
+		<div class="f-row">
+			<select multiple>
+				<option value="">Select</option>
+				<option value="Test 1">Test 1</option>
+				<option value="Test 2">Test 2</option>
+				<option value="Test 3">Test 3</option>
+				<option value="Test 4">Test 4</option>
+				<option value="Test 5">Test 5</option>
+			</select>
+		</div>
+
+		<div class="f-row">
+			<select>
+				<option value="">Select</option>
+				<optgroup label="Group One">
+					<option value="Test 1">Test 1</option>
+					<option value="Test 2">Test 2</option>
+					<option value="Test 3">Test 3</option>
+				</optgroup>
+				<optgroup label="Group Two">
+					<option value="Test 4">Test 4</option>
+					<option value="Test 5">Test 5</option>
+				</optgroup>
+			</select>
+		</div>
+
+		<div class="f-row">
+			<select multiple>
+				<option value="">Select</option>
+				<optgroup label="Group One">
+					<option value="Test 1">Test 1</option>
+					<option value="Test 2">Test 2</option>
+					<option value="Test 3">Test 3</option>
+				</optgroup>
+				<optgroup label="Group Two">
+					<option value="Test 4">Test 4</option>
+					<option value="Test 5">Test 5</option>
+				</optgroup>
+			</select>
+		</div>
+
+		<div class="f-row">
+			<label>
+				<input type="radio" name="r-1" value="radio 1"> One
+			</label>
+			<label>
+				<input type="radio" name="r-1" value="radio 2"> Two
+			</label>
+			<label>
+				<input type="radio" name="r-1" value="radio 3"> Three
+			</label>
+		</div>
+
+		<div class="f-row">
+			<label>
+				<input type="checkbox" name="c-1" value="checkbox 1"> One
+			</label>
+			<label>
+				<input type="checkbox" name="c-1" value="checkbox 2"> Two
+			</label>
+			<label>
+				<input type="checkbox" name="c-1" value="checkbox 3"> Three
+			</label>
+		</div>
+
+		<div class="f-row">
+			<input type="file">
+		</div>
+
+		<div class="f-row">
+			<button type="submit">Send</button>
+		</div>
+	</form>
 </body>
 </html>

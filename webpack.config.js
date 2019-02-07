@@ -62,7 +62,7 @@ plugins.push(new HtmlWebpackPlugin({
 
 module.exports = {
 	mode: mode,
-    watch: false,
+    watch: true,
 	entry: {
         bundle: ['./app/main.js']
 	},
