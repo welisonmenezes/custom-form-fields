@@ -1,56 +1,57 @@
+import Check from './Check.js';
 export default class Creator {
 
-	constructor() {}
+	constructor() {
+		this.check = new Check();
+	}
 
-	createElements(elements) {
-		if( Array.isArray(elements) ) {
+	createElements(elements, parentTree) {
+		if( elements && Array.isArray(elements) ) {
 			const tempEls = [];
-
+			let parent = document.createElement('DIV');
+			if(this.check.isHTMLElement(parentTree)) {
+				parent = parentTree;
+			} else if (parentTree && parentTree.name) {
+				parent = this.createASingleElement(parentTree);
+			}
 			elements.forEach((element) => {
-
-				if( element.name ) {
-					const tempEl = document.createElement(element.name);
-
-					if(element.class && Array.isArray(element.class)) {
-						element.class.forEach((cls) => {
-							tempEl.classList.add(cls);
-						});
-					}
-
-					if(element.attributes && Array.isArray(element.attributes)) {
-						element.attributes.forEach((attr) => {
-							const tempAtt = document.createAttribute(attr.name);
-							tempAtt.value = attr.value;
-							tempEl.setAttributeNode(tempAtt);
-						});
-					}
-
-					if(element.text) {
-						const tempText = document.createTextNode(element.text);
-						tempEl.appendChild(tempText);
-					}
-
-					if(element.children) {
-						const tempChild = this.createElements(element.children);
-						tempEl.appendChild(tempChild);
-					}
-
+				if( element && element.name ) {
+					const tempEl = this.createASingleElement(element);
 					tempEls.push(tempEl);
 				}
-
 			});
-
+			let lastEl, i;
 			const total = tempEls.length;
-			let i;
-			let lastEl;
-			for(i = (total - 1); i >= 0; i--) {
-				if(i > 0) {
-					tempEls[i - 1].appendChild(tempEls[i]);
-					lastEl = tempEls[i - 1];
-				}
+			for(i = 0; i < total; i++) {
+				parent.appendChild(tempEls[i]);
 			}
-			return lastEl;
+			return parent;
 		}
 	}
 
+	createASingleElement(element) {
+		const tempEl = document.createElement(element.name);
+		if(element.class && Array.isArray(element.class)) {
+			element.class.forEach((cls) => {
+				tempEl.classList.add(cls);
+			});
+		}
+		if(element.attributes && Array.isArray(element.attributes)) {
+			element.attributes.forEach((attr) => {
+				const tempAtt = document.createAttribute(attr.name);
+				tempAtt.value = attr.value;
+				tempEl.setAttributeNode(tempAtt);
+			});
+		}
+		if(element.text) {
+			const tempText = document.createTextNode(element.text);
+			tempEl.appendChild(tempText);
+		}
+		if(element.children && element.children.elements) {
+			const parentTree = (element.children.parentTree) ? element.children.parentTree : tempEl;
+			const tempChild = this.createElements(element.children.elements, parentTree);
+			if(element.children.parentTree) tempEl.appendChild(tempChild);
+		}
+		return tempEl;
+	}
 }
