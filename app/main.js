@@ -29,7 +29,20 @@ const elements = [
 			{name: 'data-value', value: 'value-test'},
 			{name: 'data-target', value: 'target-test'}
 		],
-		text: 'P text'
+		text: 'P text',
+		children: [
+			{
+				name: 'LABEL'
+			},
+			{
+				name: 'INPUT',
+				class: ['form-control', 'input-cls'],
+				attributes: [
+					{name: 'value', value: 'email@email'},
+					{name: 'type', value: 'email'}
+				]
+			}
+		] 
 	},
 	{
 		name: 'SPAN',

@@ -30,6 +30,11 @@ export default class Creator {
 						tempEl.appendChild(tempText);
 					}
 
+					if(element.children) {
+						const tempChild = this.createElements(element.children);
+						tempEl.appendChild(tempChild);
+					}
+
 					tempEls.push(tempEl);
 				}
 
