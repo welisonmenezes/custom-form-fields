@@ -9,65 +9,64 @@ const creator = new Creator();
 
 
 const selects = $.getElements('select');
-console.log('Selects', selects);
+//console.log('Selects', selects);
 
-/*
-const elements = [
-	{
+selects.forEach((select)  => {
+
+	let opts, divOpts = [], createdDiv;
+
+	const parentDiv = {
 		name: 'DIV',
-		class: ['class-div'],
-		attributes: [
-			{name: 'data-value', value: 'value-test'},
-			{name: 'id', value: 'div-id'}
-		],
-		text: 'Div text'
-	},
-	{
-		name: 'P',
-		class: ['class-1', 'class-2'],
-		attributes: [
-			{name: 'data-value', value: 'value-test'},
-			{name: 'data-target', value: 'target-test'}
-		],
-		text: 'P text',
-		children: {
-			isSiblings: true,
-			elements: [
-				{
-					name: 'LABEL'
-				},
-				{
-					name: 'INPUT',
-					class: ['form-control', 'input-cls'],
-					attributes: [
-						{name: 'value', value: 'email@email'},
-						{name: 'type', value: 'email'}
+		class: ['container-class']
+	};
+
+	const groups = $.getElements('optgroup', select);
+
+	if(groups) {
+
+		const divGroups = [];
+
+		groups.forEach((group) => {
+
+			const groupObj = {
+				name: 'DIV',
+				class: ['group-class'],
+				children: {
+					elements: [
+						{
+							name: 'DIV',
+							class: ['item-class', 'title-class'],
+							text: group.getAttribute('label')
+						}
 					]
 				}
-			],
-			parentTree: {
-				name: 'SPAN',
-				class: ['class-span'],
-				attributes: [{name: 'id', value: 'span-id-parent'}]
+			};
+
+			opts = $.getElements('option', group);
+
+			if(opts) {
+				opts.forEach((opt) => {
+					groupObj.children.elements.push({
+						name: 'DIV',
+						class: ['item-class', 'option-class'],
+						text: opt.innerHTML,
+						attributes: [
+							{name: 'data-value', value: opt.value}
+						]
+					});
+				});
 			}
-		} 
-	},
-	{
-		name: 'SPAN',
-		text: 'SPAN text'
+
+			divGroups.push(groupObj);
+		});
+
+		createdDiv = creator.createElements(divGroups, parentDiv);
 	}
-];
+	
+	console.log('createdDiv', createdDiv);
+});
 
-const parent = {
-	name: 'DIV',
-	class: ['class-div'],
-	attributes: [{name: 'id', value: 'div-id-parent'}]
-};
-
-const createdEl = creator.createElements(elements, false, parent);
-console.log('createdEl', createdEl);
-*/
-
+/*
 const elements = [
 	{
 		name: 'DIV',
@@ -137,3 +136,4 @@ const parent = {
 
 const createdEl = creator.createElements(elements, parent);
 console.log('createdEl', createdEl);
+*/
