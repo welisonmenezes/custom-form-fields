@@ -11,8 +11,9 @@ export default class SelectBuilder {
 	build() {
 		const selects = this.$.getElements('select');
 		selects.forEach((select)  => {
-			this.createWrapSelect(select);
-			this.createUISelect(select);
+			const wrapSelect = this.createWrapSelect(select);
+			const createdUISelect = this.createUISelect(select);
+			this.insertCreatedUISelect(createdUISelect, wrapSelect);
 		});
 	}
 
@@ -28,6 +29,7 @@ export default class SelectBuilder {
 		if(wrapSelect) {
 			wrapSelect.insertAdjacentElement('afterbegin', select);
 		}
+		return wrapSelect;
 	}
 
 	createUISelect(select) {
@@ -36,30 +38,29 @@ export default class SelectBuilder {
 			name: 'DIV',
 			class: ['container-class']
 		};
-
 		const optsArr = this.createSelectObj(select);
-
 		const createdEl = this.creator.createElements(optsArr, divParent);
-		console.log(createdEl);
+		return createdEl;
+	}
+
+	insertCreatedUISelect(createdUISelect, wrapSelect) {
+		if(createdUISelect && wrapSelect) {
+			wrapSelect.appendChild(createdUISelect);
+		}
 	}
 
 	createSelectObj(containerOptions) {
 		const optsArr = [];
 		const children = containerOptions.children;
-
 		if(children.length) {
 			const total = children.length;
 			let i, child;
 			for(i = 0; i < total; i++){
 				child = children[i];
 				if(child.tagName === 'OPTION') {
-
 					optsArr.push(this.createOptionsObj(child));
-
 				} else if (child.tagName === 'OPTGROUP') {
-
 					optsArr.push(this.createGroupsObj(child));
-
 				}
 			}
 		}
