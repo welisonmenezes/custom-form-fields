@@ -11,6 +11,7 @@ export default class SelectBuilder {
 	build() {
 		const selects = this.$.getElements('select');
 		selects.forEach((select)  => {
+			this.creator.createAttribute(select, 'tabindex', -1);
 			const wrapSelect = this.createWrapSelect(select);
 			const createdUISelect = this.createUISelect(select);
 			this.insertCreatedUISelect(createdUISelect, wrapSelect);
@@ -30,6 +31,7 @@ export default class SelectBuilder {
 		if(wrapSelect) {
 			wrapSelect.insertAdjacentElement('afterbegin', select);
 		}
+		this.creator.createAttribute(wrapSelect, 'tabindex', 0);
 		return wrapSelect;
 	}
 

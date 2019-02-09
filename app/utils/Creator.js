@@ -38,9 +38,7 @@ export default class Creator {
 		}
 		if(element.attributes && Array.isArray(element.attributes)) {
 			element.attributes.forEach((attr) => {
-				const tempAtt = document.createAttribute(attr.name);
-				tempAtt.value = attr.value;
-				tempEl.setAttributeNode(tempAtt);
+				this.createAttribute(tempEl, attr.name, attr.value);
 			});
 		}
 		if(element.text) {
@@ -53,5 +51,11 @@ export default class Creator {
 			if(element.children.parentTree) tempEl.appendChild(tempChild);
 		}
 		return tempEl;
+	}
+
+	createAttribute(element, attrName, attrValue) {
+		const tempAtt = document.createAttribute(attrName);
+		tempAtt.value = attrValue
+		element.setAttributeNode(tempAtt);
 	}
 }
