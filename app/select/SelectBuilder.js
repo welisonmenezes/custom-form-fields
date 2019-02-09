@@ -14,6 +14,7 @@ export default class SelectBuilder {
 			const wrapSelect = this.createWrapSelect(select);
 			const createdUISelect = this.createUISelect(select);
 			this.insertCreatedUISelect(createdUISelect, wrapSelect);
+			this.setSelectedOption(select);
 		});
 	}
 
@@ -46,6 +47,18 @@ export default class SelectBuilder {
 	insertCreatedUISelect(createdUISelect, wrapSelect) {
 		if(createdUISelect && wrapSelect) {
 			wrapSelect.appendChild(createdUISelect);
+		}
+	}
+
+	setSelectedOption(select) {
+		const options = this.$.getElements('option', select);
+		const divOptions = this.$.getElements('.option-class', select.parentElement);
+		if(options.length) {
+			options.forEach((opt, i) => {
+				if( (opt.value === select.value) || (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false') ) {
+					divOptions[i].classList.add('selected');
+				}
+			});
 		}
 	}
 
