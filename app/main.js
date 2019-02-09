@@ -4,7 +4,7 @@ import './polyfills/Array.js';
 import SelectBuilder from './select/SelectBuilder.js';
 
 const selects = new SelectBuilder();
-selects.createSelects();
+selects.build();
 
 
 /*
