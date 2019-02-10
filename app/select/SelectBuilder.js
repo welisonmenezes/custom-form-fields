@@ -15,15 +15,18 @@ export default class SelectBuilder {
 			const wrapSelect = this.createWrapSelect(select);
 			const createdUISelect = this.createUISelect(select);
 			this.insertCreatedUISelect(createdUISelect, wrapSelect);
+
 			this.setSelectedOption(select);
+			this.displaySelectedOptions(select);
 		});
 	}
 
 	createWrapSelect(select) {
+		const selectType = (select.hasAttribute('multiple')) ? 'multiple' : 'normal';
 		const wrapArr = [
 			{
 				name: 'DIV',
-				class: ['wrap-select']
+				class: ['wrap-select', selectType]
 			}
 		];
 		const parentSelect = this.creator.createElements(wrapArr, select.parentNode);
@@ -64,6 +67,35 @@ export default class SelectBuilder {
 		}
 	}
 
+	getSelectedOptions(select) {
+		const divOptions = this.$.getElements('.option-class.selected', select.parentElement);
+		if(divOptions) {
+			return divOptions;
+		}
+		return null;
+	}
+
+	displaySelectedOptions(select) {
+		const selectedOptions = this.getSelectedOptions(select);
+		//console.log(selectedOptions);
+		const displayContainer = {
+			name: 'DIV',
+			class: ['display-class'],
+			children: {
+				elements: []
+			}
+		};
+		if(selectedOptions.length) {
+			selectedOptions.forEach((opt) => {
+				displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
+			});
+		}
+		//console.log(displayContainer)
+		//console.log(select.parentNode)
+		const x = this.creator.createElements([displayContainer], select.parentNode);
+		//console.log(x)
+	}
+
 	createSelectObj(containerOptions) {
 		const optsArr = [];
 		const children = containerOptions.children;
@@ -80,6 +112,17 @@ export default class SelectBuilder {
 			}
 		}
 		return optsArr;
+	}
+
+	createSelectedOptionsObj(selectedOption) {
+		return {
+			name: 'DIV',
+			class: ['displayed-class'],
+			text: selectedOption.innerHTML,
+			attributes: [
+				{name: 'data-value', value: selectedOption.getAttribute('data-value')}
+			]
+		};
 	}
 
 	createOptionsObj(optionElement) {
