@@ -17,7 +17,9 @@ export default class SelectBuilder {
 			this.insertCreatedUISelect(createdUISelect, wrapSelect);
 
 			this.setSelectedOption(select);
-			this.displaySelectedOptions(select);
+			this.createSelectedOptsDisplayS(select);
+
+			this.addEventListenerToSelect(wrapSelect, 'click', this.onSelectClick);
 		});
 	}
 
@@ -75,9 +77,8 @@ export default class SelectBuilder {
 		return null;
 	}
 
-	displaySelectedOptions(select) {
+	createSelectedOptsDisplayS(select) {
 		const selectedOptions = this.getSelectedOptions(select);
-		//console.log(selectedOptions);
 		const displayContainer = {
 			name: 'DIV',
 			class: ['display-class'],
@@ -90,10 +91,8 @@ export default class SelectBuilder {
 				displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
 			});
 		}
-		//console.log(displayContainer)
-		//console.log(select.parentNode)
-		const x = this.creator.createElements([displayContainer], select.parentNode);
-		//console.log(x)
+		const selectedDisplay = this.creator.createElements([displayContainer], select.parentNode);
+		return selectedDisplay;
 	}
 
 	createSelectObj(containerOptions) {
@@ -159,5 +158,23 @@ export default class SelectBuilder {
 			}
 		}
 		return group;
+	}
+
+	addEventListenerToSelect(element, eventName, callback) {
+		if(element) {
+			element.addEventListener(eventName, callback.bind(element, ['xxx']));
+		}
+	}
+
+	onSelectClick(event) {
+		this.classList.add('opened');
+		const items = this.querySelectorAll('.item-class');
+		let heightAll = 0;
+		if(items.length) {
+			items.forEach((item) => {
+				heightAll = heightAll + item.clientHeight;
+			});
+		}
+		this.querySelector('.container-class').style.height = heightAll + 'px';
 	}
 }
