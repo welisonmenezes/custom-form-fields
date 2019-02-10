@@ -6,6 +6,9 @@ export default class SelectBuilder {
 	constructor() {
 		this.$ = new Selector();
 		this.creator = new Creator();
+
+
+		this.addEventListenerToSelect(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
 	}
 
 	build() {
@@ -19,7 +22,7 @@ export default class SelectBuilder {
 			this.setSelectedOption(select);
 			this.createSelectedOptsDisplayS(select);
 
-			this.addEventListenerToSelect(wrapSelect, 'click', this.onSelectClick);
+			this.addEventListenerToSelect(wrapSelect, 'click', this.onSelectClick, [this]);
 		});
 	}
 
@@ -160,13 +163,30 @@ export default class SelectBuilder {
 		return group;
 	}
 
-	addEventListenerToSelect(element, eventName, callback) {
+	addEventListenerToSelect(element, eventName, callback, arrayArgs) {
 		if(element) {
-			element.addEventListener(eventName, callback.bind(element, ['xxx']));
+			element.addEventListener(eventName, callback.bind(element, arrayArgs));
 		}
 	}
 
-	onSelectClick(event) {
+	closeWrapSelects() {
+		const wrapSelects =  document.querySelectorAll('.wrap-select');
+		if(wrapSelects.length) {
+			wrapSelects.forEach((wrapSelect) => {
+				if(wrapSelect.classList.contains('opened')) {
+					wrapSelect.classList.remove('opened');
+					wrapSelect.querySelector('.container-class').style.height = 0;
+				}
+			});
+		}
+	}
+
+	onSelectClick(args) {
+
+		arguments[(arguments.length - 1)].stopPropagation();
+
+		args[0].closeWrapSelects();
+
 		this.classList.add('opened');
 		const items = this.querySelectorAll('.item-class');
 		let heightAll = 0;
@@ -176,5 +196,9 @@ export default class SelectBuilder {
 			});
 		}
 		this.querySelector('.container-class').style.height = heightAll + 'px';
+	}
+
+	onSelectFocusOut(args) {
+		args[0].closeWrapSelects();
 	}
 }
