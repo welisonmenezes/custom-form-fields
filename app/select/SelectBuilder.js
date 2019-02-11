@@ -22,7 +22,15 @@ export default class SelectBuilder {
 			this.setSelectedOption(select);
 			this.createSelectedOptsDisplayS(select);
 
-			this.addEventListenerToSelect(wrapSelect, 'click', this.onSelectClick, [this]);
+			this.addEventListenerToSelect(wrapSelect, 'click', this.onOpenSelectClick, [this]);
+
+			const options = wrapSelect.querySelectorAll('.option-class');
+			if(options.length) {
+				options.forEach((opt) => {
+					this.addEventListenerToSelect(opt, 'click', this.onSelectItem, [this]);
+				});
+			}
+
 		});
 	}
 
@@ -181,24 +189,31 @@ export default class SelectBuilder {
 		}
 	}
 
-	onSelectClick(args) {
-
-		arguments[(arguments.length - 1)].stopPropagation();
-
-		args[0].closeWrapSelects();
-
-		this.classList.add('opened');
-		const items = this.querySelectorAll('.item-class');
+	openWrapSelect(wrapSelect) {
+		wrapSelect.classList.add('opened');
+		const items = wrapSelect.querySelectorAll('.item-class');
 		let heightAll = 0;
 		if(items.length) {
 			items.forEach((item) => {
 				heightAll = heightAll + item.clientHeight;
 			});
 		}
-		this.querySelector('.container-class').style.height = heightAll + 'px';
+		wrapSelect.querySelector('.container-class').style.height = heightAll + 'px';
+	}
+
+	onOpenSelectClick(args) {
+
+		arguments[(arguments.length - 1)].stopPropagation();
+
+		args[0].closeWrapSelects();
+		args[0].openWrapSelect(this);
 	}
 
 	onSelectFocusOut(args) {
 		args[0].closeWrapSelects();
+	}
+
+	onSelectItem(args) {
+		console.log(this)
 	}
 }
