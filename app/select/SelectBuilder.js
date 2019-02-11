@@ -11,10 +11,18 @@ export default class SelectBuilder {
 		this.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
 	
 		this.config = {
+			element: 'select',
 			selectors: {
 				selected: 'selected',
 				opened: 'opened',
-				multiple: 'multiple'
+				multiple: 'multiple',
+				uiOption: 'option-class',
+				uiItemSelect: 'item-class',
+				uiGroupTitle: 'title-class',
+				wrapSelect: 'wrap-select',
+				containerOptions: 'container-class',
+				containerSelected: 'display-class',
+				selectedDisplayed: 'displayed-class'
 			}
 		};
 
@@ -24,7 +32,7 @@ export default class SelectBuilder {
 	}
 
 	build() {
-		const selects = this.$.getElements('select');
+		const selects = this.$.getElements(this.config.element);
 		selects.forEach((select)  => {
 			this.creator.createAttribute(select, 'tabindex', -1);
 			const wrapSelect = this.createWrapSelect(select);
@@ -38,7 +46,7 @@ export default class SelectBuilder {
 
 	resolveEventsToUiSelect(wrapSelect) {
 		this.addEventListenerToElement(wrapSelect, 'click', this.onToggleSelectClick, [this]);
-		const options = wrapSelect.querySelectorAll('.option-class');
+		const options = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
 		if(options.length) {
 			options.forEach((opt) => {
 				this.addEventListenerToElement(opt, 'click', this.onSelectItem, [this, wrapSelect]);
@@ -47,15 +55,15 @@ export default class SelectBuilder {
 	}
 
 	createWrapSelect(select) {
-		const selectType = (select.hasAttribute('multiple')) ? 'multiple' : 'normal';
+		const selectType = (select.hasAttribute('multiple')) ? this.config.selectors.multiple : 'non-' + this.config.selectors.multiple;
 		const wrapArr = [
 			{
 				name: 'DIV',
-				class: ['wrap-select', selectType]
+				class: [this.config.selectors.wrapSelect, selectType]
 			}
 		];
 		const parentSelect = this.creator.createElements(wrapArr, select.parentNode);
-		const wrapSelect = this.$.getElement('div.wrap-select', parentSelect);
+		const wrapSelect = this.$.getElement('.' + this.config.selectors.wrapSelect, parentSelect);
 		if(wrapSelect) {
 			wrapSelect.insertAdjacentElement('afterbegin', select);
 		}
@@ -67,7 +75,7 @@ export default class SelectBuilder {
 		let childObj;
 		const divParent = {
 			name: 'DIV',
-			class: ['container-class']
+			class: [this.config.selectors.containerOptions]
 		};
 		const optsArr = this.createSelectObj(select);
 		const createdEl = this.creator.createElements(optsArr, divParent);
@@ -82,32 +90,32 @@ export default class SelectBuilder {
 
 	setSelectedOption(select) {
 		const options = this.$.getElements('option', select);
-		const divOptions = this.$.getElements('.option-class', select.parentElement);
+		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption, select.parentElement);
 		const isMultiple = (select.hasAttribute('multiple'));
 		if(options.length) {
 			options.forEach((opt, i) => {
 				if( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false') ) {
-					divOptions[i].classList.add('selected');
+					divOptions[i].classList.add(this.config.selectors.selected);
 				} else if(!isMultiple && (opt.value === select.value)) {
-					divOptions[i].classList.add('selected');
+					divOptions[i].classList.add(this.config.selectors.selected);
 				}
 			});
 		}
 		if(isMultiple){
-			const SelectedDivOptions = this.$.getElements('.option-class.selected', select.parentElement);
+			const SelectedDivOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
 			if(!SelectedDivOptions) {
 				this.creator.createAttribute(options[0], 'selected', true);
-				divOptions[0].classList.add('selected');
+				divOptions[0].classList.add(this.config.selectors.selected);
 			} else {
 				options[0].removeAttribute('selected');
-				divOptions[0].classList.remove('selected');
+				divOptions[0].classList.remove(this.config.selectors.selected);
 			}
 		}
 		
 	}
 
 	getSelectedOptions(select) {
-		const divOptions = this.$.getElements('.option-class.selected', select.parentElement);
+		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
 		if(divOptions) {
 			return divOptions;
 		}
@@ -119,7 +127,7 @@ export default class SelectBuilder {
 		const selectedOptions = this.getSelectedOptions(select);
 		const displayContainer = {
 			name: 'DIV',
-			class: ['display-class'],
+			class: [this.config.selectors.containerSelected],
 			children: {
 				elements: []
 			}
@@ -139,7 +147,7 @@ export default class SelectBuilder {
 
 	updateSelectedOptsDisplay(select) {
 		const wrapSelect = select.parentNode;
-		const existedDisplays = wrapSelect.querySelector('.display-class');
+		const existedDisplays = wrapSelect.querySelector('.' + this.config.selectors.containerSelected);
 		existedDisplays.innerHTML = '';
 		const selectedOptions = this.getSelectedOptions(select);
 		const arr = [];
@@ -155,7 +163,7 @@ export default class SelectBuilder {
 
 	resolveEventsToUiOptions(wrapSelect) {
 		if(wrapSelect.classList.contains('multiple')) {
-			const displayedOpts = wrapSelect.querySelectorAll('.displayed-class');
+			const displayedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.selectedDisplayed);
 			if(displayedOpts.length) {
 				displayedOpts.forEach((opt) => {
 					this.addEventListenerToElement(opt, 'click', this.onDeselectItem, [this, wrapSelect]);
@@ -185,7 +193,7 @@ export default class SelectBuilder {
 	createSelectedOptionsObj(selectedOption) {
 		return {
 			name: 'DIV',
-			class: ['displayed-class'],
+			class: [this.config.selectors.selectedDisplayed],
 			text: selectedOption.innerHTML,
 			attributes: [
 				{name: 'data-value', value: selectedOption.getAttribute('data-value')}
@@ -196,7 +204,7 @@ export default class SelectBuilder {
 	createOptionsObj(optionElement) {
 		return {
 			name: 'DIV',
-			class: ['item-class', 'option-class'],
+			class: [this.config.selectors.uiItemSelect, this.config.selectors.uiOption],
 			text: optionElement.innerHTML,
 			attributes: [
 				{name: 'data-value', value: optionElement.value}
@@ -212,7 +220,7 @@ export default class SelectBuilder {
 				elements: [
 					{
 						name: 'DIV',
-						class: ['item-class', 'title-class'],
+						class: [this.config.selectors.uiItemSelect, this.config.selectors.uiGroupTitle],
 						text: groupElement.getAttribute('label')
 					}
 				]
@@ -236,29 +244,29 @@ export default class SelectBuilder {
 	}
 
 	closeWrapSelects() {
-		const wrapSelects =  document.querySelectorAll('.wrap-select.opened');
+		const wrapSelects =  document.querySelectorAll('.' + this.config.selectors.wrapSelect + '.' + this.config.selectors.opened);
 		if(wrapSelects.length) {
 			wrapSelects.forEach((wrapSelect) => {
-				wrapSelect.classList.remove('opened');
-				wrapSelect.querySelector('.container-class').style.height = 0;
+				wrapSelect.classList.remove(this.config.selectors.opened);
+				wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = 0;
 			});
 		}
 	}
 
 	openWrapSelect(wrapSelect) {
-		wrapSelect.classList.add('opened');
-		const items = wrapSelect.querySelectorAll('.item-class');
+		wrapSelect.classList.add(this.config.selectors.opened);
+		const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiItemSelect);
 		let heightAll = 0;
 		if(items.length) {
 			items.forEach((item) => {
 				heightAll = heightAll + item.clientHeight;
 			});
 		}
-		wrapSelect.querySelector('.container-class').style.height = heightAll + 'px';
+		wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = heightAll + 'px';
 	}
 
 	resetNonMultipleSelect(select, wrapSelect) {
-		const divSelectedOpts = wrapSelect.querySelectorAll('.option-class.selected');
+		const divSelectedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected);
 		const opts = select.querySelectorAll('option');
 		if(opts.length) {
 			opts.forEach((opt) => {
@@ -267,7 +275,7 @@ export default class SelectBuilder {
 		}
 		if(divSelectedOpts) {
 			divSelectedOpts.forEach((opt) => {
-				opt.classList.remove('selected');
+				opt.classList.remove(this.config.selectors.selected);
 			});
 		}
 		select.value = '';
@@ -275,7 +283,7 @@ export default class SelectBuilder {
 
 	onToggleSelectClick(args) {
 		arguments[(arguments.length - 1)].stopPropagation();
-		if(this.classList.contains('opened')) {
+		if(this.classList.contains(args[0].config.selectors.opened)) {
 			args[0].closeWrapSelects();
 		} else {
 			args[0].closeWrapSelects();
@@ -299,7 +307,7 @@ export default class SelectBuilder {
 			select.value = val;
 			self.closeWrapSelects();
 		} else {
-			this.classList.add('selected');
+			this.classList.add(self.config.selectors.selected);
 		}
 		if(optByVal) {
 			optByVal.selected = 'selected';
@@ -314,13 +322,13 @@ export default class SelectBuilder {
 		const wrapSelect = args[1];
 		const val = this.getAttribute('data-value');
 		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
-		const UIoptByVal = wrapSelect.querySelector('.option-class[data-value="' + val + '"]');
+		const UIoptByVal = wrapSelect.querySelector('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]');
 		const select = wrapSelect.querySelector('select');
 		if(optByVal) {
 			optByVal.removeAttribute('selected');
 		}
 		if(UIoptByVal) {
-			UIoptByVal.classList.remove('selected');
+			UIoptByVal.classList.remove(self.config.selectors.selected);
 		}
 		self.setSelectedOption(select);
 		self.updateSelectedOptsDisplay(select);
