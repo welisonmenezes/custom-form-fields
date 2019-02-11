@@ -6,8 +6,6 @@ export default class SelectBuilder {
 	constructor() {
 		this.$ = new Selector();
 		this.creator = new Creator();
-
-
 		this.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
 	}
 
@@ -26,7 +24,6 @@ export default class SelectBuilder {
 
 	resolveEventsToUiSelect(wrapSelect) {
 		this.addEventListenerToElement(wrapSelect, 'click', this.onOpenSelectClick, [this]);
-
 		const options = wrapSelect.querySelectorAll('.option-class');
 		if(options.length) {
 			options.forEach((opt) => {
@@ -72,13 +69,27 @@ export default class SelectBuilder {
 	setSelectedOption(select) {
 		const options = this.$.getElements('option', select);
 		const divOptions = this.$.getElements('.option-class', select.parentElement);
+		const isMultiple = (select.hasAttribute('multiple'));
 		if(options.length) {
 			options.forEach((opt, i) => {
-				if( (opt.value === select.value) || (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false') ) {
+				if( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false') ) {
+					divOptions[i].classList.add('selected');
+				} else if(!isMultiple && (opt.value === select.value)) {
 					divOptions[i].classList.add('selected');
 				}
 			});
 		}
+		if(isMultiple){
+			const SelectedDivOptions = this.$.getElements('.option-class.selected', select.parentElement);
+			if(!SelectedDivOptions) {
+				this.creator.createAttribute(options[0], 'selected', true);
+				divOptions[0].classList.add('selected');
+			} else {
+				options[0].removeAttribute('selected');
+				divOptions[0].classList.remove('selected');
+			}
+		}
+		
 	}
 
 	getSelectedOptions(select) {
@@ -99,12 +110,17 @@ export default class SelectBuilder {
 				elements: []
 			}
 		};
-		if(selectedOptions.length) {
+		if(selectedOptions && selectedOptions.length) {
 			selectedOptions.forEach((opt) => {
 				displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
 			});
 		}
-		return this.creator.createElements([displayContainer], wrapSelect);
+
+		
+
+		const displayedOpts =  this.creator.createElements([displayContainer], wrapSelect);
+		this.resolveEventsToUiOptions(wrapSelect);
+		return displayedOpts;
 	}
 
 	updateSelectedOptsDisplay(select) {
@@ -113,12 +129,25 @@ export default class SelectBuilder {
 		existedDisplays.innerHTML = '';
 		const selectedOptions = this.getSelectedOptions(select);
 		const arr = [];
-		if(selectedOptions.length) {
+		if(selectedOptions && selectedOptions.length) {
 			selectedOptions.forEach((opt) => {
 				arr.push(this.createSelectedOptionsObj(opt));
 			});
 		}
-		return this.creator.createElements(arr, existedDisplays);
+		const displayedOpts =  this.creator.createElements(arr, existedDisplays);
+		this.resolveEventsToUiOptions(wrapSelect);
+		return displayedOpts;
+	}
+
+	resolveEventsToUiOptions(wrapSelect) {
+		if(wrapSelect.classList.contains('multiple')) {
+			const displayedOpts = wrapSelect.querySelectorAll('.displayed-class');
+			if(displayedOpts.length) {
+				displayedOpts.forEach((opt) => {
+					this.addEventListenerToElement(opt, 'click', this.onDeselectItem, [this, wrapSelect]);
+				});
+			}
+		}
 	}
 
 	createSelectObj(containerOptions) {
@@ -256,6 +285,24 @@ export default class SelectBuilder {
 		}
 		if(optByVal) {
 			optByVal.selected = 'selected';
+		}
+		self.setSelectedOption(select);
+		self.updateSelectedOptsDisplay(select);
+	}
+
+	onDeselectItem(args) {
+		arguments[(arguments.length - 1)].stopPropagation();
+		const self = args[0];
+		const wrapSelect = args[1];
+		const val = this.getAttribute('data-value');
+		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
+		const UIoptByVal = wrapSelect.querySelector('.option-class[data-value="' + val + '"]');
+		const select = wrapSelect.querySelector('select');
+		if(optByVal) {
+			optByVal.removeAttribute('selected');
+		}
+		if(UIoptByVal) {
+			UIoptByVal.classList.remove('selected');
 		}
 		self.setSelectedOption(select);
 		self.updateSelectedOptsDisplay(select);
