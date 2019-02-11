@@ -3,7 +3,13 @@ import './polyfills/Array.js';
 
 import SelectBuilder from './select/SelectBuilder.js';
 
-const selects = new SelectBuilder();
+
+const options = {
+	selectors: {
+		selected: 'my-selected'
+	}
+}
+const selects = new SelectBuilder(options);
 selects.build();
 
 

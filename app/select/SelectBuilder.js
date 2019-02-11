@@ -1,12 +1,26 @@
 import Selector from '../utils/Selector.js';
 import Creator from '../utils/Creator.js';
+import Utils from '../utils/Utils.js';
 
 export default class SelectBuilder {
 
-	constructor() {
+	constructor(userConfigurations) {
 		this.$ = new Selector();
 		this.creator = new Creator();
+		this.utils = new Utils();
 		this.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
+	
+		this.config = {
+			selectors: {
+				selected: 'selected',
+				opened: 'opened',
+				multiple: 'multiple'
+			}
+		};
+
+		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
+
+		console.log(this.config);
 	}
 
 	build() {
