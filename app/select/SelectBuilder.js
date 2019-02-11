@@ -23,7 +23,7 @@ export default class SelectBuilder {
 	}
 
 	resolveEventsToUiSelect(wrapSelect) {
-		this.addEventListenerToElement(wrapSelect, 'click', this.onOpenSelectClick, [this]);
+		this.addEventListenerToElement(wrapSelect, 'click', this.onToggleSelectClick, [this]);
 		const options = wrapSelect.querySelectorAll('.option-class');
 		if(options.length) {
 			options.forEach((opt) => {
@@ -259,10 +259,14 @@ export default class SelectBuilder {
 		select.value = '';
 	}
 
-	onOpenSelectClick(args) {
+	onToggleSelectClick(args) {
 		arguments[(arguments.length - 1)].stopPropagation();
-		args[0].closeWrapSelects();
-		args[0].openWrapSelect(this);
+		if(this.classList.contains('opened')) {
+			args[0].closeWrapSelects();
+		} else {
+			args[0].closeWrapSelects();
+			args[0].openWrapSelect(this);
+		}
 	}
 
 	onSelectFocusOut(args) {
