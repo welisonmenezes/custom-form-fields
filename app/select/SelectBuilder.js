@@ -27,7 +27,7 @@ export default class SelectBuilder {
 			const options = wrapSelect.querySelectorAll('.option-class');
 			if(options.length) {
 				options.forEach((opt) => {
-					this.addEventListenerToSelect(opt, 'click', this.onSelectItem, [this]);
+					this.addEventListenerToSelect(opt, 'click', this.onSelectItem, [this, wrapSelect]);
 				});
 			}
 
@@ -89,6 +89,7 @@ export default class SelectBuilder {
 	}
 
 	createSelectedOptsDisplayS(select) {
+		const wrapSelect = select.parentNode;
 		const selectedOptions = this.getSelectedOptions(select);
 		const displayContainer = {
 			name: 'DIV',
@@ -102,8 +103,25 @@ export default class SelectBuilder {
 				displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
 			});
 		}
-		const selectedDisplay = this.creator.createElements([displayContainer], select.parentNode);
+		const selectedDisplay = this.creator.createElements([displayContainer], wrapSelect);
 		return selectedDisplay;
+	}
+
+	updateSelectedOptsDisplay(select) {
+		const wrapSelect = select.parentNode;
+		const existedDisplays = wrapSelect.querySelector('.display-class');
+
+		existedDisplays.innerHTML = '';
+
+		const selectedOptions = this.getSelectedOptions(select);
+		const arr = [];
+		if(selectedOptions.length) {
+			selectedOptions.forEach((opt) => {
+				arr.push(this.createSelectedOptionsObj(opt));
+			});
+		}
+		//console.log(arr)
+		return this.creator.createElements(arr, existedDisplays);
 	}
 
 	createSelectObj(containerOptions) {
@@ -214,6 +232,37 @@ export default class SelectBuilder {
 	}
 
 	onSelectItem(args) {
-		console.log(this)
+		const self = args[0];
+		const wrapSelect = args[1];
+		const val = this.getAttribute('data-value');
+		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
+		const select = wrapSelect.querySelector('select');
+		const divSelectedOpts = wrapSelect.querySelectorAll('.option-class.selected');
+		const opts = select.querySelectorAll('option');
+
+		if(!select.hasAttribute('multiple')) {
+			if(opts.length) {
+				opts.forEach((opt) => {
+					opt.removeAttribute('selected');
+				});
+			}
+
+			if(divSelectedOpts) {
+				divSelectedOpts.forEach((opt) => {
+					opt.classList.remove('selected');
+				});
+			}
+
+			select.value = val;
+		} else {
+			this.classList.add('selected');
+		}
+		
+		if(optByVal) {
+			optByVal.selected = 'selected';
+		}
+
+		self.setSelectedOption(select);
+		self.updateSelectedOptsDisplay(select);
 	}
 }
