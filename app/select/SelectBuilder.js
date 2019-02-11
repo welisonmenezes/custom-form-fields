@@ -8,7 +8,7 @@ export default class SelectBuilder {
 		this.creator = new Creator();
 
 
-		this.addEventListenerToSelect(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
+		this.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
 	}
 
 	build() {
@@ -18,20 +18,21 @@ export default class SelectBuilder {
 			const wrapSelect = this.createWrapSelect(select);
 			const createdUISelect = this.createUISelect(select);
 			this.insertCreatedUISelect(createdUISelect, wrapSelect);
-
 			this.setSelectedOption(select);
-			this.createSelectedOptsDisplayS(select);
-
-			this.addEventListenerToSelect(wrapSelect, 'click', this.onOpenSelectClick, [this]);
-
-			const options = wrapSelect.querySelectorAll('.option-class');
-			if(options.length) {
-				options.forEach((opt) => {
-					this.addEventListenerToSelect(opt, 'click', this.onSelectItem, [this, wrapSelect]);
-				});
-			}
-
+			this.createSelectedOptsDisplay(select);
+			this.resolveEventsToUiSelect(wrapSelect);
 		});
+	}
+
+	resolveEventsToUiSelect(wrapSelect) {
+		this.addEventListenerToElement(wrapSelect, 'click', this.onOpenSelectClick, [this]);
+
+		const options = wrapSelect.querySelectorAll('.option-class');
+		if(options.length) {
+			options.forEach((opt) => {
+				this.addEventListenerToElement(opt, 'click', this.onSelectItem, [this, wrapSelect]);
+			});
+		}
 	}
 
 	createWrapSelect(select) {
@@ -88,7 +89,7 @@ export default class SelectBuilder {
 		return null;
 	}
 
-	createSelectedOptsDisplayS(select) {
+	createSelectedOptsDisplay(select) {
 		const wrapSelect = select.parentNode;
 		const selectedOptions = this.getSelectedOptions(select);
 		const displayContainer = {
@@ -103,16 +104,13 @@ export default class SelectBuilder {
 				displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
 			});
 		}
-		const selectedDisplay = this.creator.createElements([displayContainer], wrapSelect);
-		return selectedDisplay;
+		return this.creator.createElements([displayContainer], wrapSelect);
 	}
 
 	updateSelectedOptsDisplay(select) {
 		const wrapSelect = select.parentNode;
 		const existedDisplays = wrapSelect.querySelector('.display-class');
-
 		existedDisplays.innerHTML = '';
-
 		const selectedOptions = this.getSelectedOptions(select);
 		const arr = [];
 		if(selectedOptions.length) {
@@ -120,7 +118,6 @@ export default class SelectBuilder {
 				arr.push(this.createSelectedOptionsObj(opt));
 			});
 		}
-		//console.log(arr)
 		return this.creator.createElements(arr, existedDisplays);
 	}
 
@@ -189,20 +186,18 @@ export default class SelectBuilder {
 		return group;
 	}
 
-	addEventListenerToSelect(element, eventName, callback, arrayArgs) {
+	addEventListenerToElement(element, eventName, callback, arrayArgs) {
 		if(element) {
 			element.addEventListener(eventName, callback.bind(element, arrayArgs));
 		}
 	}
 
 	closeWrapSelects() {
-		const wrapSelects =  document.querySelectorAll('.wrap-select');
+		const wrapSelects =  document.querySelectorAll('.wrap-select.opened');
 		if(wrapSelects.length) {
 			wrapSelects.forEach((wrapSelect) => {
-				if(wrapSelect.classList.contains('opened')) {
-					wrapSelect.classList.remove('opened');
-					wrapSelect.querySelector('.container-class').style.height = 0;
-				}
+				wrapSelect.classList.remove('opened');
+				wrapSelect.querySelector('.container-class').style.height = 0;
 			});
 		}
 	}
@@ -219,10 +214,24 @@ export default class SelectBuilder {
 		wrapSelect.querySelector('.container-class').style.height = heightAll + 'px';
 	}
 
+	resetNonMultipleSelect(select, wrapSelect) {
+		const divSelectedOpts = wrapSelect.querySelectorAll('.option-class.selected');
+		const opts = select.querySelectorAll('option');
+		if(opts.length) {
+			opts.forEach((opt) => {
+				opt.removeAttribute('selected');
+			});
+		}
+		if(divSelectedOpts) {
+			divSelectedOpts.forEach((opt) => {
+				opt.classList.remove('selected');
+			});
+		}
+		select.value = '';
+	}
+
 	onOpenSelectClick(args) {
-
 		arguments[(arguments.length - 1)].stopPropagation();
-
 		args[0].closeWrapSelects();
 		args[0].openWrapSelect(this);
 	}
@@ -232,36 +241,22 @@ export default class SelectBuilder {
 	}
 
 	onSelectItem(args) {
+		arguments[(arguments.length - 1)].stopPropagation();
 		const self = args[0];
 		const wrapSelect = args[1];
 		const val = this.getAttribute('data-value');
 		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
 		const select = wrapSelect.querySelector('select');
-		const divSelectedOpts = wrapSelect.querySelectorAll('.option-class.selected');
-		const opts = select.querySelectorAll('option');
-
 		if(!select.hasAttribute('multiple')) {
-			if(opts.length) {
-				opts.forEach((opt) => {
-					opt.removeAttribute('selected');
-				});
-			}
-
-			if(divSelectedOpts) {
-				divSelectedOpts.forEach((opt) => {
-					opt.classList.remove('selected');
-				});
-			}
-
+			self.resetNonMultipleSelect(select, wrapSelect);
 			select.value = val;
+			self.closeWrapSelects();
 		} else {
 			this.classList.add('selected');
 		}
-		
 		if(optByVal) {
 			optByVal.selected = 'selected';
 		}
-
 		self.setSelectedOption(select);
 		self.updateSelectedOptsDisplay(select);
 	}
