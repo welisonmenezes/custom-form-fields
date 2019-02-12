@@ -92,26 +92,25 @@ export default class SelectBuilder {
 		const options = this.$.getElements('option', select);
 		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption, select.parentElement);
 		const isMultiple = (select.hasAttribute('multiple'));
-		if(options.length) {
-			options.forEach((opt, i) => {
-				if( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false') ) {
-					divOptions[i].classList.add(this.config.selectors.selected);
-				} else if(!isMultiple && (opt.value === select.value)) {
-					divOptions[i].classList.add(this.config.selectors.selected);
-				}
-			});
-		}
+		options.forEach((opt, i) => {
+			if( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false' && isMultiple) ) {
+				divOptions[i].classList.add(this.config.selectors.selected);
+			} else if(!isMultiple && (opt.value === select.value)) {
+				divOptions[i].classList.add(this.config.selectors.selected);
+			}
+		});
 		if(isMultiple){
 			const SelectedDivOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
 			if(!SelectedDivOptions) {
-				this.creator.createAttribute(options[0], 'selected', true);
+				this.creator.createAttribute(options[0], 'selected', 'true');
 				divOptions[0].classList.add(this.config.selectors.selected);
 			} else {
-				options[0].removeAttribute('selected');
-				divOptions[0].classList.remove(this.config.selectors.selected);
+				if(SelectedDivOptions.length > 1) {
+					options[0].removeAttribute('selected');
+					divOptions[0].classList.remove(this.config.selectors.selected);
+				}
 			}
 		}
-		
 	}
 
 	getSelectedOptions(select) {
@@ -310,7 +309,7 @@ export default class SelectBuilder {
 			this.classList.add(self.config.selectors.selected);
 		}
 		if(optByVal) {
-			optByVal.selected = 'selected';
+			self.creator.createAttribute(optByVal, 'selected', 'true');
 		}
 		self.setSelectedOption(select);
 		self.updateSelectedOptsDisplay(select);
