@@ -1,15 +1,28 @@
-import Selector from '../utils/Selector.js';
-import Creator from '../utils/Creator.js';
-import Utils from '../utils/Utils.js';
-
 export default class SelectBuilder {
 
-	constructor(userConfigurations) {
-		this.$ = new Selector();
-		this.creator = new Creator();
-		this.utils = new Utils();
+	constructor(userConfigurations, Selector, Creator, Utils) {
+		this.$ = Selector;
+		this.creator = Creator;
+		this.utils = Utils;
 		this.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
-	
+		this._setConfiguration(userConfigurations);
+		console.log(this.config);
+	}
+
+	build() {
+		const selects = this.$.getElements(this.config.element);
+		selects.forEach((select)  => {
+			this.creator.createAttribute(select, 'tabindex', -1);
+			const wrapSelect = this.createWrapSelect(select);
+			const createdUISelect = this.createUISelect(select);
+			this.insertCreatedUISelect(createdUISelect, wrapSelect);
+			this.setSelectedOption(select);
+			this.createSelectedOptsDisplay(select);
+			this.resolveEventsToUiSelect(wrapSelect);
+		});
+	}
+
+	_setConfiguration(userConfigurations) {
 		this.config = {
 			element: 'select',
 			selectors: {
@@ -27,21 +40,6 @@ export default class SelectBuilder {
 		};
 
 		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
-
-		console.log(this.config);
-	}
-
-	build() {
-		const selects = this.$.getElements(this.config.element);
-		selects.forEach((select)  => {
-			this.creator.createAttribute(select, 'tabindex', -1);
-			const wrapSelect = this.createWrapSelect(select);
-			const createdUISelect = this.createUISelect(select);
-			this.insertCreatedUISelect(createdUISelect, wrapSelect);
-			this.setSelectedOption(select);
-			this.createSelectedOptsDisplay(select);
-			this.resolveEventsToUiSelect(wrapSelect);
-		});
 	}
 
 	resolveEventsToUiSelect(wrapSelect) {

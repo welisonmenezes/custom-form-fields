@@ -1,8 +1,7 @@
-import Check from './Check.js';
 export default class Creator {
 
-	constructor() {
-		this.check = new Check();
+	constructor(Check) {
+		this.check = Check;
 	}
 
 	createElements(elements, parentTree) {
