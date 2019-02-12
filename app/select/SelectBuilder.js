@@ -34,6 +34,8 @@ export default class SelectBuilder {
 				uiGroupTitle: 'title-class',
 				wrapSelect: 'wrap-select',
 				containerOptions: 'container-class',
+				containerOptsOverlowed: 'overflowed',
+				containerOptsOnTop: 'moved-to-top',
 				containerSelected: 'display-class',
 				selectedDisplayed: 'displayed-class'
 			}
@@ -262,6 +264,7 @@ export default class SelectBuilder {
 		//wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = heightAll + 'px';
 		
 		this.setHeightOptionContainer(wrapSelect, heightAll);
+		this.setContainerOptsPosition(wrapSelect);
 	}
 
 	resetNonMultipleSelect(select, wrapSelect) {
@@ -333,23 +336,34 @@ export default class SelectBuilder {
 		self.updateSelectedOptsDisplay(select);
 	}
 
-	getHeigthOptionContainer(heightAllOpts) {
+	getHeigthOptionContainer(wrapSelect, heightAllOpts) {
 		const winH = this.utils.getWindowHeight();
-		const halfWinH = (winH/2);
+		const halfWinH = (winH / 2) - (wrapSelect.clientHeight / 2);
 		return (heightAllOpts > halfWinH) ? halfWinH : heightAllOpts;
 	}
 
 	setHeightOptionContainer(wrapSelect, heightAllOpts) {
-		const winH = this.utils.getWindowHeight();
-		const newH = this.getHeigthOptionContainer(heightAllOpts);
+		const newH = this.getHeigthOptionContainer(wrapSelect, heightAllOpts);
 		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
 		if(containerOptions) {
 			containerOptions.style.height = (newH + 1) + 'px';
-
-			if(heightAllOpts > (winH/2)) {
-				containerOptions.classList.add('overflowed');
+			if(heightAllOpts > newH) {
+				containerOptions.classList.add(this.config.selectors.containerOptsOverlowed);
 			} else {
-				containerOptions.classList.remove('overflowed');
+				containerOptions.classList.remove(this.config.selectors.containerOptsOverlowed);
+			}
+		}
+	}
+
+	setContainerOptsPosition(wrapSelect) {
+		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
+		if(containerOptions) {
+			const relativeTop = this.utils.getWindowPositonElement(wrapSelect);
+			const winH = this.utils.getWindowHeight();
+			if(relativeTop < (winH / 2)){
+				containerOptions.classList.remove(this.config.selectors.containerOptsOnTop);
+			} else {
+				containerOptions.classList.add(this.config.selectors.containerOptsOnTop);
 			}
 		}
 	}

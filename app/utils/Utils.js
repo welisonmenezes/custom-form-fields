@@ -33,4 +33,15 @@ export default class Utils {
 	getWindowHeight() {
 		return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	}
+
+	getScreenTop() {
+		return (window.scrollY ||  window.pageYOffset || document.body.scrollTop);
+	}
+
+	getWindowPositonElement(element) {
+		const elH = element.clientHeight;
+		const elTop = element.offsetTop;
+		const screenTop = this.getScreenTop();
+		return (elTop + (elH / 2)) - screenTop;
+	}
 }

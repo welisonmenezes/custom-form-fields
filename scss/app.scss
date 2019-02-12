@@ -30,6 +30,7 @@
 	.container-class{
 		position: absolute;
 		top: 36px;
+		bottom: auto;
 		left: 0;
 		z-index: 10;
 		width: 100%;
@@ -48,6 +49,10 @@
 
 		&.overflowed{
 			overflow: auto;
+		}
+		&.moved-to-top{
+			top: auto;
+			bottom: 36px;
 		}
 	}
 
