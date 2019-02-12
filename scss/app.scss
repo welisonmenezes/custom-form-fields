@@ -45,6 +45,10 @@
 		-ms-transition: all 0.05s ease;
 		-o-transition: all 0.05s ease;
 		transition: all 0.05s ease;
+
+		&.overflowed{
+			overflow: auto;
+		}
 	}
 
 	.display-class{

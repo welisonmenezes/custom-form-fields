@@ -259,7 +259,9 @@ export default class SelectBuilder {
 				heightAll = heightAll + item.clientHeight;
 			});
 		}
-		wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = heightAll + 'px';
+		//wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = heightAll + 'px';
+		
+		this.setHeightOptionContainer(wrapSelect, heightAll);
 	}
 
 	resetNonMultipleSelect(select, wrapSelect) {
@@ -329,5 +331,26 @@ export default class SelectBuilder {
 		}
 		self.setSelectedOption(select);
 		self.updateSelectedOptsDisplay(select);
+	}
+
+	getHeigthOptionContainer(heightAllOpts) {
+		const winH = this.utils.getWindowHeight();
+		const halfWinH = (winH/2);
+		return (heightAllOpts > halfWinH) ? halfWinH : heightAllOpts;
+	}
+
+	setHeightOptionContainer(wrapSelect, heightAllOpts) {
+		const winH = this.utils.getWindowHeight();
+		const newH = this.getHeigthOptionContainer(heightAllOpts);
+		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
+		if(containerOptions) {
+			containerOptions.style.height = (newH + 1) + 'px';
+
+			if(heightAllOpts > (winH/2)) {
+				containerOptions.classList.add('overflowed');
+			} else {
+				containerOptions.classList.remove('overflowed');
+			}
+		}
 	}
 }

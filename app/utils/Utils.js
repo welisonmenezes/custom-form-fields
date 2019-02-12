@@ -25,4 +25,12 @@ export default class Utils {
 		}
 		return target;
 	}
+
+	getWindowWidth() {
+		return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	}
+
+	getWindowHeight() {
+		return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	}
 }
