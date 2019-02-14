@@ -54,15 +54,15 @@ export default class Utils {
 	}
 
 	disableScroll() {
-		const x = window.scrollX;
-    	const y = window.scrollY;
-    	window.onscroll = function() {
-    		window.scrollTo(x, y);
+    	window.onkeydown  = function(e) {
+    		if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+		        e.preventDefault();
+		    }
     	};
 	}
 
 	enableScroll() {
-		window.onscroll = function(){};
+		window.onkeydown = function(){};
 	}
 
 }
