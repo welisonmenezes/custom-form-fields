@@ -44,4 +44,25 @@ export default class Utils {
 		const screenTop = this.getScreenTop();
 		return (elTop + (elH / 2)) - screenTop;
 	}
+
+	preventDefault(event) {
+		const e = event || window.event;
+		if (e.preventDefault) {
+			e.preventDefault();
+		}
+		e.returnValue = false;  
+	}
+
+	disableScroll() {
+		const x = window.scrollX;
+    	const y = window.scrollY;
+    	window.onscroll = function() {
+    		window.scrollTo(x, y);
+    	};
+	}
+
+	enableScroll() {
+		window.onscroll = function(){};
+	}
+
 }

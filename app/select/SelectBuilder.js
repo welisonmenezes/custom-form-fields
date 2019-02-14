@@ -46,6 +46,9 @@ export default class SelectBuilder {
 
 	resolveEventsToUiSelect(wrapSelect) {
 		this.addEventListenerToElement(wrapSelect, 'click', this.onToggleSelectClick, [this]);
+		this.addEventListenerToElement(wrapSelect, 'focusin', this.onFocusInSelect, [this]);
+		this.addEventListenerToElement(wrapSelect, 'focusout', this.onFocusOutSelect, [this]);
+		this.addEventListenerToElement(wrapSelect, 'keyup', this.onKeyupSelect, [this]);
 		const options = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
 		if(options.length) {
 			options.forEach((opt) => {
@@ -284,7 +287,8 @@ export default class SelectBuilder {
 	}
 
 	onToggleSelectClick(args) {
-		arguments[(arguments.length - 1)].stopPropagation();
+		const event = arguments[(arguments.length - 1)];
+		event.stopPropagation();
 		if(this.classList.contains(args[0].config.selectors.opened)) {
 			args[0].closeWrapSelects();
 		} else {
@@ -293,13 +297,31 @@ export default class SelectBuilder {
 		}
 	}
 
+	onKeyupSelect(args) {
+		const self = args[0];
+		const event = arguments[(arguments.length - 1)];
+		event.stopPropagation();
+		console.log(event);
+	}
+
+	onFocusInSelect(args) {
+		const self = args[0];
+		self.utils.disableScroll();
+	}
+
+	onFocusOutSelect(args) {
+		const self = args[0];
+		self.utils.enableScroll();
+	}
+
 	onSelectFocusOut(args) {
 		args[0].closeWrapSelects();
 	}
 
 	onSelectItem(args) {
-		arguments[(arguments.length - 1)].stopPropagation();
 		const self = args[0];
+		const event = arguments[(arguments.length - 1)];
+		event.stopPropagation();
 		const wrapSelect = args[1];
 		const val = this.getAttribute('data-value');
 		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
@@ -319,8 +341,9 @@ export default class SelectBuilder {
 	}
 
 	onDeselectItem(args) {
-		arguments[(arguments.length - 1)].stopPropagation();
 		const self = args[0];
+		const event = arguments[(arguments.length - 1)];
+		event.stopPropagation();
 		const wrapSelect = args[1];
 		const val = this.getAttribute('data-value');
 		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
