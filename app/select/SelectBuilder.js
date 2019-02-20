@@ -31,6 +31,7 @@ export default class SelectBuilder {
 				multiple: 'multiple',
 				uiOption: 'option-class',
 				uiItemSelect: 'item-class',
+				uiGroupClass: 'group-class',
 				uiGroupTitle: 'title-class',
 				wrapSelect: 'wrap-select',
 				containerOptions: 'container-class',
@@ -217,7 +218,7 @@ export default class SelectBuilder {
 	createGroupsObj(groupElement) {
 		const group = {
 			name: 'DIV',
-			class: ['group-class'],
+			class: [this.config.selectors.uiGroupClass],
 			children: {
 				elements: [
 					{
@@ -287,17 +288,32 @@ export default class SelectBuilder {
 	}
 
 	changeSelectedOptionByKey(wrapSelect, direction) {
-		const selected = wrapSelect.querySelector('.' + this.config.selectors.selected);
-		let nextEl;
-		if (selected) {
+		let selected = wrapSelect.querySelectorAll('.' + this.config.selectors.selected);
+		const opts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
+		
+		if (selected && opts) {
+
+			/* TODO */
+			// if (direction === 'top') {
+			// 	selected = selected[(0)];
+			// } else if(direction === 'bottom') {
+			// 	selected = selected[(selected.length -1)];
+			// }
+			
+			const index = Array.prototype.indexOf.call(opts, selected);
+			const total = opts.length;
+			let newIndex;
+
 			if (direction === 'top') {
-				nextEl = selected.previousElementSibling;
+				newIndex = (index > 0) ? (index - 1) : (total - 1);
 			} else if(direction === 'bottom') {
-				nextEl = selected.nextElementSibling;
+				newIndex = (index < (total - 1)) ? (index + 1) : 0;
 			}
-		}
-		if (nextEl) {
-			nextEl.click();
+
+			const newEl = opts[newIndex];
+			if (newEl) {
+				newEl.click();
+			}
 		}
 	}
 
