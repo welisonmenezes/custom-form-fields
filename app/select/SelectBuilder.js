@@ -286,10 +286,25 @@ export default class SelectBuilder {
 		select.value = '';
 	}
 
+	changeSelectedOptionByKey(wrapSelect, direction) {
+		const selected = wrapSelect.querySelector('.' + this.config.selectors.selected);
+		let nextEl;
+		if (selected) {
+			if (direction === 'top') {
+				nextEl = selected.previousElementSibling;
+			} else if(direction === 'bottom') {
+				nextEl = selected.nextElementSibling;
+			}
+		}
+		if (nextEl) {
+			nextEl.click();
+		}
+	}
+
 	onToggleSelectClick(args) {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
-		if(this.classList.contains(args[0].config.selectors.opened)) {
+		if (this.classList.contains(args[0].config.selectors.opened)) {
 			args[0].closeWrapSelects();
 		} else {
 			args[0].closeWrapSelects();
@@ -301,7 +316,13 @@ export default class SelectBuilder {
 		const self = args[0];
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
-		console.log(event);
+		if (event.key === 'ArrowUp') {
+			self.changeSelectedOptionByKey(this, 'top');
+		} else if(event.key === 'ArrowDown') {
+			self.changeSelectedOptionByKey(this, 'bottom');
+		} else {
+			//console.log('Other');
+		}
 	}
 
 	onFocusInSelect(args) {
