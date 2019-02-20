@@ -287,21 +287,35 @@ export default class SelectBuilder {
 		select.value = '';
 	}
 
-	changeSelectedOptionByKey(wrapSelect, direction) {
+	changeSelectedOptionByKey(wrapSelect, direction, event) {
 		let selected = wrapSelect.querySelectorAll('.' + this.config.selectors.selected);
-		const opts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
-		
-		if (selected && opts) {
+		const uiOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
+		const opts = wrapSelect.querySelectorAll('option');
+		let newSelected;
 
-			/* TODO */
-			// if (direction === 'top') {
-			// 	selected = selected[(0)];
-			// } else if(direction === 'bottom') {
-			// 	selected = selected[(selected.length -1)];
-			// }
+		if (selected && uiOpts) {
+
+			if (wrapSelect.classList.contains(this.config.selectors.multiple)) {
+	
+				if (direction === 'top') {
+					newSelected = selected[(0)];
+				} else if(direction === 'bottom') {
+					newSelected = selected[(selected.length -1)];
+				}
+
+				if (!event.shiftKey) {
+					uiOpts.forEach((opt, ind) => {
+						opts[ind].removeAttribute('selected');
+						opt.classList.remove(this.config.selectors.selected);
+					});
+				}
+
+			} else {
+				newSelected = selected[0];
+			}
 			
-			const index = Array.prototype.indexOf.call(opts, selected);
-			const total = opts.length;
+			const index = Array.prototype.indexOf.call(uiOpts, newSelected);
+			const total = uiOpts.length;
 			let newIndex;
 
 			if (direction === 'top') {
@@ -310,7 +324,7 @@ export default class SelectBuilder {
 				newIndex = (index < (total - 1)) ? (index + 1) : 0;
 			}
 
-			const newEl = opts[newIndex];
+			const newEl = uiOpts[newIndex];
 			if (newEl) {
 				newEl.click();
 			}
@@ -333,9 +347,9 @@ export default class SelectBuilder {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		if (event.key === 'ArrowUp') {
-			self.changeSelectedOptionByKey(this, 'top');
+			self.changeSelectedOptionByKey(this, 'top', event);
 		} else if(event.key === 'ArrowDown') {
-			self.changeSelectedOptionByKey(this, 'bottom');
+			self.changeSelectedOptionByKey(this, 'bottom', event);
 		} else {
 			//console.log('Other');
 		}
