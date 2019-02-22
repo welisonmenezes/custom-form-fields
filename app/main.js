@@ -13,6 +13,7 @@ const creator = new Creator(check);
 const utils = new Utils(check);
 
 const options = {
+	selectByDigit: false,
 	selectors: {
 		selected: 'selected'
 	}

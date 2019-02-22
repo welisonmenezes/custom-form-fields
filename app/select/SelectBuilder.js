@@ -26,6 +26,8 @@ export default class SelectBuilder {
 	_setConfiguration(userConfigurations) {
 		this.config = {
 			element: 'select',
+			selectByArrows: true,
+			selectByDigit: true,
 			selectors: {
 				selected: 'selected',
 				opened: 'opened',
@@ -50,7 +52,9 @@ export default class SelectBuilder {
 		this.addEventListenerToElement(wrapSelect, 'click', this.onToggleSelectClick, [this]);
 		this.addEventListenerToElement(wrapSelect, 'focusin', this.onFocusInSelect, [this]);
 		this.addEventListenerToElement(wrapSelect, 'focusout', this.onFocusOutSelect, [this]);
-		this.addEventListenerToElement(wrapSelect, 'keyup', this.onKeyupSelect, [this]);
+		if (this.config.selectByArrows || this.config.selectByDigit) {
+			this.addEventListenerToElement(wrapSelect, 'keyup', this.onKeyupSelect, [this]);
+		}
 		const options = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
 		if (options.length) {
 			options.forEach((opt) => {
@@ -333,7 +337,8 @@ export default class SelectBuilder {
 				let i;
 				for (i = 0; i < total; i++) {
 					const firstLetter = uiOpts[i].innerHTML.charAt(0).toLowerCase();
-					if (digit === firstLetter) {
+					const value = uiOpts[i].getAttribute('data-value');
+					if (digit === firstLetter && value !== '') {
 						uiOpts[i].click();
 						break;
 					}
@@ -358,11 +363,17 @@ export default class SelectBuilder {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		if (event.key === 'ArrowUp') {
-			self.changeSelectedOptionByArrowKey(this, 'top', event);
+			if (self.config.selectByArrows) {
+				self.changeSelectedOptionByArrowKey(this, 'top', event);
+			}
 		} else if (event.key === 'ArrowDown') {
-			self.changeSelectedOptionByArrowKey(this, 'bottom', event);
+			if (self.config.selectByArrows) {
+				self.changeSelectedOptionByArrowKey(this, 'bottom', event);
+			}
 		} else {
-			self.changeSelectedOptionByDigitKey(this, event);
+			if (self.config.selectByDigit) {
+				self.changeSelectedOptionByDigitKey(this, event);
+			}
 		}
 	}
 
