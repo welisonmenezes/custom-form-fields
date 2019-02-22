@@ -1,30 +1,21 @@
 import '../scss/app.scss';
 import './polyfills/Array.js';
 
-import Check from './utils/Check.js';
-import Selector from './utils/Selector.js';
-import Creator from './utils/Creator.js';
-import Utils from './utils/Utils.js';
-import SelectBuilder from './select/SelectBuilder.js';
-
-const check = new Check();
-const selector = new Selector();
-const creator = new Creator(check);
-const utils = new Utils(check);
+import CustomFormFields from './CustomFormFields.js';
 
 const options = {
-	selectByDigit: false,
-	selectors: {
-		selected: 'selected'
+	selects: {
+		selectByDigit: false,
+		selectors: {
+			selected: 'selected'
+		}
 	}
-}
-const selects = new SelectBuilder(options, selector, creator, check, utils);
-selects.build();
-
+};
+const cff = new CustomFormFields(options);
 
 document.getElementById('addOpt').addEventListener('click', function() {
 	const select = document.getElementById('sel-1');
-	selects.addNewOption('xxx', 'Xxx', select);
+	cff.selects.addNewOption('xxx', 'Xxx', select);
 });
 
 /*
