@@ -63,6 +63,40 @@ export default class SelectBuilder {
 		}
 	}
 
+	addNewOption(value, text, select) {
+		if (select && this.check.isHTMLElement(select)) {
+			const optObj = {
+				name: 'OPTION',
+				class: [],
+				attributes: [
+					{name: 'value', value: value}
+				],
+				text: text
+			};
+			const opt = this.creator.createASingleElement(optObj);
+			if (opt) {
+				select.append(opt);
+				this.updateUiSelect(select, opt);
+			}
+		}
+	}
+
+	updateUiSelect(select, newOpt) {
+		if (select) {
+			const wrapSelect = select.parentElement;
+			if (wrapSelect) {
+				const uiOptContainer = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
+				if (uiOptContainer) {
+					const uiOpt = this.creator.createASingleElement(this.createOptionsObj(newOpt));
+					if (uiOpt) {
+						uiOptContainer.append(uiOpt);
+						this.addEventListenerToElement(uiOpt, 'click', this.onSelectItem, [this, wrapSelect]);
+					}
+				}
+			}
+		}
+	}
+
 	createWrapSelect(select) {
 		const selectType = (select.hasAttribute('multiple')) ? this.config.selectors.multiple : 'non-' + this.config.selectors.multiple;
 		const wrapArr = [

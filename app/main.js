@@ -22,6 +22,11 @@ const selects = new SelectBuilder(options, selector, creator, check, utils);
 selects.build();
 
 
+document.getElementById('addOpt').addEventListener('click', function() {
+	const select = document.getElementById('sel-1');
+	selects.addNewOption('xxx', 'Xxx', select);
+});
+
 /*
 const elements = [
 	{

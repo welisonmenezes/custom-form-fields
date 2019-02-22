@@ -9,7 +9,7 @@
 	<h1>Custom Form Fields</h1>
 	<form action="./">
 		<div class="f-row">
-			<select name="sel-1" class="my-select">
+			<select name="sel-1" id="sel-1" class="my-select">
 				<option value="">Select</option>
 				<option value="Test 1" selected>a Test 1</option>
 				<option value="Test 2">b Test 2</option>
@@ -17,10 +17,12 @@
 				<option value="Test 4">a Test 4</option>
 				<option value="Test 5">e Test 5</option>
 			</select>
+
+			<a id="addOpt">Add Option</a>
 		</div>
 
 		<div class="f-row">
-			<select multiple name="sel-2">
+			<select multiple name="sel-2" id="sel-2">
 				<option value="">Select</option>
 				<option value="Test 1">a Test 1</option>
 				<option value="Test 2" selected>b Test 2</option>
