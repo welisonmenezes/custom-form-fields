@@ -1,8 +1,9 @@
 export default class SelectBuilder {
 
-	constructor(userConfigurations, Selector, Creator, Utils) {
+	constructor(userConfigurations, Selector, Creator, Check, Utils) {
 		this.$ = Selector;
 		this.creator = Creator;
+		this.check = Check;
 		this.utils = Utils;
 		this.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
 		this._setConfiguration(userConfigurations);
@@ -51,7 +52,7 @@ export default class SelectBuilder {
 		this.addEventListenerToElement(wrapSelect, 'focusout', this.onFocusOutSelect, [this]);
 		this.addEventListenerToElement(wrapSelect, 'keyup', this.onKeyupSelect, [this]);
 		const options = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
-		if(options.length) {
+		if (options.length) {
 			options.forEach((opt) => {
 				this.addEventListenerToElement(opt, 'click', this.onSelectItem, [this, wrapSelect]);
 			});
@@ -68,7 +69,7 @@ export default class SelectBuilder {
 		];
 		const parentSelect = this.creator.createElements(wrapArr, select.parentNode);
 		const wrapSelect = this.$.getElement('.' + this.config.selectors.wrapSelect, parentSelect);
-		if(wrapSelect) {
+		if (wrapSelect) {
 			wrapSelect.insertAdjacentElement('afterbegin', select);
 		}
 		this.creator.createAttribute(wrapSelect, 'tabindex', 0);
@@ -87,7 +88,7 @@ export default class SelectBuilder {
 	}
 
 	insertCreatedUISelect(createdUISelect, wrapSelect) {
-		if(createdUISelect && wrapSelect) {
+		if (createdUISelect && wrapSelect) {
 			wrapSelect.appendChild(createdUISelect);
 		}
 	}
@@ -97,19 +98,19 @@ export default class SelectBuilder {
 		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption, select.parentElement);
 		const isMultiple = (select.hasAttribute('multiple'));
 		options.forEach((opt, i) => {
-			if( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false' && isMultiple) ) {
+			if ( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false' && isMultiple) ) {
 				divOptions[i].classList.add(this.config.selectors.selected);
-			} else if(!isMultiple && (opt.value === select.value)) {
+			} else if (!isMultiple && (opt.value === select.value)) {
 				divOptions[i].classList.add(this.config.selectors.selected);
 			}
 		});
-		if(isMultiple){
+		if (isMultiple) {
 			const SelectedDivOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
-			if(!SelectedDivOptions) {
+			if (!SelectedDivOptions) {
 				this.creator.createAttribute(options[0], 'selected', 'true');
 				divOptions[0].classList.add(this.config.selectors.selected);
 			} else {
-				if(SelectedDivOptions.length > 1) {
+				if (SelectedDivOptions.length > 1) {
 					options[0].removeAttribute('selected');
 					divOptions[0].classList.remove(this.config.selectors.selected);
 				}
@@ -119,7 +120,7 @@ export default class SelectBuilder {
 
 	getSelectedOptions(select) {
 		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
-		if(divOptions) {
+		if (divOptions) {
 			return divOptions;
 		}
 		return null;
@@ -135,7 +136,7 @@ export default class SelectBuilder {
 				elements: []
 			}
 		};
-		if(selectedOptions && selectedOptions.length) {
+		if (selectedOptions && selectedOptions.length) {
 			selectedOptions.forEach((opt) => {
 				displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
 			});
@@ -154,7 +155,7 @@ export default class SelectBuilder {
 		existedDisplays.innerHTML = '';
 		const selectedOptions = this.getSelectedOptions(select);
 		const arr = [];
-		if(selectedOptions && selectedOptions.length) {
+		if (selectedOptions && selectedOptions.length) {
 			selectedOptions.forEach((opt) => {
 				arr.push(this.createSelectedOptionsObj(opt));
 			});
@@ -165,9 +166,9 @@ export default class SelectBuilder {
 	}
 
 	resolveEventsToUiOptions(wrapSelect) {
-		if(wrapSelect.classList.contains('multiple')) {
+		if (wrapSelect.classList.contains('multiple')) {
 			const displayedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.selectedDisplayed);
-			if(displayedOpts.length) {
+			if (displayedOpts.length) {
 				displayedOpts.forEach((opt) => {
 					this.addEventListenerToElement(opt, 'click', this.onDeselectItem, [this, wrapSelect]);
 				});
@@ -178,12 +179,12 @@ export default class SelectBuilder {
 	createSelectObj(containerOptions) {
 		const optsArr = [];
 		const children = containerOptions.children;
-		if(children.length) {
+		if (children.length) {
 			const total = children.length;
 			let i, child;
-			for(i = 0; i < total; i++){
+			for (i = 0; i < total; i++) {
 				child = children[i];
-				if(child.tagName === 'OPTION') {
+				if (child.tagName === 'OPTION') {
 					optsArr.push(this.createOptionsObj(child));
 				} else if (child.tagName === 'OPTGROUP') {
 					optsArr.push(this.createGroupsObj(child));
@@ -229,9 +230,9 @@ export default class SelectBuilder {
 				]
 			}
 		};
-		if(groupElement.children.length) {
+		if (groupElement.children.length) {
 			const grupOptsArr = this.createSelectObj(groupElement);
-			if(grupOptsArr.length) {
+			if (grupOptsArr.length) {
 				grupOptsArr.forEach((optObj) => {
 					group.children.elements.push(optObj);
 				});
@@ -241,14 +242,14 @@ export default class SelectBuilder {
 	}
 
 	addEventListenerToElement(element, eventName, callback, arrayArgs) {
-		if(element) {
+		if (element) {
 			element.addEventListener(eventName, callback.bind(element, arrayArgs));
 		}
 	}
 
 	closeWrapSelects() {
 		const wrapSelects =  document.querySelectorAll('.' + this.config.selectors.wrapSelect + '.' + this.config.selectors.opened);
-		if(wrapSelects.length) {
+		if (wrapSelects.length) {
 			wrapSelects.forEach((wrapSelect) => {
 				wrapSelect.classList.remove(this.config.selectors.opened);
 				wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = 0;
@@ -260,7 +261,7 @@ export default class SelectBuilder {
 		wrapSelect.classList.add(this.config.selectors.opened);
 		const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiItemSelect);
 		let heightAll = 0;
-		if(items.length) {
+		if (items.length) {
 			items.forEach((item) => {
 				heightAll = heightAll + item.clientHeight;
 			});
@@ -274,12 +275,12 @@ export default class SelectBuilder {
 	resetNonMultipleSelect(select, wrapSelect) {
 		const divSelectedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected);
 		const opts = select.querySelectorAll('option');
-		if(opts.length) {
+		if (opts.length) {
 			opts.forEach((opt) => {
 				opt.removeAttribute('selected');
 			});
 		}
-		if(divSelectedOpts) {
+		if (divSelectedOpts) {
 			divSelectedOpts.forEach((opt) => {
 				opt.classList.remove(this.config.selectors.selected);
 			});
@@ -287,46 +288,56 @@ export default class SelectBuilder {
 		select.value = '';
 	}
 
-	changeSelectedOptionByKey(wrapSelect, direction, event) {
+	changeSelectedOptionByArrowKey(wrapSelect, direction, event) {
 		let selected = wrapSelect.querySelectorAll('.' + this.config.selectors.selected);
 		const uiOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
 		const opts = wrapSelect.querySelectorAll('option');
 		let newSelected;
-
 		if (selected && uiOpts) {
-
 			if (wrapSelect.classList.contains(this.config.selectors.multiple)) {
-	
 				if (direction === 'top') {
 					newSelected = selected[(0)];
-				} else if(direction === 'bottom') {
+				} else if (direction === 'bottom') {
 					newSelected = selected[(selected.length -1)];
 				}
-
 				if (!event.shiftKey) {
 					uiOpts.forEach((opt, ind) => {
 						opts[ind].removeAttribute('selected');
 						opt.classList.remove(this.config.selectors.selected);
 					});
 				}
-
 			} else {
 				newSelected = selected[0];
 			}
-			
 			const index = Array.prototype.indexOf.call(uiOpts, newSelected);
 			const total = uiOpts.length;
 			let newIndex;
-
 			if (direction === 'top') {
 				newIndex = (index > 0) ? (index - 1) : (total - 1);
-			} else if(direction === 'bottom') {
+			} else if (direction === 'bottom') {
 				newIndex = (index < (total - 1)) ? (index + 1) : 0;
 			}
-
 			const newEl = uiOpts[newIndex];
 			if (newEl) {
 				newEl.click();
+			}
+		}
+	}
+
+	changeSelectedOptionByDigitKey(wrapSelect, event) {
+		const digit = event.key.toLowerCase();
+		if (this.check.isSingleDigit(digit)) {
+			const uiOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
+			if (uiOpts) {
+				const total = uiOpts.length;
+				let i;
+				for (i = 0; i < total; i++) {
+					const firstLetter = uiOpts[i].innerHTML.charAt(0).toLowerCase();
+					if (digit === firstLetter) {
+						uiOpts[i].click();
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -347,11 +358,11 @@ export default class SelectBuilder {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		if (event.key === 'ArrowUp') {
-			self.changeSelectedOptionByKey(this, 'top', event);
-		} else if(event.key === 'ArrowDown') {
-			self.changeSelectedOptionByKey(this, 'bottom', event);
+			self.changeSelectedOptionByArrowKey(this, 'top', event);
+		} else if (event.key === 'ArrowDown') {
+			self.changeSelectedOptionByArrowKey(this, 'bottom', event);
 		} else {
-			//console.log('Other');
+			self.changeSelectedOptionByDigitKey(this, event);
 		}
 	}
 
@@ -377,14 +388,14 @@ export default class SelectBuilder {
 		const val = this.getAttribute('data-value');
 		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
 		const select = wrapSelect.querySelector('select');
-		if(!select.hasAttribute('multiple')) {
+		if (!select.hasAttribute('multiple')) {
 			self.resetNonMultipleSelect(select, wrapSelect);
 			select.value = val;
 			self.closeWrapSelects();
 		} else {
 			this.classList.add(self.config.selectors.selected);
 		}
-		if(optByVal) {
+		if (optByVal) {
 			self.creator.createAttribute(optByVal, 'selected', 'true');
 		}
 		self.setSelectedOption(select);
@@ -400,10 +411,10 @@ export default class SelectBuilder {
 		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
 		const UIoptByVal = wrapSelect.querySelector('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]');
 		const select = wrapSelect.querySelector('select');
-		if(optByVal) {
+		if (optByVal) {
 			optByVal.removeAttribute('selected');
 		}
-		if(UIoptByVal) {
+		if (UIoptByVal) {
 			UIoptByVal.classList.remove(self.config.selectors.selected);
 		}
 		self.setSelectedOption(select);
@@ -419,9 +430,9 @@ export default class SelectBuilder {
 	setHeightOptionContainer(wrapSelect, heightAllOpts) {
 		const newH = this.getHeigthOptionContainer(wrapSelect, heightAllOpts);
 		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
-		if(containerOptions) {
+		if (containerOptions) {
 			containerOptions.style.height = (newH + 1) + 'px';
-			if(heightAllOpts > newH) {
+			if (heightAllOpts > newH) {
 				containerOptions.classList.add(this.config.selectors.containerOptsOverlowed);
 			} else {
 				containerOptions.classList.remove(this.config.selectors.containerOptsOverlowed);
@@ -431,10 +442,10 @@ export default class SelectBuilder {
 
 	setContainerOptsPosition(wrapSelect) {
 		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
-		if(containerOptions) {
+		if (containerOptions) {
 			const relativeTop = this.utils.getWindowPositonElement(wrapSelect);
 			const winH = this.utils.getWindowHeight();
-			if(relativeTop < (winH / 2)){
+			if (relativeTop < (winH / 2)) {
 				containerOptions.classList.remove(this.config.selectors.containerOptsOnTop);
 			} else {
 				containerOptions.classList.add(this.config.selectors.containerOptsOnTop);

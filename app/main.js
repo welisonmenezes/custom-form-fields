@@ -17,7 +17,7 @@ const options = {
 		selected: 'selected'
 	}
 }
-const selects = new SelectBuilder(options, selector, creator, utils);
+const selects = new SelectBuilder(options, selector, creator, check, utils);
 selects.build();
 
 
