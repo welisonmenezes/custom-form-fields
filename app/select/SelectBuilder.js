@@ -10,19 +10,29 @@ export default class SelectBuilder {
 		console.log(this.config);
 	}
 
+	/**
+	 * Build UI selects from default selects
+	 */
 	build() {
 		const selects = this.$.getElements(this.config.element);
-		selects.forEach((select)  => {
-			this.creator.createAttribute(select, 'tabindex', -1);
-			const wrapSelect = this.createWrapSelect(select);
-			const createdUISelect = this.createUISelect(select);
-			this.insertCreatedUISelect(createdUISelect, wrapSelect);
-			this.setSelectedOption(select);
-			this.createSelectedOptsDisplay(select);
-			this.resolveEventsToUiSelect(wrapSelect);
-		});
+		if (selects) {
+			selects.forEach((select)  => {
+				this.creator.createAttribute(select, 'tabindex', -1);
+				const wrapSelect = this.createWrapSelect(select);
+				const createdUISelect = this.createUISelect(select);
+				this.insertCreatedUISelect(createdUISelect, wrapSelect);
+				this.setSelectedOption(select);
+				this.createSelectedOptsDisplay(select);
+				this.resolveEventsToUiSelect(wrapSelect);
+			});
+		}
+		
 	}
 
+	/**
+	 * Sets configurations by merging user configurations with default configurations
+	 * @param {Object} userConfigurations - The user configurations
+	 */
 	_setConfiguration(userConfigurations) {
 		this.config = {
 			element: 'select',
@@ -48,6 +58,10 @@ export default class SelectBuilder {
 		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
 	}
 
+	/**
+	 * Add event listeners to ui selects and your ui options
+	 * @param { HTMLElement || HTMLFormElement } wrapSelect - The ui select container
+	 */
 	resolveEventsToUiSelect(wrapSelect) {
 		this.addEventListenerToElement(wrapSelect, 'click', this.onToggleSelectClick, [this]);
 		this.addEventListenerToElement(wrapSelect, 'focusin', this.onFocusInSelect, [this]);
@@ -63,6 +77,12 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * Add new option to normal select
+	 * @param { String } value - The value of the option
+	 * @param { String } text - The text of the option
+	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 */
 	addNewOption(value, text, select) {
 		if (select && this.check.isHTMLElement(select)) {
 			const optObj = {
@@ -76,18 +96,23 @@ export default class SelectBuilder {
 			const opt = this.creator.createASingleElement(optObj);
 			if (opt) {
 				select.append(opt);
-				this.updateUiSelect(select, opt);
+				this.addNewUiOption(select, opt);
 			}
 		}
 	}
 
-	updateUiSelect(select, newOpt) {
+	/**
+	 * Add new option to ui select and add yor corresponding event
+	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 * @param { HTMLElement || HTMLFormElement } newOpt - The new opt that was created
+	 */
+	addNewUiOption(select, newOpt) {
 		if (select) {
 			const wrapSelect = select.parentElement;
 			if (wrapSelect) {
 				const uiOptContainer = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
 				if (uiOptContainer) {
-					const uiOpt = this.creator.createASingleElement(this.createOptionsObj(newOpt));
+					const uiOpt = this.creator.createASingleElement(this.createOptionObj(newOpt));
 					if (uiOpt) {
 						uiOptContainer.append(uiOpt);
 						this.addEventListenerToElement(uiOpt, 'click', this.onSelectItem, [this, wrapSelect]);
@@ -97,6 +122,11 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * Create the ui select container
+	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 * @returns { HTMLElement } the ui select container that was created
+	 */
 	createWrapSelect(select) {
 		const selectType = (select.hasAttribute('multiple')) ? this.config.selectors.multiple : 'non-' + this.config.selectors.multiple;
 		const wrapArr = [
@@ -114,17 +144,96 @@ export default class SelectBuilder {
 		return wrapSelect;
 	}
 
+	/**
+	 * Create the ui select
+	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 * @returns { HTMLElement } the ui select that was created
+	 */
 	createUISelect(select) {
 		let childObj;
 		const divParent = {
 			name: 'DIV',
 			class: [this.config.selectors.containerOptions]
 		};
-		const optsArr = this.createSelectObj(select);
+		const optsArr = this.createOptionsAndGroupsObj(select);
 		const createdEl = this.creator.createElements(optsArr, divParent);
 		return createdEl;
 	}
 
+	/**
+	 * Create an array of object that will be used to create the ui options
+	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the options
+	 * @returns { Array } An array with the configurations to create ui options
+	 */
+	createOptionsAndGroupsObj(select) {
+		const optsArr = [];
+		const children = select.children;
+		if (children.length) {
+			const total = children.length;
+			let i, child;
+			for (i = 0; i < total; i++) {
+				child = children[i];
+				if (child.tagName === 'OPTION') {
+					optsArr.push(this.createOptionObj(child));
+				} else if (child.tagName === 'OPTGROUP') {
+					optsArr.push(this.createGroupObj(child));
+				}
+			}
+		}
+		return optsArr;
+	}
+
+	/**
+	 * Create an object that will be used to create an ui option
+	 * @param { HTMLElement || HTMLFormElement } optionElement - The option element
+	 * @returns { Object } An object that will be used to creat an ui option
+	 */
+	createOptionObj(optionElement) {
+		return {
+			name: 'DIV',
+			class: [this.config.selectors.uiItemSelect, this.config.selectors.uiOption],
+			text: optionElement.innerHTML,
+			attributes: [
+				{name: 'data-value', value: optionElement.value}
+			]
+		};
+	}
+
+	/**
+	 * Create an object that will be used to create an ui optgroup
+	 * @param { HTMLElement || HTMLFormElement } groupElement - The group element
+	 * @returns { Object } An object that will be used to creat an ui optgroup
+	 */
+	createGroupObj(groupElement) {
+		const group = {
+			name: 'DIV',
+			class: [this.config.selectors.uiGroupClass],
+			children: {
+				elements: [
+					{
+						name: 'DIV',
+						class: [this.config.selectors.uiItemSelect, this.config.selectors.uiGroupTitle],
+						text: groupElement.getAttribute('label')
+					}
+				]
+			}
+		};
+		if (groupElement.children.length) {
+			const grupOptsArr = this.createOptionsAndGroupsObj(groupElement);
+			if (grupOptsArr.length) {
+				grupOptsArr.forEach((optObj) => {
+					group.children.elements.push(optObj);
+				});
+			}
+		}
+		return group;
+	}
+
+	/**
+	 * Insert the created ui select into ui container select
+	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 * @returns { HTMLElement } the ui select that was created
+	 */
 	insertCreatedUISelect(createdUISelect, wrapSelect) {
 		if (createdUISelect && wrapSelect) {
 			wrapSelect.appendChild(createdUISelect);
@@ -187,6 +296,17 @@ export default class SelectBuilder {
 		return displayedOpts;
 	}
 
+	createSelectedOptionsObj(selectedOption) {
+		return {
+			name: 'DIV',
+			class: [this.config.selectors.selectedDisplayed],
+			text: selectedOption.innerHTML,
+			attributes: [
+				{name: 'data-value', value: selectedOption.getAttribute('data-value')}
+			]
+		};
+	}
+
 	updateSelectedOptsDisplay(select) {
 		const wrapSelect = select.parentNode;
 		const existedDisplays = wrapSelect.querySelector('.' + this.config.selectors.containerSelected);
@@ -212,71 +332,6 @@ export default class SelectBuilder {
 				});
 			}
 		}
-	}
-
-	createSelectObj(containerOptions) {
-		const optsArr = [];
-		const children = containerOptions.children;
-		if (children.length) {
-			const total = children.length;
-			let i, child;
-			for (i = 0; i < total; i++) {
-				child = children[i];
-				if (child.tagName === 'OPTION') {
-					optsArr.push(this.createOptionsObj(child));
-				} else if (child.tagName === 'OPTGROUP') {
-					optsArr.push(this.createGroupsObj(child));
-				}
-			}
-		}
-		return optsArr;
-	}
-
-	createSelectedOptionsObj(selectedOption) {
-		return {
-			name: 'DIV',
-			class: [this.config.selectors.selectedDisplayed],
-			text: selectedOption.innerHTML,
-			attributes: [
-				{name: 'data-value', value: selectedOption.getAttribute('data-value')}
-			]
-		};
-	}
-
-	createOptionsObj(optionElement) {
-		return {
-			name: 'DIV',
-			class: [this.config.selectors.uiItemSelect, this.config.selectors.uiOption],
-			text: optionElement.innerHTML,
-			attributes: [
-				{name: 'data-value', value: optionElement.value}
-			]
-		};
-	}
-
-	createGroupsObj(groupElement) {
-		const group = {
-			name: 'DIV',
-			class: [this.config.selectors.uiGroupClass],
-			children: {
-				elements: [
-					{
-						name: 'DIV',
-						class: [this.config.selectors.uiItemSelect, this.config.selectors.uiGroupTitle],
-						text: groupElement.getAttribute('label')
-					}
-				]
-			}
-		};
-		if (groupElement.children.length) {
-			const grupOptsArr = this.createSelectObj(groupElement);
-			if (grupOptsArr.length) {
-				grupOptsArr.forEach((optObj) => {
-					group.children.elements.push(optObj);
-				});
-			}
-		}
-		return group;
 	}
 
 	addEventListenerToElement(element, eventName, callback, arrayArgs) {
