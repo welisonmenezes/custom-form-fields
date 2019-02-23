@@ -1,5 +1,13 @@
 export default class SelectBuilder {
 
+	/**
+	 * The constructor
+	 * @param { Object } userConfigurations - The user configurations
+	 * @param { Object } Selector - An instance of the Selector
+	 * @param { Object } Creator - An instance of the Creator
+	 * @param { Object } Check - An instance of the Check
+	 * @param { Object } Utils - An instance of the Utils
+	 */
 	constructor(userConfigurations, Selector, Creator, Check, Utils) {
 		this.$ = Selector;
 		this.creator = Creator;
@@ -7,7 +15,6 @@ export default class SelectBuilder {
 		this.utils = Utils;
 		this.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
 		this._setConfiguration(userConfigurations);
-		console.log(this.config);
 	}
 
 	/**
@@ -26,7 +33,6 @@ export default class SelectBuilder {
 				this.resolveEventsToUiSelect(wrapSelect);
 			});
 		}
-		
 	}
 
 	/**
@@ -54,7 +60,6 @@ export default class SelectBuilder {
 				selectedDisplayed: 'displayed-class'
 			}
 		};
-
 		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
 	}
 
@@ -123,7 +128,7 @@ export default class SelectBuilder {
 	}
 
 	/**
-	 * Create the ui select container
+	 * Create the ui select container and insert on page
 	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
 	 * @returns { HTMLElement } the ui select container that was created
 	 */
@@ -156,8 +161,7 @@ export default class SelectBuilder {
 			class: [this.config.selectors.containerOptions]
 		};
 		const optsArr = this.createOptionsAndGroupsObj(select);
-		const createdEl = this.creator.createElements(optsArr, divParent);
-		return createdEl;
+		return this.creator.createElements(optsArr, divParent);
 	}
 
 	/**
@@ -231,7 +235,8 @@ export default class SelectBuilder {
 
 	/**
 	 * Insert the created ui select into ui container select
-	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 * @param { HTMLElement || HTMLFormElement } createdUISelect - The created ui select
+	 * @param { HTMLElement || HTMLFormElement } wrapSelect - The ui select container
 	 * @returns { HTMLElement } the ui select that was created
 	 */
 	insertCreatedUISelect(createdUISelect, wrapSelect) {
@@ -240,31 +245,42 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * Set the selected option (also ui option)
+	 * @param { HTMLElement || HTMLFormElement } select - The select element
+	 */
 	setSelectedOption(select) {
 		const options = this.$.getElements('option', select);
 		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption, select.parentElement);
-		const isMultiple = (select.hasAttribute('multiple'));
-		options.forEach((opt, i) => {
-			if ( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false' && isMultiple) ) {
-				divOptions[i].classList.add(this.config.selectors.selected);
-			} else if (!isMultiple && (opt.value === select.value)) {
-				divOptions[i].classList.add(this.config.selectors.selected);
-			}
-		});
-		if (isMultiple) {
-			const SelectedDivOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
-			if (!SelectedDivOptions) {
-				this.creator.createAttribute(options[0], 'selected', 'true');
-				divOptions[0].classList.add(this.config.selectors.selected);
-			} else {
-				if (SelectedDivOptions.length > 1) {
-					options[0].removeAttribute('selected');
-					divOptions[0].classList.remove(this.config.selectors.selected);
+		if(options && divOptions) {
+			const isMultiple = (select.hasAttribute('multiple'));
+			options.forEach((opt, i) => {
+				if ( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false' && isMultiple) ) {
+					divOptions[i].classList.add(this.config.selectors.selected);
+				} else if (!isMultiple && (opt.value === select.value)) {
+					divOptions[i].classList.add(this.config.selectors.selected);
+				}
+			});
+			if (isMultiple) {
+				const SelectedDivOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
+				if (!SelectedDivOptions) {
+					this.creator.createAttribute(options[0], 'selected', 'true');
+					divOptions[0].classList.add(this.config.selectors.selected);
+				} else {
+					if (SelectedDivOptions.length > 1) {
+						options[0].removeAttribute('selected');
+						divOptions[0].classList.remove(this.config.selectors.selected);
+					}
 				}
 			}
 		}
 	}
 
+	/**
+	 * Get the selected ui option
+	 * @param { HTMLElement || HTMLFormElement } select - The select element
+	 * @returns { HTMLElement || null } The selected ui option if exists or null
+	 */
 	getSelectedOptions(select) {
 		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
 		if (divOptions) {
@@ -273,57 +289,81 @@ export default class SelectBuilder {
 		return null;
 	}
 
+	/**
+	 * Create selected options display (What will be shown as selected) - And add events
+	 * @param { HTMLElement || HTMLFormElement } select - The select element
+	 * @returns { HTMLElement || null } The display of selected ui options if exists or null
+	 */
 	createSelectedOptsDisplay(select) {
 		const wrapSelect = select.parentNode;
 		const selectedOptions = this.getSelectedOptions(select);
-		const displayContainer = {
-			name: 'DIV',
-			class: [this.config.selectors.containerSelected],
-			children: {
-				elements: []
+		if (wrapSelect && selectedOptions) {
+			const displayContainer = {
+				name: 'DIV',
+				class: [this.config.selectors.containerSelected],
+				children: {
+					elements: []
+				}
+			};
+			if (selectedOptions && selectedOptions.length) {
+				selectedOptions.forEach((opt) => {
+					displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
+				});
 			}
-		};
-		if (selectedOptions && selectedOptions.length) {
-			selectedOptions.forEach((opt) => {
-				displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
-			});
+			const displayedOpts =  this.creator.createElements([displayContainer], wrapSelect);
+			this.resolveEventsToUiSelectedDisplay(wrapSelect);
+			return displayedOpts;
 		}
-
-		
-
-		const displayedOpts =  this.creator.createElements([displayContainer], wrapSelect);
-		this.resolveEventsToUiOptions(wrapSelect);
-		return displayedOpts;
+		return null;
 	}
 
-	createSelectedOptionsObj(selectedOption) {
+	/**
+	 * Create selected options object that will be used to create the display
+	 * @param { HTMLElement } uiSelectedOption - The ui selected option
+	 * @returns { Object } The object that will be used to create the display
+	 */
+	createSelectedOptionsObj(uiSelectedOption) {
 		return {
 			name: 'DIV',
 			class: [this.config.selectors.selectedDisplayed],
-			text: selectedOption.innerHTML,
+			text: uiSelectedOption.innerHTML,
 			attributes: [
-				{name: 'data-value', value: selectedOption.getAttribute('data-value')}
+				{name: 'data-value', value: uiSelectedOption.getAttribute('data-value')}
 			]
 		};
 	}
 
+	/**
+	 * Update the ui selected options
+	 * @param { HTMLElement } select - The select element
+	 * @returns { HTMLElement || null } The new ui options selected if exist or null
+	 */
 	updateSelectedOptsDisplay(select) {
 		const wrapSelect = select.parentNode;
-		const existedDisplays = wrapSelect.querySelector('.' + this.config.selectors.containerSelected);
-		existedDisplays.innerHTML = '';
-		const selectedOptions = this.getSelectedOptions(select);
-		const arr = [];
-		if (selectedOptions && selectedOptions.length) {
-			selectedOptions.forEach((opt) => {
-				arr.push(this.createSelectedOptionsObj(opt));
-			});
+		if (wrapSelect) {
+			const existedDisplays = wrapSelect.querySelector('.' + this.config.selectors.containerSelected);
+			if (existedDisplays) {
+				existedDisplays.innerHTML = '';
+				const selectedOptions = this.getSelectedOptions(select);
+				const arr = [];
+				if (selectedOptions && selectedOptions.length) {
+					selectedOptions.forEach((opt) => {
+						arr.push(this.createSelectedOptionsObj(opt));
+					});
+				}
+				const displayedOpts =  this.creator.createElements(arr, existedDisplays);
+				this.resolveEventsToUiSelectedDisplay(wrapSelect);
+				return displayedOpts;
+			}
 		}
-		const displayedOpts =  this.creator.createElements(arr, existedDisplays);
-		this.resolveEventsToUiOptions(wrapSelect);
-		return displayedOpts;
+		return null;
 	}
 
-	resolveEventsToUiOptions(wrapSelect) {
+	/**
+	 * Add events to ui selected options on display
+	 * @param { HTMLElement } wrapSelect - The ui selects container
+	 */
+	resolveEventsToUiSelectedDisplay(wrapSelect) {
 		if (wrapSelect.classList.contains('multiple')) {
 			const displayedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.selectedDisplayed);
 			if (displayedOpts.length) {
