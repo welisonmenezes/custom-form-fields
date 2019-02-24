@@ -567,6 +567,10 @@ export default class SelectBuilder {
 		args[0].closeWrapSelects();
 	}
 
+	/**
+	 * The callback to ui option click event
+	 * @param { Array } args - Params received by callback
+	 */
 	onSelectItem(args) {
 		const self = args[0];
 		const event = arguments[(arguments.length - 1)];
@@ -589,6 +593,10 @@ export default class SelectBuilder {
 		self.updateSelectedOptsDisplay(select);
 	}
 
+	/**
+	 * The callback to ui option selected on display click event
+	 * @param { Array } args - Params received by callback
+	 */
 	onDeselectItem(args) {
 		const self = args[0];
 		const event = arguments[(arguments.length - 1)];
@@ -608,12 +616,22 @@ export default class SelectBuilder {
 		self.updateSelectedOptsDisplay(select);
 	}
 
+	/**
+	 * Get height to be used in ui option container after opened
+	 * @param { HTMLElement } wrapSelect - The ui selects container
+	 * @param { Integer } heightAllOpts - The height of summing of the all ui options
+	 */
 	getHeigthOptionContainer(wrapSelect, heightAllOpts) {
 		const winH = this.utils.getWindowHeight();
 		const halfWinH = (winH / 2) - (wrapSelect.clientHeight / 2);
 		return (heightAllOpts > halfWinH) ? halfWinH : heightAllOpts;
 	}
 
+	/**
+	 * Set height in ui option container after opened
+	 * @param { HTMLElement } wrapSelect - The ui selects container
+	 * @param { Integer } heightAllOpts - The height of summing of the all ui options
+	 */
 	setHeightOptionContainer(wrapSelect, heightAllOpts) {
 		const newH = this.getHeigthOptionContainer(wrapSelect, heightAllOpts);
 		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
@@ -627,6 +645,10 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * Set bottom or top position to ui container option after opened
+	 * @param { HTMLElement } wrapSelect - The ui selects container
+	 */
 	setContainerOptsPosition(wrapSelect) {
 		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
 		if (containerOptions) {
