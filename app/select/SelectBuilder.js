@@ -71,7 +71,15 @@ export default class SelectBuilder {
 				beforeEachBuildSelect: null,
 				afterEachBuildSelect: null,
 				beforeAddNewOption: null,
-				afterAddNewOption: null
+				afterAddNewOption: null,
+				beforeOpenSelect: null,
+				afterOpenSelect: null,
+				beforeCloseSelects: null,
+				afterCloseSelects: null,
+				beforeSelectItem: null,
+				afterSelectItem: null,
+				beforeDeselectItem: null,
+				afterDeselectItem: null
 			}
 		};
 		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
@@ -409,10 +417,12 @@ export default class SelectBuilder {
 	closeWrapSelects() {
 		const wrapSelects =  document.querySelectorAll('.' + this.config.selectors.wrapSelect + '.' + this.config.selectors.opened);
 		if (wrapSelects.length) {
+			this.callCallbackFunction(this.config.callbacks.beforeCloseSelects, this, wrapSelects);
 			wrapSelects.forEach((wrapSelect) => {
 				wrapSelect.classList.remove(this.config.selectors.opened);
 				wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = 0;
 			});
+			this.callCallbackFunction(this.config.callbacks.afterCloseSelects, this, wrapSelects);
 		}
 	}
 
@@ -421,6 +431,7 @@ export default class SelectBuilder {
 	 * @param { HTMLElement } wrapSelect - The ui select container
 	 */
 	openWrapSelect(wrapSelect) {
+		this.callCallbackFunction(this.config.callbacks.beforeOpenSelect, this, wrapSelect);
 		wrapSelect.classList.add(this.config.selectors.opened);
 		const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiItemSelect);
 		let heightAll = 0;
@@ -431,6 +442,7 @@ export default class SelectBuilder {
 		}
 		this.setHeightOptionContainer(wrapSelect, heightAll);
 		this.setContainerOptsPosition(wrapSelect);
+		this.callCallbackFunction(this.config.callbacks.afterOpenSelect, this, wrapSelect);
 	}
 
 	/**
@@ -592,6 +604,7 @@ export default class SelectBuilder {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		const wrapSelect = args[1];
+		self.callCallbackFunction(self.config.callbacks.beforeSelectItem, self, wrapSelect);
 		const val = this.getAttribute('data-value');
 		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
 		const select = wrapSelect.querySelector('select');
@@ -607,6 +620,7 @@ export default class SelectBuilder {
 		}
 		self.setSelectedOption(select);
 		self.updateSelectedOptsDisplay(select);
+		self.callCallbackFunction(self.config.callbacks.afterSelectItem, self, wrapSelect);
 	}
 
 	/**
@@ -618,6 +632,7 @@ export default class SelectBuilder {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		const wrapSelect = args[1];
+		self.callCallbackFunction(self.config.callbacks.beforeDeselectItem, self, wrapSelect);
 		const val = this.getAttribute('data-value');
 		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
 		const UIoptByVal = wrapSelect.querySelector('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]');
@@ -630,6 +645,7 @@ export default class SelectBuilder {
 		}
 		self.setSelectedOption(select);
 		self.updateSelectedOptsDisplay(select);
+		self.callCallbackFunction(self.config.callbacks.afterDeselectItem, self, wrapSelect);
 	}
 
 	/**

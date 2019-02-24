@@ -27,6 +27,30 @@ const options = {
 			},
 			afterAddNewOption: function(uiOption) {
 				console.log('afterAddNewOption', uiOption);
+			},
+			beforeOpenSelect: function(wrapSelect) {
+				console.log('beforeOpenSelect', wrapSelect);
+			},
+			afterOpenSelect: function(wrapSelect) {
+				console.log('afterOpenSelect', wrapSelect);
+			},
+			beforeCloseSelects: function(wrapSelects) {
+				console.log('beforeCloseSelects', wrapSelects);
+			},
+			afterCloseSelects: function(wrapSelects) {
+				console.log('afterCloseSelects', wrapSelects);
+			},
+			beforeSelectItem: function(wrapSelect) {
+				console.log('beforeSelectItem', wrapSelect);
+			},
+			afterSelectItem: function(wrapSelect) {
+				console.log('afterSelectItem', wrapSelect);
+			},
+			beforeDeselectItem: function(wrapSelect) {
+				console.log('beforeDeselectItem', wrapSelect);
+			},
+			afterDeselectItem: function(wrapSelect) {
+				console.log('afterDeselectItem', wrapSelect);
 			}
 		}
 	}
