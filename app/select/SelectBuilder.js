@@ -50,6 +50,8 @@ export default class SelectBuilder {
 			element: 'select',
 			selectByArrows: true,
 			selectByDigit: true,
+			autoHeight: true,
+			autoPositioning: true,
 			selectors: {
 				selected: 'selected',
 				opened: 'opened',
@@ -420,7 +422,9 @@ export default class SelectBuilder {
 			this.callCallbackFunction(this.config.callbacks.beforeCloseSelects, this, wrapSelects);
 			wrapSelects.forEach((wrapSelect) => {
 				wrapSelect.classList.remove(this.config.selectors.opened);
-				wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = 0;
+				if (this.config.autoHeight) {
+					wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = 0;
+				}
 			});
 			this.callCallbackFunction(this.config.callbacks.afterCloseSelects, this, wrapSelects);
 		}
@@ -440,8 +444,12 @@ export default class SelectBuilder {
 				heightAll = heightAll + item.clientHeight;
 			});
 		}
-		this.setHeightOptionContainer(wrapSelect, heightAll);
-		this.setContainerOptsPosition(wrapSelect);
+		if (this.config.autoHeight) {
+			this.setHeightOptionContainer(wrapSelect, heightAll);
+		}
+		if (this.config.autoPositioning) {
+			this.setContainerOptsPosition(wrapSelect);
+		}
 		this.callCallbackFunction(this.config.callbacks.afterOpenSelect, this, wrapSelect);
 	}
 
