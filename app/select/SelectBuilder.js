@@ -374,12 +374,22 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * Add given event to given element
+	 * @param { HTMLElement } element - The element that will receive the event
+	 * @param { String } eventName - The event's name
+	 * @param { Function } callback - The callback function that will be called by event
+	 * @param { Array } arrayArgs - Params to be passed to callback function
+	 */
 	addEventListenerToElement(element, eventName, callback, arrayArgs) {
 		if (element) {
 			element.addEventListener(eventName, callback.bind(element, arrayArgs));
 		}
 	}
 
+	/**
+	 * Close the ui select
+	 */
 	closeWrapSelects() {
 		const wrapSelects =  document.querySelectorAll('.' + this.config.selectors.wrapSelect + '.' + this.config.selectors.opened);
 		if (wrapSelects.length) {
@@ -390,6 +400,10 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * Open the ui select
+	 * @param { HTMLElement } wrapSelect - The ui select container
+	 */
 	openWrapSelect(wrapSelect) {
 		wrapSelect.classList.add(this.config.selectors.opened);
 		const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiItemSelect);
@@ -399,12 +413,15 @@ export default class SelectBuilder {
 				heightAll = heightAll + item.clientHeight;
 			});
 		}
-		//wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = heightAll + 'px';
-		
 		this.setHeightOptionContainer(wrapSelect, heightAll);
 		this.setContainerOptsPosition(wrapSelect);
 	}
 
+	/**
+	 * Reset the selects that is not a multiple select
+	 * @param { HTMLElement } select - The select element
+	 * @param { HTMLElement } wrapSelect - The ui selects container
+	 */
 	resetNonMultipleSelect(select, wrapSelect) {
 		const divSelectedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected);
 		const opts = select.querySelectorAll('option');
@@ -421,17 +438,23 @@ export default class SelectBuilder {
 		select.value = '';
 	}
 
+	/**
+	 * Change selected option by arrow key navigation
+	 * @param { HTMLElement } wrapSelect - The ui selects container
+	 * @param { String } direction - ['top', 'bottom'] To indicates what key was pressed
+	 * @param { Event } event - The event object that was fired
+	 */
 	changeSelectedOptionByArrowKey(wrapSelect, direction, event) {
 		let selected = wrapSelect.querySelectorAll('.' + this.config.selectors.selected);
 		const uiOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
 		const opts = wrapSelect.querySelectorAll('option');
-		let newSelected;
-		if (selected && uiOpts) {
+		let oldSelected;
+		if (selected && uiOpts && opts) {
 			if (wrapSelect.classList.contains(this.config.selectors.multiple)) {
 				if (direction === 'top') {
-					newSelected = selected[(0)];
+					oldSelected = selected[0];
 				} else if (direction === 'bottom') {
-					newSelected = selected[(selected.length -1)];
+					oldSelected = selected[(selected.length -1)];
 				}
 				if (!event.shiftKey) {
 					uiOpts.forEach((opt, ind) => {
@@ -440,9 +463,9 @@ export default class SelectBuilder {
 					});
 				}
 			} else {
-				newSelected = selected[0];
+				oldSelected = selected[0];
 			}
-			const index = Array.prototype.indexOf.call(uiOpts, newSelected);
+			const index = Array.prototype.indexOf.call(uiOpts, oldSelected);
 			const total = uiOpts.length;
 			let newIndex;
 			if (direction === 'top') {
@@ -450,13 +473,18 @@ export default class SelectBuilder {
 			} else if (direction === 'bottom') {
 				newIndex = (index < (total - 1)) ? (index + 1) : 0;
 			}
-			const newEl = uiOpts[newIndex];
-			if (newEl) {
-				newEl.click();
+			const newSelected = uiOpts[newIndex];
+			if (newSelected) {
+				newSelected.click();
 			}
 		}
 	}
 
+	/**
+	 * Change selected option by digit key navigation
+	 * @param { HTMLElement } wrapSelect - The ui selects container
+	 * @param { Event } event - The event object that was fired
+	 */
 	changeSelectedOptionByDigitKey(wrapSelect, event) {
 		const digit = event.key.toLowerCase();
 		if (this.check.isSingleDigit(digit)) {
@@ -476,9 +504,14 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * The callback to click ui select event 
+	 * @param { Array } args - Params received by callback
+	 */
 	onToggleSelectClick(args) {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
+		// this is the element
 		if (this.classList.contains(args[0].config.selectors.opened)) {
 			args[0].closeWrapSelects();
 		} else {
@@ -487,8 +520,12 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * The callback to keyup ui select event 
+	 * @param { Array } args - Params received by callback
+	 */
 	onKeyupSelect(args) {
-		const self = args[0];
+		const self = args[0]; // args[0] is the context
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		if (event.key === 'ArrowUp') {
@@ -506,16 +543,26 @@ export default class SelectBuilder {
 		}
 	}
 
+	/**
+	 * The callback to focus in ui select event 
+	 * @param { Array } args - Params received by callback
+	 */
 	onFocusInSelect(args) {
-		const self = args[0];
-		self.utils.disableScroll();
+		args[0].utils.disableScroll();
 	}
 
+	/**
+	 * The callback to foucs out ui select event 
+	 * @param { Array } args - Params received by callback
+	 */
 	onFocusOutSelect(args) {
-		const self = args[0];
-		self.utils.enableScroll();
+		args[0].utils.enableScroll();
 	}
 
+	/**
+	 * The callback to body click event (except the ui select element itself) 
+	 * @param { Array } args - Params received by callback
+	 */
 	onSelectFocusOut(args) {
 		args[0].closeWrapSelects();
 	}
