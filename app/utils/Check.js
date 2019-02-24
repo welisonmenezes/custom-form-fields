@@ -37,5 +37,14 @@ export default class Check {
     isSingleDigit(value) {
         return (/^[a-zA-Z0-9]+$/.test(value)) && (value.length === 1);
     }
+
+    /**
+     * Checks if value a Function
+     * @param { Any } fn The value that will be validated
+     * @returns { Boolean } if is valid (true)
+     */
+    isFunction(fn) {
+        return Object.prototype.toString.call(fn) == '[object Function]';
+    }
 	
 }

@@ -8,6 +8,26 @@ const options = {
 		selectByDigit: false,
 		selectors: {
 			selected: 'selected'
+		},
+		callbacks: {
+			beforeBuildSelect: function(selects) {
+				console.log('beforeBuildSelect', selects);
+			},
+			afterBuildSelect: function(wrapSelects) {
+				console.log('afterBuildSelect', wrapSelects);
+			},
+			beforeEachBuildSelect: function(select) {
+				console.log('beforeEachBuildSelect', select);
+			},
+			afterEachBuildSelect: function(wrapSelect) {
+				console.log('afterEachBuildSelect', wrapSelect);
+			},
+			beforeAddNewOption: function(option) {
+				console.log('beforeAddNewOption', option);
+			},
+			afterAddNewOption: function(uiOption) {
+				console.log('afterAddNewOption', uiOption);
+			}
 		}
 	}
 };

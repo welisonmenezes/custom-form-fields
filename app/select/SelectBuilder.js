@@ -22,8 +22,11 @@ export default class SelectBuilder {
 	 */
 	build() {
 		const selects = this.$.getElements(this.config.element);
+		const wrapSelects = [];
+		this.callCallbackFunction(this.config.callbacks.beforeBuildSelect, this, selects);
 		if (selects) {
 			selects.forEach((select)  => {
+				this.callCallbackFunction(this.config.callbacks.beforeEachBuildSelect, this, select);
 				this.creator.createAttribute(select, 'tabindex', -1);
 				const wrapSelect = this.createWrapSelect(select);
 				const createdUISelect = this.createUISelect(select);
@@ -31,8 +34,11 @@ export default class SelectBuilder {
 				this.setSelectedOption(select);
 				this.createSelectedOptsDisplay(select);
 				this.resolveEventsToUiSelect(wrapSelect);
+				wrapSelects.push(wrapSelect);
+				this.callCallbackFunction(this.config.callbacks.afterEachBuildSelect, this, wrapSelect);
 			});
 		}
+		this.callCallbackFunction(this.config.callbacks.afterBuildSelect, this, wrapSelects);
 	}
 
 	/**
@@ -58,6 +64,14 @@ export default class SelectBuilder {
 				containerOptsOnTop: 'moved-to-top',
 				containerSelected: 'display-class',
 				selectedDisplayed: 'displayed-class'
+			},
+			callbacks: {
+				beforeBuildSelect: null,
+				afterBuildSelect: null,
+				beforeEachBuildSelect: null,
+				afterEachBuildSelect: null,
+				beforeAddNewOption: null,
+				afterAddNewOption: null
 			}
 		};
 		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
@@ -99,6 +113,7 @@ export default class SelectBuilder {
 				text: text
 			};
 			const opt = this.creator.createASingleElement(optObj);
+			this.callCallbackFunction(this.config.callbacks.beforeAddNewOption, this, opt);
 			if (opt) {
 				select.append(opt);
 				this.addNewUiOption(select, opt);
@@ -121,6 +136,7 @@ export default class SelectBuilder {
 					if (uiOpt) {
 						uiOptContainer.append(uiOpt);
 						this.addEventListenerToElement(uiOpt, 'click', this.onSelectItem, [this, wrapSelect]);
+						this.callCallbackFunction(this.config.callbacks.afterAddNewOption, this, uiOpt);
 					}
 				}
 			}
@@ -659,6 +675,19 @@ export default class SelectBuilder {
 			} else {
 				containerOptions.classList.add(this.config.selectors.containerOptsOnTop);
 			}
+		}
+	}
+
+	/**
+	 * Calls de callback functions
+	 * @param { Function } callback The callback method
+	 * @param { Object } ref The new reference
+	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } element The container or field that will be validated
+	 * @param { String || Number || Array } otherParams The params that can be used by callback
+	 */
+	callCallbackFunction(callback, ref, element, otherParams) {
+		if (this.check.isFunction(callback)) {
+			callback.call(ref, element, otherParams);
 		}
 	}
 }
