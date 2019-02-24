@@ -704,14 +704,38 @@ export default class SelectBuilder {
 
 	/**
 	 * Calls de callback functions
-	 * @param { Function } callback The callback method
-	 * @param { Object } ref The new reference
-	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } element The container or field that will be validated
-	 * @param { String || Number || Array } otherParams The params that can be used by callback
+	 * @param { Function } callback - The callback method
+	 * @param { Object } ref - The new reference
+	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } element - The container or field that will be validated
+	 * @param { String || Number || Array } otherParams - The params that can be used by callback
 	 */
 	callCallbackFunction(callback, ref, element, otherParams) {
 		if (this.check.isFunction(callback)) {
 			callback.call(ref, element, otherParams);
+		}
+	}
+
+	/**
+	 * Select item programmatically
+	 * @param { Integer } itemIndex - The index of the option that will be selected
+	 * @param { HTMLElement } select - the select element
+	 */
+	selectItem(itemIndex, select) {
+		if (this.check.isInteger(itemIndex) && select && this.check.isHTMLElement(select)) {
+			const wrapSelect = select.parentElement;
+			if (wrapSelect) {
+				const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
+				if (items) {
+					const total = items.length;
+					let i;
+					for(i = 0; i < total; i++) {
+						if (i === itemIndex) {
+							items[i].click();
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 }

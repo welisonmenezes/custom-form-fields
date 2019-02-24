@@ -62,6 +62,11 @@ document.getElementById('addOpt').addEventListener('click', function() {
 	cff.selects.addNewOption('xxx', 'Xxx', select);
 });
 
+document.getElementById('selectOpt').addEventListener('click', function() {
+	const select = document.getElementById('sel-1');
+	cff.selects.selectItem(2, select);
+});
+
 /*
 const elements = [
 	{

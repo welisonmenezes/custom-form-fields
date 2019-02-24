@@ -46,5 +46,14 @@ export default class Check {
     isFunction(fn) {
         return Object.prototype.toString.call(fn) == '[object Function]';
     }
+
+    /**
+     * Checks if value is (or can be) a valid Integer
+     * @param { String } value The value that will be validated
+     * @returns { Boolean } if is valid (true)
+     */
+    isInteger(value) {
+        return (/^[0-9]+$/.test(value));
+    }
 	
 }
