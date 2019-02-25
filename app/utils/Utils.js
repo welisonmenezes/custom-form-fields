@@ -103,4 +103,31 @@ export default class Utils {
 		window.onkeydown = function(){};
 	}
 
+
+	/**
+	 * Add given event to given element
+	 * @param { HTMLElement } element - The element that will receive the event
+	 * @param { String } eventName - The event's name
+	 * @param { Function } callback - The callback function that will be called by event
+	 * @param { Array } arrayArgs - Params to be passed to callback function
+	 */
+	addEventListenerToElement(element, eventName, callback, arrayArgs) {
+		if (element) {
+			element.addEventListener(eventName, callback.bind(element, arrayArgs));
+		}
+	}
+
+	/**
+	 * Calls de callback functions
+	 * @param { Function } callback - The callback method
+	 * @param { Object } ref - The new reference
+	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } element - The container or field that will be validated
+	 * @param { String || Number || Array } otherParams - The params that can be used by callback
+	 */
+	callCallbackFunction(callback, ref, element, otherParams) {
+		if (this.check.isFunction(callback)) {
+			callback.call(ref, element, otherParams);
+		}
+	}
+
 }

@@ -13,7 +13,7 @@ export default class SelectBuilder {
 		this.creator = Creator;
 		this.check = Check;
 		this.utils = Utils;
-		this.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
+		this.utils.addEventListenerToElement(document.getElementsByTagName('body')[0], 'click', this.onSelectFocusOut, [this]);
 		this._setConfiguration(userConfigurations);
 	}
 
@@ -74,13 +74,13 @@ export default class SelectBuilder {
 	build() {
 		const selects = this.$.getElements(this.config.element);
 		const wrapSelects = [];
-		this.callCallbackFunction(this.config.callbacks.beforeBuildSelects, this, selects);
+		this.utils.callCallbackFunction(this.config.callbacks.beforeBuildSelects, this, selects);
 		if (selects) {
 			selects.forEach((select)  => {
 				wrapSelects.push(this.constroy(select));
 			});
 		}
-		this.callCallbackFunction(this.config.callbacks.afterBuildSelects, this, wrapSelects);
+		this.utils.callCallbackFunction(this.config.callbacks.afterBuildSelects, this, wrapSelects);
 	}
 
 	/**
@@ -93,7 +93,7 @@ export default class SelectBuilder {
 		if(parent && parent.classList.contains(this.config.selectors.wrapSelect)) {
 			return null;
 		}
-		this.callCallbackFunction(this.config.callbacks.beforeConstroySelect, this, select);
+		this.utils.callCallbackFunction(this.config.callbacks.beforeConstroySelect, this, select);
 		this.creator.createAttribute(select, 'tabindex', -1);
 		const wrapSelect = this.createWrapSelect(select);
 		const createdUISelect = this.createUISelect(select);
@@ -101,7 +101,7 @@ export default class SelectBuilder {
 		this.setSelectedOption(select);
 		this.createSelectedOptsDisplay(select);
 		this.resolveEventsToUiSelect(wrapSelect);
-		this.callCallbackFunction(this.config.callbacks.afterConstroySelect, this, wrapSelect);
+		this.utils.callCallbackFunction(this.config.callbacks.afterConstroySelect, this, wrapSelect);
 		return wrapSelect;
 	}
 
@@ -115,10 +115,10 @@ export default class SelectBuilder {
 			if (wrapSelect && wrapSelect.classList.contains(this.config.selectors.wrapSelect)) {
 				const target = wrapSelect.parentElement;
 				if (target) {
-					this.callCallbackFunction(this.config.callbacks.beforeDestroySelect, this, wrapSelect);
+					this.utils.callCallbackFunction(this.config.callbacks.beforeDestroySelect, this, wrapSelect);
 					target.appendChild(select);
 					target.removeChild(wrapSelect);
-					this.callCallbackFunction(this.config.callbacks.afterDestroySelect, this, select);
+					this.utils.callCallbackFunction(this.config.callbacks.afterDestroySelect, this, select);
 				}
 			}
 		}
@@ -129,16 +129,16 @@ export default class SelectBuilder {
 	 * @param { HTMLElement || HTMLFormElement } wrapSelect - The ui select container
 	 */
 	resolveEventsToUiSelect(wrapSelect) {
-		this.addEventListenerToElement(wrapSelect, 'click', this.onToggleSelectClick, [this]);
-		this.addEventListenerToElement(wrapSelect, 'focusin', this.onFocusInSelect, [this]);
-		this.addEventListenerToElement(wrapSelect, 'focusout', this.onFocusOutSelect, [this]);
+		this.utils.addEventListenerToElement(wrapSelect, 'click', this.onToggleSelectClick, [this]);
+		this.utils.addEventListenerToElement(wrapSelect, 'focusin', this.onFocusInSelect, [this]);
+		this.utils.addEventListenerToElement(wrapSelect, 'focusout', this.onFocusOutSelect, [this]);
 		if (this.config.selectByArrows || this.config.selectByDigit) {
-			this.addEventListenerToElement(wrapSelect, 'keyup', this.onKeyupSelect, [this]);
+			this.utils.addEventListenerToElement(wrapSelect, 'keyup', this.onKeyupSelect, [this]);
 		}
 		const options = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
 		if (options.length) {
 			options.forEach((opt) => {
-				this.addEventListenerToElement(opt, 'click', this.onSelectItem, [this, wrapSelect]);
+				this.utils.addEventListenerToElement(opt, 'click', this.onSelectItem, [this, wrapSelect]);
 			});
 		}
 	}
@@ -161,7 +161,7 @@ export default class SelectBuilder {
 					text: text
 				};
 				const opt = this.creator.createASingleElement(optObj);
-				this.callCallbackFunction(this.config.callbacks.beforeAddNewOption, this, opt);
+				this.utils.callCallbackFunction(this.config.callbacks.beforeAddNewOption, this, opt);
 				if (opt) {
 					select.append(opt);
 					this.addNewUiOption(select, opt);
@@ -184,8 +184,8 @@ export default class SelectBuilder {
 					const uiOpt = this.creator.createASingleElement(this.createOptionObj(newOpt));
 					if (uiOpt) {
 						uiOptContainer.append(uiOpt);
-						this.addEventListenerToElement(uiOpt, 'click', this.onSelectItem, [this, wrapSelect]);
-						this.callCallbackFunction(this.config.callbacks.afterAddNewOption, this, uiOpt);
+						this.utils.addEventListenerToElement(uiOpt, 'click', this.onSelectItem, [this, wrapSelect]);
+						this.utils.callCallbackFunction(this.config.callbacks.afterAddNewOption, this, uiOpt);
 					}
 				}
 			}
@@ -449,22 +449,9 @@ export default class SelectBuilder {
 			const displayedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.selectedDisplayed);
 			if (displayedOpts.length) {
 				displayedOpts.forEach((opt) => {
-					this.addEventListenerToElement(opt, 'click', this.onDeselectItem, [this, wrapSelect]);
+					this.utils.addEventListenerToElement(opt, 'click', this.onDeselectItem, [this, wrapSelect]);
 				});
 			}
-		}
-	}
-
-	/**
-	 * Add given event to given element
-	 * @param { HTMLElement } element - The element that will receive the event
-	 * @param { String } eventName - The event's name
-	 * @param { Function } callback - The callback function that will be called by event
-	 * @param { Array } arrayArgs - Params to be passed to callback function
-	 */
-	addEventListenerToElement(element, eventName, callback, arrayArgs) {
-		if (element) {
-			element.addEventListener(eventName, callback.bind(element, arrayArgs));
 		}
 	}
 
@@ -474,14 +461,14 @@ export default class SelectBuilder {
 	closeWrapSelects() {
 		const wrapSelects =  document.querySelectorAll('.' + this.config.selectors.wrapSelect + '.' + this.config.selectors.opened);
 		if (wrapSelects.length) {
-			this.callCallbackFunction(this.config.callbacks.beforeCloseSelects, this, wrapSelects);
+			this.utils.callCallbackFunction(this.config.callbacks.beforeCloseSelects, this, wrapSelects);
 			wrapSelects.forEach((wrapSelect) => {
 				wrapSelect.classList.remove(this.config.selectors.opened);
 				if (this.config.autoHeight) {
 					wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = 0;
 				}
 			});
-			this.callCallbackFunction(this.config.callbacks.afterCloseSelects, this, wrapSelects);
+			this.utils.callCallbackFunction(this.config.callbacks.afterCloseSelects, this, wrapSelects);
 		}
 	}
 
@@ -490,7 +477,7 @@ export default class SelectBuilder {
 	 * @param { HTMLElement } wrapSelect - The ui select container
 	 */
 	openWrapSelect(wrapSelect) {
-		this.callCallbackFunction(this.config.callbacks.beforeOpenSelect, this, wrapSelect);
+		this.utils.callCallbackFunction(this.config.callbacks.beforeOpenSelect, this, wrapSelect);
 		wrapSelect.classList.add(this.config.selectors.opened);
 		const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiItemSelect);
 		let heightAll = 0;
@@ -505,7 +492,7 @@ export default class SelectBuilder {
 		if (this.config.autoPositioning) {
 			this.setContainerOptsPosition(wrapSelect);
 		}
-		this.callCallbackFunction(this.config.callbacks.afterOpenSelect, this, wrapSelect);
+		this.utils.callCallbackFunction(this.config.callbacks.afterOpenSelect, this, wrapSelect);
 	}
 
 	/**
@@ -707,7 +694,7 @@ export default class SelectBuilder {
 		event.stopPropagation();
 		const wrapSelect = args[1];
 		if (!wrapSelect.classList.contains(self.config.selectors.disabled) && !this.classList.contains(self.config.selectors.uiOptDisabled)) {
-			self.callCallbackFunction(self.config.callbacks.beforeSelectItem, self, wrapSelect);
+			self.utils.callCallbackFunction(self.config.callbacks.beforeSelectItem, self, wrapSelect);
 			const val = this.getAttribute('data-value');
 			const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
 			const select = wrapSelect.querySelector('select');
@@ -723,7 +710,7 @@ export default class SelectBuilder {
 			}
 			self.setSelectedOption(select);
 			self.updateSelectedOptsDisplay(select);
-			self.callCallbackFunction(self.config.callbacks.afterSelectItem, self, wrapSelect);
+			self.utils.callCallbackFunction(self.config.callbacks.afterSelectItem, self, wrapSelect);
 		}
 	}
 
@@ -737,7 +724,7 @@ export default class SelectBuilder {
 		event.stopPropagation();
 		const wrapSelect = args[1];
 		if (!wrapSelect.classList.contains(self.config.selectors.disabled)) {
-			self.callCallbackFunction(self.config.callbacks.beforeDeselectItem, self, wrapSelect);
+			self.utils.callCallbackFunction(self.config.callbacks.beforeDeselectItem, self, wrapSelect);
 			const val = this.getAttribute('data-value');
 			const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
 			const UIoptByVal = wrapSelect.querySelector('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]');
@@ -750,7 +737,7 @@ export default class SelectBuilder {
 			}
 			self.setSelectedOption(select);
 			self.updateSelectedOptsDisplay(select);
-			self.callCallbackFunction(self.config.callbacks.afterDeselectItem, self, wrapSelect);
+			self.utils.callCallbackFunction(self.config.callbacks.afterDeselectItem, self, wrapSelect);
 		}
 	}
 
@@ -801,19 +788,6 @@ export default class SelectBuilder {
 	}
 
 	/**
-	 * Calls de callback functions
-	 * @param { Function } callback - The callback method
-	 * @param { Object } ref - The new reference
-	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } element - The container or field that will be validated
-	 * @param { String || Number || Array } otherParams - The params that can be used by callback
-	 */
-	callCallbackFunction(callback, ref, element, otherParams) {
-		if (this.check.isFunction(callback)) {
-			callback.call(ref, element, otherParams);
-		}
-	}
-
-	/**
 	 * Select item programmatically
 	 * @param { Integer } itemIndex - The index of the option that will be selected
 	 * @param { HTMLElement } select - the select element
@@ -838,5 +812,4 @@ export default class SelectBuilder {
 			}
 		}
 	}
-
 }
