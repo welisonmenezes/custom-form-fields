@@ -12,12 +12,13 @@
 	box-sizing: border-box;
 
 	select{
-		@include opacity(0);
 		width: 0;
 		height: 0;
 		position: absolute;
 		top: -99999px;
 		left: -99999px;
+
+		@include opacity(0);
 	}
 
 	.cff-option{

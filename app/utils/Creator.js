@@ -1,9 +1,87 @@
 export default class Creator {
 
+	/**
+     * The constructor
+     * @param { Check } An instance of the Check class
+     */
 	constructor(Check) {
 		this.check = Check;
 	}
 
+	/**
+     * Create HTML elements from given params
+     * @param { Array } An array of objects that configure the criation of new element
+     *
+     *	eg.: [{
+	 *			name: 'DIV',
+	 *			class: ['class-div'],
+	 *			attributes: [
+	 *				{name: 'data-value', value: 'value-test'},
+	 *				{name: 'id', value: 'div-id'}
+	 *			],
+	 *			text: 'Div text',
+	 *			children: {
+	 *				elements: [
+	 *					{
+	 *						name: 'P',
+	 *						class: ['class-1', 'class-2'],
+	 *						attributes: [
+	 *							{name: 'data-value', value: 'value-test'},
+	 *							{name: 'data-target', value: 'target-test'}
+	 *						],
+	 *						text: 'P text',
+	 *						children: {
+	 *							elements: [
+	 *								{
+	 *									name: 'LABEL',
+	 *									children: {
+	 *										elements: [
+	 *											{
+	 *												name: 'SPAN',
+	 *												text: 'inside all'
+	 *											}
+	 *										]
+	 *									}
+	 *								},
+	 *								{
+	 *									name: 'INPUT',
+	 *									class: ['form-control', 'input-cls'],
+	 *									attributes: [
+	 *										{name: 'value', value: 'email@email'},
+	 *										{name: 'type', value: 'email'}
+	 *									]
+	 *								}
+	 *							],
+	 *							parentTree: {
+	 *								name: 'SPAN',
+	 *								class: ['class-span'],
+	 *								attributes: [{name: 'id', value: 'span-id-parent'}]
+	 *							}
+	 *						}
+	 *					},
+	 *					{
+	 *						name: 'P',
+	 *						text: 'Paragraph'
+	 *					}
+	 *				]
+	 *			}
+	 *		},
+	 *		{
+	 *			name: 'SPAN',
+	 *			text: 'SPAN text'
+	 *		}]
+	 *
+	 * @param { Object } parentTree - An object that configure the parent of new element,
+	 * if not was passed a DIV element will be created by default.
+	 *
+	 * eg.: {
+	 *			name: 'DIV',
+	 *			class: ['class-div'],
+	 *			attributes: [{name: 'id', value: 'div-id-parent'}]
+	 *		}
+	 *
+     * @returns { HTMLElement } The parentTree with the new created element into or null 
+     */
 	createElements(elements, parentTree) {
 		if( elements && Array.isArray(elements) ) {
 			const tempEls = [];
@@ -26,8 +104,19 @@ export default class Creator {
 			}
 			return parent;
 		}
+		return null;
 	}
 
+	/**
+	 * Create a single HTML element
+	 * @param { Object } element - An object that cofigure the creation of the new element
+	 * eg.: {
+	 *			name: 'SPAN',
+	 *			text: 'SPAN text'
+	 *		}
+	 *
+	 * @returns { HTMLElement } The new created element
+	 */
 	createASingleElement(element) {
 		const tempEl = document.createElement(element.name);
 		if(element.class && Array.isArray(element.class)) {
@@ -52,6 +141,12 @@ export default class Creator {
 		return tempEl;
 	}
 
+	/**
+	 * Creat HTML attribute with given name and value to given element
+	 * @param { HTMLElement } select - The select element
+	 * @param { String } attrName - The attribute's name
+	 * @param { String } attrValue - The attribute's value
+	 */
 	createAttribute(element, attrName, attrValue) {
 		const tempAtt = document.createAttribute(attrName);
 		tempAtt.value = attrValue
