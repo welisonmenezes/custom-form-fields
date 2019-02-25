@@ -7,7 +7,7 @@ const options = {
 	selects: {
 		selectByDigit: false,
 		selectors: {
-			selected: 'selected'
+			selected: 'cff-selected'
 		},
 		callbacks: {
 			beforeBuildSelect: function(selects) {

@@ -56,6 +56,7 @@ export default class SelectBuilder {
 				selected: 'cff-selected',
 				opened: 'cff-opened',
 				multiple: 'cff-multiple',
+				single: 'cff-single',
 				uiOption: 'cff-option',
 				uiItemSelect: 'cff-item',
 				uiGroupClass: 'cff-group',
@@ -159,7 +160,7 @@ export default class SelectBuilder {
 	 * @returns { HTMLElement } the ui select container that was created
 	 */
 	createWrapSelect(select) {
-		const selectType = (select.hasAttribute('multiple')) ? this.config.selectors.multiple : 'non-' + this.config.selectors.multiple;
+		const selectType = (select.hasAttribute('multiple')) ? this.config.selectors.multiple : this.config.selectors.single;
 		const wrapArr = [
 			{
 				name: 'DIV',
