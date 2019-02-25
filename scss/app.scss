@@ -25,6 +25,11 @@
 		&.cff-selected{
 			background: #f4f4f4;
 		}
+		&.cff-opt-disabled{
+			cursor: not-allowed;
+			
+			@include opacity(0.5);
+		}
 	}
 
 	.cff-container-options{

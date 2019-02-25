@@ -91,6 +91,7 @@ export default class SelectBuilder {
 				single: 'cff-single',
 				disabled: 'cff-disabled',
 				uiOption: 'cff-option',
+				uiOptDisabled: 'cff-opt-disabled',
 				uiItemSelect: 'cff-item',
 				uiGroupClass: 'cff-group',
 				uiGroupTitle: 'cff-group-title',
@@ -265,9 +266,13 @@ export default class SelectBuilder {
 	 * @returns { Object } An object that will be used to creat an ui option
 	 */
 	createOptionObj(optionElement) {
+		const optClasses = [this.config.selectors.uiItemSelect, this.config.selectors.uiOption];
+		if (optionElement.hasAttribute('disabled')) {
+			optClasses.push(this.config.selectors.uiOptDisabled);
+		}
 		return {
 			name: 'DIV',
-			class: [this.config.selectors.uiItemSelect, this.config.selectors.uiOption],
+			class: optClasses,
 			text: optionElement.innerHTML,
 			attributes: [
 				{name: 'data-value', value: optionElement.value}
@@ -559,11 +564,35 @@ export default class SelectBuilder {
 			} else if (direction === 'bottom') {
 				newIndex = (index < (total - 1)) ? (index + 1) : 0;
 			}
-			const newSelected = uiOpts[newIndex];
+			newIndex = this.setNewIndexIfOptIsDisabled(direction, newIndex, uiOpts);
+			let newSelected = uiOpts[newIndex];
 			if (newSelected) {
 				newSelected.click();
 			}
 		}
+	}
+
+	/**
+	 * Set new index recursively if option is disabeld
+	 * @param { String } direction - the ditection of the key [top, bottom]
+	 * @param { Integer } oldIndex - the index of the disabled option 
+	 * @param { Nodelist } uiOpts - The intire list of ui options
+	 * @returns { Integer } The index of the next option 
+	 * (if is disabled run again, and again, and again...)
+	 */
+	setNewIndexIfOptIsDisabled(direction, oldIndex, uiOpts) {
+		let newIndex = oldIndex;
+		let newSelected = uiOpts[newIndex];
+		if (newSelected && newSelected.classList.contains(this.config.selectors.uiOptDisabled)) {
+			const total = uiOpts.length;
+			if (direction === 'top') {
+				newIndex = (newIndex === 0) ? (total - 1) : (newIndex - 1);
+			} else if (direction === 'bottom') {
+				newIndex = (newIndex === (total - 1)) ? 0 : (newIndex + 1);
+			}
+			newIndex = this.setNewIndexIfOptIsDisabled(direction, newIndex, uiOpts);
+		}
+		return newIndex;
 	}
 
 	/**
@@ -676,8 +705,8 @@ export default class SelectBuilder {
 		const self = args[0];
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
-		if (!this.classList.contains(self.config.selectors.disabled)) {
-			const wrapSelect = args[1];
+		const wrapSelect = args[1];
+		if (!wrapSelect.classList.contains(self.config.selectors.disabled) && !this.classList.contains(self.config.selectors.uiOptDisabled)) {
 			self.callCallbackFunction(self.config.callbacks.beforeSelectItem, self, wrapSelect);
 			const val = this.getAttribute('data-value');
 			const optByVal = wrapSelect.querySelector('[value="' + val + '"]');

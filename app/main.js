@@ -12,51 +12,6 @@ const options = {
 		callbacks: {
 			beforeBuildSelects: function(selects) {
 				console.log('beforeBuildSelects', selects);
-			},
-			afterBuildSelects: function(wrapSelects) {
-				console.log('afterBuildSelects', wrapSelects);
-			},
-			beforeConstroySelect: function(select) {
-				console.log('beforeConstroySelect', select);
-			},
-			afterConstroySelect: function(wrapSelect) {
-				console.log('afterConstroySelect', wrapSelect);
-			},
-			beforeDestroySelect: function(wrapSelect) {
-				console.log('beforeDestroySelect', wrapSelect);
-			},
-			afterDestroySelect: function(select) {
-				console.log('afterDestroySelect', select);
-			},
-			beforeAddNewOption: function(option) {
-				console.log('beforeAddNewOption', option);
-			},
-			afterAddNewOption: function(uiOption) {
-				console.log('afterAddNewOption', uiOption);
-			},
-			beforeOpenSelect: function(wrapSelect) {
-				console.log('beforeOpenSelect', wrapSelect);
-			},
-			afterOpenSelect: function(wrapSelect) {
-				console.log('afterOpenSelect', wrapSelect);
-			},
-			beforeCloseSelects: function(wrapSelects) {
-				console.log('beforeCloseSelects', wrapSelects);
-			},
-			afterCloseSelects: function(wrapSelects) {
-				console.log('afterCloseSelects', wrapSelects);
-			},
-			beforeSelectItem: function(wrapSelect) {
-				console.log('beforeSelectItem', wrapSelect);
-			},
-			afterSelectItem: function(wrapSelect) {
-				console.log('afterSelectItem', wrapSelect);
-			},
-			beforeDeselectItem: function(wrapSelect) {
-				console.log('beforeDeselectItem', wrapSelect);
-			},
-			afterDeselectItem: function(wrapSelect) {
-				console.log('afterDeselectItem', wrapSelect);
 			}
 		}
 	}
