@@ -739,4 +739,17 @@ export default class SelectBuilder {
 			}
 		}
 	}
+
+	destroy(select) {
+		if (select && this.check.isHTMLElement(select)) {
+			const wrapSelect = select.parentElement;
+			if (wrapSelect) {
+				const target = wrapSelect.parentElement;
+				if (target) {
+					target.appendChild(select);
+					target.removeChild(wrapSelect);
+				}
+			}
+		}
+	}
 }

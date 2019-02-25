@@ -66,3 +66,8 @@ document.getElementById('selectOpt').addEventListener('click', function() {
 	const select = document.getElementById('sel-1');
 	cff.selects.selectItem(2, select);
 });
+
+document.getElementById('destroySelect').addEventListener('click', function() {
+	const select = document.getElementById('sel-1');
+	cff.selects.destroy(select);
+});
