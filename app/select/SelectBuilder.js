@@ -89,6 +89,7 @@ export default class SelectBuilder {
 				opened: 'cff-opened',
 				multiple: 'cff-multiple',
 				single: 'cff-single',
+				disabled: 'cff-disabled',
 				uiOption: 'cff-option',
 				uiItemSelect: 'cff-item',
 				uiGroupClass: 'cff-group',
@@ -149,19 +150,21 @@ export default class SelectBuilder {
 	 */
 	addNewOption(value, text, select) {
 		if (select && this.check.isHTMLElement(select)) {
-			const optObj = {
-				name: 'OPTION',
-				class: [],
-				attributes: [
-					{name: 'value', value: value}
-				],
-				text: text
-			};
-			const opt = this.creator.createASingleElement(optObj);
-			this.callCallbackFunction(this.config.callbacks.beforeAddNewOption, this, opt);
-			if (opt) {
-				select.append(opt);
-				this.addNewUiOption(select, opt);
+			if (!select.hasAttribute('disabled')) {
+				const optObj = {
+					name: 'OPTION',
+					class: [],
+					attributes: [
+						{name: 'value', value: value}
+					],
+					text: text
+				};
+				const opt = this.creator.createASingleElement(optObj);
+				this.callCallbackFunction(this.config.callbacks.beforeAddNewOption, this, opt);
+				if (opt) {
+					select.append(opt);
+					this.addNewUiOption(select, opt);
+				}
 			}
 		}
 	}
@@ -201,12 +204,20 @@ export default class SelectBuilder {
 				class: [this.config.selectors.wrapSelect, selectType]
 			}
 		];
+		if (select.hasAttribute('disabled')) {
+			wrapArr[0].class.push(this.config.selectors.disabled);
+		}
 		const parentSelect = this.creator.createElements(wrapArr, select.parentNode);
 		const wrapSelect = this.$.getElement('.' + this.config.selectors.wrapSelect, parentSelect);
 		if (wrapSelect) {
 			wrapSelect.insertAdjacentElement('afterbegin', select);
 		}
-		this.creator.createAttribute(wrapSelect, 'tabindex', 0);
+		
+		if (select.hasAttribute('disabled')) {
+			this.creator.createAttribute(wrapSelect, 'aria-disabled', true);
+		} else {
+			this.creator.createAttribute(wrapSelect, 'tabindex', 0);
+		}
 		return wrapSelect;
 	}
 
@@ -585,14 +596,18 @@ export default class SelectBuilder {
 	 */
 	onToggleSelectClick(args) {
 		const event = arguments[(arguments.length - 1)];
+		const self = args[0];
 		event.stopPropagation();
-		// this is the element
-		if (this.classList.contains(args[0].config.selectors.opened)) {
-			args[0].closeWrapSelects();
-		} else {
-			args[0].closeWrapSelects();
-			args[0].openWrapSelect(this);
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			// this is the element
+			if (this.classList.contains(self.config.selectors.opened)) {
+				self.closeWrapSelects();
+			} else {
+				self.closeWrapSelects();
+				self.openWrapSelect(this);
+			}
 		}
+		
 	}
 
 	/**
@@ -603,17 +618,19 @@ export default class SelectBuilder {
 		const self = args[0]; // args[0] is the context
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
-		if (event.key === 'ArrowUp') {
-			if (self.config.selectByArrows) {
-				self.changeSelectedOptionByArrowKey(this, 'top', event);
-			}
-		} else if (event.key === 'ArrowDown') {
-			if (self.config.selectByArrows) {
-				self.changeSelectedOptionByArrowKey(this, 'bottom', event);
-			}
-		} else {
-			if (self.config.selectByDigit) {
-				self.changeSelectedOptionByDigitKey(this, event);
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			if (event.key === 'ArrowUp') {
+				if (self.config.selectByArrows) {
+					self.changeSelectedOptionByArrowKey(this, 'top', event);
+				}
+			} else if (event.key === 'ArrowDown') {
+				if (self.config.selectByArrows) {
+					self.changeSelectedOptionByArrowKey(this, 'bottom', event);
+				}
+			} else {
+				if (self.config.selectByDigit) {
+					self.changeSelectedOptionByDigitKey(this, event);
+				}
 			}
 		}
 	}
@@ -623,7 +640,10 @@ export default class SelectBuilder {
 	 * @param { Array } args - Params received by callback
 	 */
 	onFocusInSelect(args) {
-		args[0].utils.disableScroll();
+		const self = args[0];
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			self.utils.disableScroll();
+		}
 	}
 
 	/**
@@ -631,7 +651,10 @@ export default class SelectBuilder {
 	 * @param { Array } args - Params received by callback
 	 */
 	onFocusOutSelect(args) {
-		args[0].utils.enableScroll();
+		const self = args[0];
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			self.utils.enableScroll();
+		}
 	}
 
 	/**
@@ -639,7 +662,10 @@ export default class SelectBuilder {
 	 * @param { Array } args - Params received by callback
 	 */
 	onSelectFocusOut(args) {
-		args[0].closeWrapSelects();
+		const self = args[0];
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			self.closeWrapSelects();
+		}
 	}
 
 	/**
@@ -650,24 +676,26 @@ export default class SelectBuilder {
 		const self = args[0];
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
-		const wrapSelect = args[1];
-		self.callCallbackFunction(self.config.callbacks.beforeSelectItem, self, wrapSelect);
-		const val = this.getAttribute('data-value');
-		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
-		const select = wrapSelect.querySelector('select');
-		if (!select.hasAttribute('multiple')) {
-			self.resetNonMultipleSelect(select, wrapSelect);
-			select.value = val;
-			self.closeWrapSelects();
-		} else {
-			this.classList.add(self.config.selectors.selected);
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			const wrapSelect = args[1];
+			self.callCallbackFunction(self.config.callbacks.beforeSelectItem, self, wrapSelect);
+			const val = this.getAttribute('data-value');
+			const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
+			const select = wrapSelect.querySelector('select');
+			if (!select.hasAttribute('multiple')) {
+				self.resetNonMultipleSelect(select, wrapSelect);
+				select.value = val;
+				self.closeWrapSelects();
+			} else {
+				this.classList.add(self.config.selectors.selected);
+			}
+			if (optByVal) {
+				self.creator.createAttribute(optByVal, 'selected', 'true');
+			}
+			self.setSelectedOption(select);
+			self.updateSelectedOptsDisplay(select);
+			self.callCallbackFunction(self.config.callbacks.afterSelectItem, self, wrapSelect);
 		}
-		if (optByVal) {
-			self.creator.createAttribute(optByVal, 'selected', 'true');
-		}
-		self.setSelectedOption(select);
-		self.updateSelectedOptsDisplay(select);
-		self.callCallbackFunction(self.config.callbacks.afterSelectItem, self, wrapSelect);
 	}
 
 	/**
@@ -679,20 +707,22 @@ export default class SelectBuilder {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		const wrapSelect = args[1];
-		self.callCallbackFunction(self.config.callbacks.beforeDeselectItem, self, wrapSelect);
-		const val = this.getAttribute('data-value');
-		const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
-		const UIoptByVal = wrapSelect.querySelector('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]');
-		const select = wrapSelect.querySelector('select');
-		if (optByVal) {
-			optByVal.removeAttribute('selected');
+		if (!wrapSelect.classList.contains(self.config.selectors.disabled)) {
+			self.callCallbackFunction(self.config.callbacks.beforeDeselectItem, self, wrapSelect);
+			const val = this.getAttribute('data-value');
+			const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
+			const UIoptByVal = wrapSelect.querySelector('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]');
+			const select = wrapSelect.querySelector('select');
+			if (optByVal) {
+				optByVal.removeAttribute('selected');
+			}
+			if (UIoptByVal) {
+				UIoptByVal.classList.remove(self.config.selectors.selected);
+			}
+			self.setSelectedOption(select);
+			self.updateSelectedOptsDisplay(select);
+			self.callCallbackFunction(self.config.callbacks.afterDeselectItem, self, wrapSelect);
 		}
-		if (UIoptByVal) {
-			UIoptByVal.classList.remove(self.config.selectors.selected);
-		}
-		self.setSelectedOption(select);
-		self.updateSelectedOptsDisplay(select);
-		self.callCallbackFunction(self.config.callbacks.afterDeselectItem, self, wrapSelect);
 	}
 
 	/**
@@ -761,16 +791,18 @@ export default class SelectBuilder {
 	 */
 	selectItem(itemIndex, select) {
 		if (this.check.isInteger(itemIndex) && select && this.check.isHTMLElement(select)) {
-			const wrapSelect = select.parentElement;
-			if (wrapSelect) {
-				const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
-				if (items) {
-					const total = items.length;
-					let i;
-					for(i = 0; i < total; i++) {
-						if (i === itemIndex) {
-							items[i].click();
-							break;
+			if (!select.hasAttribute('disabled')) {
+				const wrapSelect = select.parentElement;
+				if (wrapSelect) {
+					const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
+					if (items) {
+						const total = items.length;
+						let i;
+						for(i = 0; i < total; i++) {
+							if (i === itemIndex) {
+								items[i].click();
+								break;
+							}
 						}
 					}
 				}

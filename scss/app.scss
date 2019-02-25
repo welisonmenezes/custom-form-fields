@@ -126,4 +126,9 @@
 			-webkit-transform: rotate(-135deg);
 		}
 	}
+
+	&.cff-disabled{
+		cursor: not-allowed;
+		background: #e3e3e3;
+	}
 }
