@@ -61,7 +61,7 @@ export default class SelectBuilder {
 	destroy(select) {
 		if (select && this.check.isHTMLElement(select)) {
 			const wrapSelect = select.parentElement;
-			if (wrapSelect) {
+			if (wrapSelect && wrapSelect.classList.contains(this.config.selectors.wrapSelect)) {
 				const target = wrapSelect.parentElement;
 				if (target) {
 					this.callCallbackFunction(this.config.callbacks.beforeDestroySelect, this, wrapSelect);
@@ -315,13 +315,17 @@ export default class SelectBuilder {
 		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption, select.parentElement);
 		if(options && divOptions) {
 			const isMultiple = (select.hasAttribute('multiple'));
-			options.forEach((opt, i) => {
+			const total = options.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				const opt = options[i];
 				if ( (opt.hasAttribute('selected') && opt.getAttribute('selected') !== 'false' && isMultiple) ) {
 					divOptions[i].classList.add(this.config.selectors.selected);
 				} else if (!isMultiple && (opt.value === select.value)) {
 					divOptions[i].classList.add(this.config.selectors.selected);
+					break;
 				}
-			});
+			}
 			if (isMultiple) {
 				const SelectedDivOptions = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, select.parentElement);
 				if (!SelectedDivOptions) {
