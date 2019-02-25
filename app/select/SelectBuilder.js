@@ -53,19 +53,19 @@ export default class SelectBuilder {
 			autoHeight: true,
 			autoPositioning: true,
 			selectors: {
-				selected: 'selected',
-				opened: 'opened',
-				multiple: 'multiple',
-				uiOption: 'option-class',
-				uiItemSelect: 'item-class',
-				uiGroupClass: 'group-class',
-				uiGroupTitle: 'title-class',
-				wrapSelect: 'wrap-select',
-				containerOptions: 'container-class',
-				containerOptsOverlowed: 'overflowed',
-				containerOptsOnTop: 'moved-to-top',
-				containerSelected: 'display-class',
-				selectedDisplayed: 'displayed-class'
+				selected: 'cff-selected',
+				opened: 'cff-opened',
+				multiple: 'cff-multiple',
+				uiOption: 'cff-option',
+				uiItemSelect: 'cff-item',
+				uiGroupClass: 'cff-group',
+				uiGroupTitle: 'cff-group-title',
+				wrapSelect: 'cff-wrap',
+				containerOptions: 'cff-container-options',
+				containerOptsOverlowed: 'cff-overflowed',
+				containerOptsOnTop: 'cff-top',
+				containerSelected: 'cff-container-display',
+				selectedDisplayed: 'cff-display'
 			},
 			callbacks: {
 				beforeBuildSelect: null,
@@ -390,7 +390,7 @@ export default class SelectBuilder {
 	 * @param { HTMLElement } wrapSelect - The ui selects container
 	 */
 	resolveEventsToUiSelectedDisplay(wrapSelect) {
-		if (wrapSelect.classList.contains('multiple')) {
+		if (wrapSelect.classList.contains(this.config.selectors.multiple)) {
 			const displayedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.selectedDisplayed);
 			if (displayedOpts.length) {
 				displayedOpts.forEach((opt) => {
