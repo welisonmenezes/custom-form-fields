@@ -10,17 +10,23 @@ const options = {
 			selected: 'cff-selected'
 		},
 		callbacks: {
-			beforeBuildSelect: function(selects) {
-				console.log('beforeBuildSelect', selects);
+			beforeBuildSelects: function(selects) {
+				console.log('beforeBuildSelects', selects);
 			},
-			afterBuildSelect: function(wrapSelects) {
-				console.log('afterBuildSelect', wrapSelects);
+			afterBuildSelects: function(wrapSelects) {
+				console.log('afterBuildSelects', wrapSelects);
 			},
-			beforeEachBuildSelect: function(select) {
-				console.log('beforeEachBuildSelect', select);
+			beforeConstroySelect: function(select) {
+				console.log('beforeConstroySelect', select);
 			},
-			afterEachBuildSelect: function(wrapSelect) {
-				console.log('afterEachBuildSelect', wrapSelect);
+			afterConstroySelect: function(wrapSelect) {
+				console.log('afterConstroySelect', wrapSelect);
+			},
+			beforeDestroySelect: function(wrapSelect) {
+				console.log('beforeDestroySelect', wrapSelect);
+			},
+			afterDestroySelect: function(select) {
+				console.log('afterDestroySelect', select);
 			},
 			beforeAddNewOption: function(option) {
 				console.log('beforeAddNewOption', option);
@@ -70,4 +76,9 @@ document.getElementById('selectOpt').addEventListener('click', function() {
 document.getElementById('destroySelect').addEventListener('click', function() {
 	const select = document.getElementById('sel-1');
 	cff.selects.destroy(select);
+});
+
+document.getElementById('constroySelect').addEventListener('click', function() {
+	const select = document.getElementById('sel-1');
+	cff.selects.constroy(select);
 });

@@ -23,22 +23,54 @@ export default class SelectBuilder {
 	build() {
 		const selects = this.$.getElements(this.config.element);
 		const wrapSelects = [];
-		this.callCallbackFunction(this.config.callbacks.beforeBuildSelect, this, selects);
+		this.callCallbackFunction(this.config.callbacks.beforeBuildSelects, this, selects);
 		if (selects) {
 			selects.forEach((select)  => {
-				this.callCallbackFunction(this.config.callbacks.beforeEachBuildSelect, this, select);
-				this.creator.createAttribute(select, 'tabindex', -1);
-				const wrapSelect = this.createWrapSelect(select);
-				const createdUISelect = this.createUISelect(select);
-				this.insertCreatedUISelect(createdUISelect, wrapSelect);
-				this.setSelectedOption(select);
-				this.createSelectedOptsDisplay(select);
-				this.resolveEventsToUiSelect(wrapSelect);
-				wrapSelects.push(wrapSelect);
-				this.callCallbackFunction(this.config.callbacks.afterEachBuildSelect, this, wrapSelect);
+				wrapSelects.push(this.constroy(select));
 			});
 		}
-		this.callCallbackFunction(this.config.callbacks.afterBuildSelect, this, wrapSelects);
+		this.callCallbackFunction(this.config.callbacks.afterBuildSelects, this, wrapSelects);
+	}
+
+	/**
+	 * Constroy ui select from default select
+	 * @param { HTMLElement } select - The select that ui be transformed
+	 * @return { HTMLElement || null } The new UI select or null
+	 */
+	constroy(select) {
+		const parent = select.parentElement;
+		if(parent && parent.classList.contains(this.config.selectors.wrapSelect)) {
+			return null;
+		}
+		this.callCallbackFunction(this.config.callbacks.beforeConstroySelect, this, select);
+		this.creator.createAttribute(select, 'tabindex', -1);
+		const wrapSelect = this.createWrapSelect(select);
+		const createdUISelect = this.createUISelect(select);
+		this.insertCreatedUISelect(createdUISelect, wrapSelect);
+		this.setSelectedOption(select);
+		this.createSelectedOptsDisplay(select);
+		this.resolveEventsToUiSelect(wrapSelect);
+		this.callCallbackFunction(this.config.callbacks.afterConstroySelect, this, wrapSelect);
+		return wrapSelect;
+	}
+
+	/**
+	 * Destroy the ui select 
+	 * @param { HTMLElement } select - The select element
+	 */
+	destroy(select) {
+		if (select && this.check.isHTMLElement(select)) {
+			const wrapSelect = select.parentElement;
+			if (wrapSelect) {
+				const target = wrapSelect.parentElement;
+				if (target) {
+					this.callCallbackFunction(this.config.callbacks.beforeDestroySelect, this, wrapSelect);
+					target.appendChild(select);
+					target.removeChild(wrapSelect);
+					this.callCallbackFunction(this.config.callbacks.afterDestroySelect, this, select);
+				}
+			}
+		}
 	}
 
 	/**
@@ -69,10 +101,12 @@ export default class SelectBuilder {
 				selectedDisplayed: 'cff-display'
 			},
 			callbacks: {
-				beforeBuildSelect: null,
-				afterBuildSelect: null,
-				beforeEachBuildSelect: null,
-				afterEachBuildSelect: null,
+				beforeBuildSelects: null,
+				afterBuildSelects: null,
+				beforeConstroySelect: null,
+				afterConstroySelect: null,
+				beforeDestroySelect: null,
+				afterDestroySelect: null,
 				beforeAddNewOption: null,
 				afterAddNewOption: null,
 				beforeOpenSelect: null,
@@ -740,16 +774,4 @@ export default class SelectBuilder {
 		}
 	}
 
-	destroy(select) {
-		if (select && this.check.isHTMLElement(select)) {
-			const wrapSelect = select.parentElement;
-			if (wrapSelect) {
-				const target = wrapSelect.parentElement;
-				if (target) {
-					target.appendChild(select);
-					target.removeChild(wrapSelect);
-				}
-			}
-		}
-	}
 }
