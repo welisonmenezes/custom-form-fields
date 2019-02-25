@@ -3,6 +3,7 @@ import Selector from './utils/Selector.js';
 import Creator from './utils/Creator.js';
 import Utils from './utils/Utils.js';
 import SelectBuilder from './select/SelectBuilder.js';
+import CheckboxRadioBuilder from './checkbox-radio/CheckboxRadioBuilder.js';
 
 export default class CustomFormFields {
 
@@ -15,6 +16,10 @@ export default class CustomFormFields {
 
 		this.selects = new SelectBuilder(options.selects, this.selector, this.creator, this.check, this.utils);
 		this.selects.build();
+
+
+		this.checkboxesRadios = new CheckboxRadioBuilder(options.checkboxesRadios, this.selector, this.creator, this.check, this.utils);
+		this.checkboxesRadios.build();
 
 	}
 }

@@ -5,7 +5,7 @@ import CustomFormFields from './CustomFormFields.js';
 
 const options = {
 	selects: {
-		selectByDigit: false,
+		selectByDigit: true,
 		selectors: {
 			selected: 'cff-selected'
 		},
@@ -13,6 +13,11 @@ const options = {
 			beforeBuildSelects: function(selects) {
 				console.log('beforeBuildSelects', selects);
 			}
+		}
+	},
+	checkboxesRadios: {
+		selectors: {
+			checked: 'xxx-checked'
 		}
 	}
 };

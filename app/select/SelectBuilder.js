@@ -18,6 +18,57 @@ export default class SelectBuilder {
 	}
 
 	/**
+	 * Sets configurations by merging user configurations with default configurations
+	 * @param {Object} userConfigurations - The user configurations
+	 */
+	_setConfiguration(userConfigurations) {
+		this.config = {
+			element: 'select',
+			selectByArrows: true,
+			selectByDigit: true,
+			autoHeight: true,
+			autoPositioning: true,
+			selectors: {
+				selected: 'cff-selected',
+				opened: 'cff-opened',
+				multiple: 'cff-multiple',
+				single: 'cff-single',
+				disabled: 'cff-disabled',
+				uiOption: 'cff-option',
+				uiOptDisabled: 'cff-opt-disabled',
+				uiItemSelect: 'cff-item',
+				uiGroupClass: 'cff-group',
+				uiGroupTitle: 'cff-group-title',
+				wrapSelect: 'cff-wrap',
+				containerOptions: 'cff-container-options',
+				containerOptsOverlowed: 'cff-overflowed',
+				containerOptsOnTop: 'cff-top',
+				containerSelected: 'cff-container-display',
+				selectedDisplayed: 'cff-display'
+			},
+			callbacks: {
+				beforeBuildSelects: null,
+				afterBuildSelects: null,
+				beforeConstroySelect: null,
+				afterConstroySelect: null,
+				beforeDestroySelect: null,
+				afterDestroySelect: null,
+				beforeAddNewOption: null,
+				afterAddNewOption: null,
+				beforeOpenSelect: null,
+				afterOpenSelect: null,
+				beforeCloseSelects: null,
+				afterCloseSelects: null,
+				beforeSelectItem: null,
+				afterSelectItem: null,
+				beforeDeselectItem: null,
+				afterDeselectItem: null
+			}
+		};
+		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
+	}
+
+	/**
 	 * Build UI selects from default selects
 	 */
 	build() {
@@ -71,57 +122,6 @@ export default class SelectBuilder {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Sets configurations by merging user configurations with default configurations
-	 * @param {Object} userConfigurations - The user configurations
-	 */
-	_setConfiguration(userConfigurations) {
-		this.config = {
-			element: 'select',
-			selectByArrows: true,
-			selectByDigit: true,
-			autoHeight: true,
-			autoPositioning: true,
-			selectors: {
-				selected: 'cff-selected',
-				opened: 'cff-opened',
-				multiple: 'cff-multiple',
-				single: 'cff-single',
-				disabled: 'cff-disabled',
-				uiOption: 'cff-option',
-				uiOptDisabled: 'cff-opt-disabled',
-				uiItemSelect: 'cff-item',
-				uiGroupClass: 'cff-group',
-				uiGroupTitle: 'cff-group-title',
-				wrapSelect: 'cff-wrap',
-				containerOptions: 'cff-container-options',
-				containerOptsOverlowed: 'cff-overflowed',
-				containerOptsOnTop: 'cff-top',
-				containerSelected: 'cff-container-display',
-				selectedDisplayed: 'cff-display'
-			},
-			callbacks: {
-				beforeBuildSelects: null,
-				afterBuildSelects: null,
-				beforeConstroySelect: null,
-				afterConstroySelect: null,
-				beforeDestroySelect: null,
-				afterDestroySelect: null,
-				beforeAddNewOption: null,
-				afterAddNewOption: null,
-				beforeOpenSelect: null,
-				afterOpenSelect: null,
-				beforeCloseSelects: null,
-				afterCloseSelects: null,
-				beforeSelectItem: null,
-				afterSelectItem: null,
-				beforeDeselectItem: null,
-				afterDeselectItem: null
-			}
-		};
-		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
 	}
 
 	/**
