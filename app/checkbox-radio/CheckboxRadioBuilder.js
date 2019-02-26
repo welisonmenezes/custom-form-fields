@@ -26,7 +26,8 @@ export default class CheckboxRadioBuilder {
 			selectors: {
 				checked: 'cff-checked',
 				disabled: 'cff-disabled',
-				wrapCheckRadio: 'cff-wrap-check-radio'
+				wrapCheckRadio: 'cff-wrap-check-radio',
+				containerCheckRadio: 'cff-container-check-radio'
 			},
 			callbacks: {}
 		};
@@ -42,13 +43,13 @@ export default class CheckboxRadioBuilder {
 			checkboxesRadios.forEach((checkRadio, index) => {
 				this.creator.createAttribute(checkRadio, 'tabindex', -1);
 				const wrapCheckRadio = this.createWrapCheckRadio(checkRadio);
+				const uiCheckRadio = this.createUICheckRadio(wrapCheckRadio);
 			});
 		}
 	}
 
-
 	/**
-	 * Create the ui select container and insert on page
+	 * Create the ui input container and insert on page
 	 * @param { HTMLElement || HTMLFormElement } checkRadio - The input that will receive the option
 	 * @returns { HTMLElement } the ui input container that was created
 	 */
@@ -80,5 +81,36 @@ export default class CheckboxRadioBuilder {
 			throw 'The container must be a label';
 		}
 		return null;
+	}
+
+	/**
+	 * Create the ui input
+	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The wrap of ui input
+	 * @returns { HTMLElement } the ui input that was created
+	 */
+	createUICheckRadio(wrapCheckRadio) {
+		const realLabel = wrapCheckRadio.querySelector('label');
+		let textLabel = '';
+		if (realLabel) {
+			textLabel = realLabel.textContent;
+		}
+		const divParent = {
+			name: 'DIV',
+			class: [this.config.selectors.containerCheckRadio]
+		};
+		const fieldsChild = [
+			{
+				name: 'A',
+				class: ['a-check']
+			},
+			{
+				name: 'SPAN',
+				class: ['span-check'],
+				text: textLabel
+			}
+		];
+		const uiCheckRadio = this.creator.createElements(fieldsChild, divParent);
+		wrapCheckRadio.appendChild(uiCheckRadio);
+		return uiCheckRadio;
 	}
 }

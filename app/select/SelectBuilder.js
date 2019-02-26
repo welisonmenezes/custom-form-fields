@@ -228,7 +228,6 @@ export default class SelectBuilder {
 	 * @returns { HTMLElement } the ui select that was created
 	 */
 	createUISelect(select) {
-		let childObj;
 		const divParent = {
 			name: 'DIV',
 			class: [this.config.selectors.containerOptions]
