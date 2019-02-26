@@ -27,7 +27,11 @@ export default class CheckboxRadioBuilder {
 				checked: 'cff-checked',
 				disabled: 'cff-disabled',
 				wrapCheckRadio: 'cff-wrap-check-radio',
-				containerCheckRadio: 'cff-container-check-radio'
+				containerCheckRadio: 'cff-container-check-radio',
+				isRadio: 'cff-is-radio',
+				isCheckbox: 'cff-is-checkbox',
+				uiInput: 'cff-ui-input',
+				uiLabel: 'cff-ui-label'
 			},
 			callbacks: {}
 		};
@@ -43,6 +47,7 @@ export default class CheckboxRadioBuilder {
 			checkboxesRadios.forEach((checkRadio, index) => {
 				this.creator.createAttribute(checkRadio, 'tabindex', -1);
 				const wrapCheckRadio = this.createWrapCheckRadio(checkRadio);
+				this.setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio);
 				const uiCheckRadio = this.createUICheckRadio(wrapCheckRadio);
 			});
 		}
@@ -83,6 +88,14 @@ export default class CheckboxRadioBuilder {
 		return null;
 	}
 
+	setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio) {
+		if (this.check.isInputRadio(checkRadio)) {
+			wrapCheckRadio.classList.add(this.config.selectors.isRadio);
+		} else if (this.check.isInputCheckbox(checkRadio)) {
+			wrapCheckRadio.classList.add(this.config.selectors.isCheckbox);
+		}
+	}
+
 	/**
 	 * Create the ui input
 	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The wrap of ui input
@@ -101,11 +114,11 @@ export default class CheckboxRadioBuilder {
 		const fieldsChild = [
 			{
 				name: 'A',
-				class: ['a-check']
+				class: [this.config.selectors.uiInput]
 			},
 			{
 				name: 'SPAN',
-				class: ['span-check'],
+				class: [this.config.selectors.uiLabel],
 				text: textLabel
 			}
 		];

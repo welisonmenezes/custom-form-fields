@@ -55,5 +55,13 @@ export default class Check {
     isInteger(value) {
         return (/^[0-9]+$/.test(value));
     }
+
+    isInputRadio(element) {
+        return (element && element.tagName === 'INPUT' && element.getAttribute('type') === 'radio');
+    }
+
+    isInputCheckbox(element) {
+        return (element && element.tagName === 'INPUT' && element.getAttribute('type') === 'checkbox');
+    }
 	
 }
