@@ -24,7 +24,9 @@ export default class CheckboxRadioBuilder {
 		this.config = {
 			element: 'input[type="checkbox"], input[type="radio"]',
 			selectors: {
-				checked: 'cff-checked'
+				checked: 'cff-checked',
+				disabled: 'cff-disabled',
+				wrapCheckRadio: 'cff-wrap-check-radio'
 			},
 			callbacks: {}
 		};
@@ -36,6 +38,47 @@ export default class CheckboxRadioBuilder {
 	 */
 	build() {
 		const checkboxesRadios = this.$.getElements(this.config.element);
-		console.log(checkboxesRadios);
+		if (checkboxesRadios) {
+			checkboxesRadios.forEach((checkRadio, index) => {
+				this.creator.createAttribute(checkRadio, 'tabindex', -1);
+				const wrapCheckRadio = this.createWrapCheckRadio(checkRadio);
+			});
+		}
+	}
+
+
+	/**
+	 * Create the ui select container and insert on page
+	 * @param { HTMLElement || HTMLFormElement } checkRadio - The input that will receive the option
+	 * @returns { HTMLElement } the ui input container that was created
+	 */
+	createWrapCheckRadio(checkRadio) {
+		const wrapArr = [
+			{
+				name: 'DIV',
+				class: [this.config.selectors.wrapCheckRadio]
+			}
+		];
+		if (checkRadio.hasAttribute('disabled')) {
+			wrapArr[0].class.push(this.config.selectors.disabled);
+		}
+		const label = checkRadio.parentNode;
+		if (label  && label.tagName === 'LABEL') {
+			const parentCheckRadio = this.creator.createElements(wrapArr, label);
+			const wrapCheckRadio = this.$.getElement('.' + this.config.selectors.wrapCheckRadio, label);
+			if (wrapCheckRadio) {
+				label.insertAdjacentElement('afterend', wrapCheckRadio);
+				wrapCheckRadio.appendChild(label);
+			}
+			if (checkRadio.hasAttribute('disabled')) {
+				this.creator.createAttribute(wrapCheckRadio, 'aria-disabled', true);
+			} else {
+				this.creator.createAttribute(wrapCheckRadio, 'tabindex', 0);
+			}
+			return wrapCheckRadio;
+		} else {
+			throw 'The container must be a label';
+		}
+		return null;
 	}
 }

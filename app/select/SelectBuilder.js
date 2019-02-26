@@ -39,7 +39,7 @@ export default class SelectBuilder {
 				uiItemSelect: 'cff-item',
 				uiGroupClass: 'cff-group',
 				uiGroupTitle: 'cff-group-title',
-				wrapSelect: 'cff-wrap',
+				wrapSelect: 'cff-wrap-select',
 				containerOptions: 'cff-container-options',
 				containerOptsOverlowed: 'cff-overflowed',
 				containerOptsOnTop: 'cff-top',

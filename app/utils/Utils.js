@@ -103,7 +103,6 @@ export default class Utils {
 		window.onkeydown = function(){};
 	}
 
-
 	/**
 	 * Add given event to given element
 	 * @param { HTMLElement } element - The element that will receive the event
@@ -129,5 +128,4 @@ export default class Utils {
 			callback.call(ref, element, otherParams);
 		}
 	}
-
 }
