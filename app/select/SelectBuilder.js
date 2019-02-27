@@ -348,7 +348,7 @@ export default class SelectBuilder {
 					divOptions[0].classList.add(this.config.selectors.selected);
 				} else {
 					if (SelectedDivOptions.length > 1) {
-						options[0].removeAttribute('selected');
+						this.creator.removeAttribute(options[0], 'selected');
 						divOptions[0].classList.remove(this.config.selectors.selected);
 					}
 				}
@@ -507,7 +507,7 @@ export default class SelectBuilder {
 		const opts = this.$.getElements('option', select);
 		if (opts && opts.length) {
 			opts.forEach((opt) => {
-				opt.removeAttribute('selected');
+				this.creator.removeAttribute(opt, 'selected');
 			});
 		}
 		if (divSelectedOpts && divSelectedOpts.length) {
@@ -538,7 +538,7 @@ export default class SelectBuilder {
 				}
 				if (!event.shiftKey) {
 					uiOpts.forEach((opt, ind) => {
-						opts[ind].removeAttribute('selected');
+						this.creator.removeAttribute(opts[ind], 'selected');
 						opt.classList.remove(this.config.selectors.selected);
 					});
 				}
@@ -732,7 +732,7 @@ export default class SelectBuilder {
 			const UIoptByVal = self.$.getElement('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]', wrapSelect);
 			const select = self.$.getElement('select', wrapSelect);
 			if (optByVal) {
-				optByVal.removeAttribute('selected');
+				self.creator.removeAttribute(optByVal, 'selected');
 			}
 			if (UIoptByVal) {
 				UIoptByVal.classList.remove(self.config.selectors.selected);
