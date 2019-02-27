@@ -105,7 +105,7 @@ export default class CheckboxRadioBuilder {
 	 * @returns { HTMLElement } the ui input that was created
 	 */
 	createUICheckRadio(wrapCheckRadio) {
-		const realLabel = wrapCheckRadio.querySelector('label');
+		const realLabel = this.$.getElement('label', wrapCheckRadio);
 		let textLabel = '';
 		if (realLabel) {
 			textLabel = realLabel.textContent;

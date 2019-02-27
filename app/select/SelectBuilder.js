@@ -135,7 +135,7 @@ export default class SelectBuilder {
 		if (this.config.selectByArrows || this.config.selectByDigit) {
 			this.utils.addEventListenerToElement(wrapSelect, 'keyup', this.onKeyupSelect, [this]);
 		}
-		const options = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
+		const options = this.$.getElements('.' + this.config.selectors.uiOption, wrapSelect);
 		if (options.length) {
 			options.forEach((opt) => {
 				this.utils.addEventListenerToElement(opt, 'click', this.onSelectItem, [this, wrapSelect]);
@@ -179,7 +179,7 @@ export default class SelectBuilder {
 		if (select) {
 			const wrapSelect = select.parentElement;
 			if (wrapSelect) {
-				const uiOptContainer = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
+				const uiOptContainer = this.$.getElement('.' + this.config.selectors.containerOptions, wrapSelect);
 				if (uiOptContainer) {
 					const uiOpt = this.creator.createASingleElement(this.createOptionObj(newOpt));
 					if (uiOpt) {
@@ -421,7 +421,7 @@ export default class SelectBuilder {
 	updateSelectedOptsDisplay(select) {
 		const wrapSelect = select.parentNode;
 		if (wrapSelect) {
-			const existedDisplays = wrapSelect.querySelector('.' + this.config.selectors.containerSelected);
+			const existedDisplays = this.$.getElement('.' + this.config.selectors.containerSelected, wrapSelect);
 			if (existedDisplays) {
 				existedDisplays.innerHTML = '';
 				const selectedOptions = this.getSelectedOptions(select);
@@ -445,7 +445,7 @@ export default class SelectBuilder {
 	 */
 	resolveEventsToUiSelectedDisplay(wrapSelect) {
 		if (wrapSelect.classList.contains(this.config.selectors.multiple)) {
-			const displayedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.selectedDisplayed);
+			const displayedOpts = this.$.getElements('.' + this.config.selectors.selectedDisplayed, wrapSelect);
 			if (displayedOpts.length) {
 				displayedOpts.forEach((opt) => {
 					this.utils.addEventListenerToElement(opt, 'click', this.onDeselectItem, [this, wrapSelect]);
@@ -458,13 +458,16 @@ export default class SelectBuilder {
 	 * Close the ui select
 	 */
 	closeWrapSelects() {
-		const wrapSelects =  document.querySelectorAll('.' + this.config.selectors.wrapSelect + '.' + this.config.selectors.opened);
-		if (wrapSelects.length) {
+		const wrapSelects =  this.$.getElements('.' + this.config.selectors.wrapSelect + '.' + this.config.selectors.opened);
+		if (wrapSelects && wrapSelects.length) {
 			this.utils.callCallbackFunction(this.config.callbacks.beforeCloseSelects, this, wrapSelects);
 			wrapSelects.forEach((wrapSelect) => {
 				wrapSelect.classList.remove(this.config.selectors.opened);
 				if (this.config.autoHeight) {
-					wrapSelect.querySelector('.' + this.config.selectors.containerOptions).style.height = 0;
+					const contOpts = this.$.getElement('.' + this.config.selectors.containerOptions, wrapSelect);
+					if (contOpts) {
+						contOpts.style.height = 0;	
+					}
 				}
 			});
 			this.utils.callCallbackFunction(this.config.callbacks.afterCloseSelects, this, wrapSelects);
@@ -478,9 +481,9 @@ export default class SelectBuilder {
 	openWrapSelect(wrapSelect) {
 		this.utils.callCallbackFunction(this.config.callbacks.beforeOpenSelect, this, wrapSelect);
 		wrapSelect.classList.add(this.config.selectors.opened);
-		const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiItemSelect);
+		const items = this.$.getElements('.' + this.config.selectors.uiItemSelect, wrapSelect);
 		let heightAll = 0;
-		if (items.length) {
+		if (items && items.length) {
 			items.forEach((item) => {
 				heightAll = heightAll + item.clientHeight;
 			});
@@ -500,14 +503,14 @@ export default class SelectBuilder {
 	 * @param { HTMLElement } wrapSelect - The ui selects container
 	 */
 	resetNonMultipleSelect(select, wrapSelect) {
-		const divSelectedOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected);
-		const opts = select.querySelectorAll('option');
-		if (opts.length) {
+		const divSelectedOpts = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, wrapSelect);
+		const opts = this.$.getElements('option', select);
+		if (opts && opts.length) {
 			opts.forEach((opt) => {
 				opt.removeAttribute('selected');
 			});
 		}
-		if (divSelectedOpts) {
+		if (divSelectedOpts && divSelectedOpts.length) {
 			divSelectedOpts.forEach((opt) => {
 				opt.classList.remove(this.config.selectors.selected);
 			});
@@ -522,9 +525,9 @@ export default class SelectBuilder {
 	 * @param { Event } event - The event object that was fired
 	 */
 	changeSelectedOptionByArrowKey(wrapSelect, direction, event) {
-		let selected = wrapSelect.querySelectorAll('.' + this.config.selectors.selected);
-		const uiOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
-		const opts = wrapSelect.querySelectorAll('option');
+		let selected = this.$.getElements('.' + this.config.selectors.selected, wrapSelect);
+		const uiOpts = this.$.getElements('.' + this.config.selectors.uiOption, wrapSelect);
+		const opts = this.$.getElements('option', wrapSelect);
 		let oldSelected;
 		if (selected && uiOpts && opts) {
 			if (wrapSelect.classList.contains(this.config.selectors.multiple)) {
@@ -589,7 +592,7 @@ export default class SelectBuilder {
 	changeSelectedOptionByDigitKey(wrapSelect, event) {
 		const digit = event.key.toLowerCase();
 		if (this.check.isSingleDigit(digit)) {
-			const uiOpts = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
+			const uiOpts = this.$.getElements('.' + this.config.selectors.uiOption, wrapSelect);
 			if (uiOpts) {
 				const total = uiOpts.length;
 				let i;
@@ -695,8 +698,8 @@ export default class SelectBuilder {
 		if (!wrapSelect.classList.contains(self.config.selectors.disabled) && !this.classList.contains(self.config.selectors.uiOptDisabled)) {
 			self.utils.callCallbackFunction(self.config.callbacks.beforeSelectItem, self, wrapSelect);
 			const val = this.getAttribute('data-value');
-			const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
-			const select = wrapSelect.querySelector('select');
+			const optByVal = self.$.getElement('option[value="' + val + '"]', wrapSelect);
+			const select = self.$.getElement('select', wrapSelect);
 			if (!select.hasAttribute('multiple')) {
 				self.resetNonMultipleSelect(select, wrapSelect);
 				select.value = val;
@@ -725,9 +728,9 @@ export default class SelectBuilder {
 		if (!wrapSelect.classList.contains(self.config.selectors.disabled)) {
 			self.utils.callCallbackFunction(self.config.callbacks.beforeDeselectItem, self, wrapSelect);
 			const val = this.getAttribute('data-value');
-			const optByVal = wrapSelect.querySelector('[value="' + val + '"]');
-			const UIoptByVal = wrapSelect.querySelector('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]');
-			const select = wrapSelect.querySelector('select');
+			const optByVal = self.$.getElement('option[value="' + val + '"]', wrapSelect);
+			const UIoptByVal = self.$.getElement('.' + self.config.selectors.uiOption + '[data-value="' + val + '"]', wrapSelect);
+			const select = self.$.getElement('select', wrapSelect);
 			if (optByVal) {
 				optByVal.removeAttribute('selected');
 			}
@@ -758,7 +761,7 @@ export default class SelectBuilder {
 	 */
 	setHeightOptionContainer(wrapSelect, heightAllOpts) {
 		const newH = this.getHeigthOptionContainer(wrapSelect, heightAllOpts);
-		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
+		const containerOptions = this.$.getElement('.' + this.config.selectors.containerOptions, wrapSelect);
 		if (containerOptions) {
 			containerOptions.style.height = (newH + 1) + 'px';
 			if (heightAllOpts > newH) {
@@ -774,7 +777,7 @@ export default class SelectBuilder {
 	 * @param { HTMLElement } wrapSelect - The ui selects container
 	 */
 	setContainerOptsPosition(wrapSelect) {
-		const containerOptions = wrapSelect.querySelector('.' + this.config.selectors.containerOptions);
+		const containerOptions = this.$.getElement('.' + this.config.selectors.containerOptions, wrapSelect);
 		if (containerOptions) {
 			const relativeTop = this.utils.getWindowPositonElement(wrapSelect);
 			const winH = this.utils.getWindowHeight();
@@ -796,7 +799,7 @@ export default class SelectBuilder {
 			if (!select.hasAttribute('disabled')) {
 				const wrapSelect = select.parentElement;
 				if (wrapSelect) {
-					const items = wrapSelect.querySelectorAll('.' + this.config.selectors.uiOption);
+					const items = this.$.getElements('.' + this.config.selectors.uiOption, wrapSelect);
 					if (items) {
 						const total = items.length;
 						let i;
