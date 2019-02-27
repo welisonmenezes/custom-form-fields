@@ -23,6 +23,7 @@ export default class CheckboxRadioBuilder {
 	_setConfiguration(userConfigurations) {
 		this.config = {
 			element: 'input[type="checkbox"], input[type="radio"]',
+			labelPosition: 'right', // ['right', 'left']
 			selectors: {
 				checked: 'cff-checked',
 				disabled: 'cff-disabled',
@@ -31,7 +32,9 @@ export default class CheckboxRadioBuilder {
 				isRadio: 'cff-is-radio',
 				isCheckbox: 'cff-is-checkbox',
 				uiInput: 'cff-ui-input',
-				uiLabel: 'cff-ui-label'
+				uiLabel: 'cff-ui-label',
+				labelLeft: 'cff-text-left',
+				labelRight: 'cff-text-right'
 			},
 			callbacks: {}
 		};
@@ -107,23 +110,34 @@ export default class CheckboxRadioBuilder {
 		if (realLabel) {
 			textLabel = realLabel.textContent;
 		}
-		const divParent = {
+		const divParentObj = {
 			name: 'DIV',
 			class: [this.config.selectors.containerCheckRadio]
 		};
-		const fieldsChild = [
+		const fieldsChildObj = [
 			{
 				name: 'A',
 				class: [this.config.selectors.uiInput]
-			},
-			{
-				name: 'SPAN',
-				class: [this.config.selectors.uiLabel],
-				text: textLabel
 			}
 		];
-		const uiCheckRadio = this.creator.createElements(fieldsChild, divParent);
+		this.addTextLabel(textLabel, fieldsChildObj, divParentObj);
+		const uiCheckRadio = this.creator.createElements(fieldsChildObj, divParentObj);
 		wrapCheckRadio.appendChild(uiCheckRadio);
 		return uiCheckRadio;
+	}
+
+	addTextLabel(textLabel, fieldsChildObj, divParentObj) {
+		const labelObj = {
+			name: 'SPAN',
+			class: [this.config.selectors.uiLabel],
+			text: textLabel
+		};
+		if (this.config.labelPosition === 'left') {
+			fieldsChildObj.unshift(labelObj);
+			divParentObj.class.push(this.config.selectors.labelLeft);
+		} else {
+			fieldsChildObj.push(labelObj);
+			divParentObj.class.push(this.config.selectors.labelRight);
+		}
 	}
 }
