@@ -52,6 +52,8 @@ export default class CheckboxRadioBuilder {
 				const wrapCheckRadio = this.createWrapCheckRadio(checkRadio);
 				this.setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio);
 				const uiCheckRadio = this.createUICheckRadio(wrapCheckRadio);
+				this.updateCheckedInput(checkRadio, wrapCheckRadio);
+				this.updateDisabledInput(checkRadio, wrapCheckRadio);
 			});
 		}
 	}
@@ -68,9 +70,6 @@ export default class CheckboxRadioBuilder {
 				class: [this.config.selectors.wrapCheckRadio]
 			}
 		];
-		if (checkRadio.hasAttribute('disabled')) {
-			wrapArr[0].class.push(this.config.selectors.disabled);
-		}
 		const label = checkRadio.parentNode;
 		if (label  && label.tagName === 'LABEL') {
 			const parentCheckRadio = this.creator.createElements(wrapArr, label);
@@ -78,11 +77,6 @@ export default class CheckboxRadioBuilder {
 			if (wrapCheckRadio) {
 				label.insertAdjacentElement('afterend', wrapCheckRadio);
 				wrapCheckRadio.appendChild(label);
-			}
-			if (checkRadio.hasAttribute('disabled')) {
-				this.creator.createAttribute(wrapCheckRadio, 'aria-disabled', true);
-			} else {
-				this.creator.createAttribute(wrapCheckRadio, 'tabindex', 0);
 			}
 			return wrapCheckRadio;
 		} else {
@@ -138,6 +132,26 @@ export default class CheckboxRadioBuilder {
 		} else {
 			fieldsChildObj.push(labelObj);
 			divParentObj.class.push(this.config.selectors.labelRight);
+		}
+	}
+
+	updateCheckedInput(checkRadio, wrapCheckRadio) {
+		if (checkRadio && checkRadio.hasAttribute('checked') && checkRadio.getAttribute('checked') !== 'false') {
+			wrapCheckRadio.classList.add(this.config.selectors.checked);
+		} else {
+			wrapCheckRadio.classList.remove(this.config.selectors.checked);
+		}
+	}
+
+	updateDisabledInput(checkRadio, wrapCheckRadio) {
+		if (checkRadio && checkRadio.hasAttribute('disabled') && checkRadio.getAttribute('disabled') !== 'false') {
+			wrapCheckRadio.classList.add(this.config.selectors.disabled);
+			this.creator.createAttribute(wrapCheckRadio, 'aria-disabled', true);
+			this.creator.removeAttribute(wrapCheckRadio, 'tabindex');
+		} else {
+			wrapCheckRadio.classList.remove(this.config.selectors.disabled);
+			this.creator.createAttribute(wrapCheckRadio, 'tabindex', 0);
+			this.creator.removeAttribute(wrapCheckRadio, 'aria-disabled');
 		}
 	}
 }

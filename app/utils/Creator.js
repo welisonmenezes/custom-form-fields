@@ -152,4 +152,10 @@ export default class Creator {
 		tempAtt.value = attrValue
 		element.setAttributeNode(tempAtt);
 	}
+
+	removeAttribute(element, attrName) {
+		if (element.hasAttribute(attrName)) {
+			element.removeAttribute(attrName);
+		}
+	}
 }

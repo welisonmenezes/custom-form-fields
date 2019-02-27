@@ -231,6 +231,15 @@
 		}
 	}
 
+	&.cff-disabled{
+		cursor: not-allowed;
+		color: #888;
+		
+		.cff-ui-input{
+    		background: #e3e3e3;
+		}
+	}
+
 	&.cff-text-left{
 		.cff-ui-input{
 		    margin: 0 0 0 5px;

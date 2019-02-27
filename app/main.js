@@ -17,7 +17,7 @@ const options = {
 	},
 	checkboxesRadios: {
 		selectors: {
-			checked: 'xxx-checked'
+			checked: 'cff-is-checked'
 		}
 	}
 };
