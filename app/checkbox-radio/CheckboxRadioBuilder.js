@@ -54,8 +54,17 @@ export default class CheckboxRadioBuilder {
 				const uiCheckRadio = this.createUICheckRadio(wrapCheckRadio);
 				this.updateCheckedInput(checkRadio, wrapCheckRadio);
 				this.updateDisabledInput(checkRadio, wrapCheckRadio);
+				this.resolveEventsToUiSelect(wrapCheckRadio);
 			});
 		}
+	}
+
+	/**
+	 * Add event listeners to ui selects and your ui options
+	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The ui select container
+	 */
+	resolveEventsToUiSelect(wrapCheckRadio) {
+		this.utils.addEventListenerToElement(wrapCheckRadio, 'click', this.onCheckRadioClick, [this]);
 	}
 
 	/**
@@ -136,7 +145,7 @@ export default class CheckboxRadioBuilder {
 	}
 
 	updateCheckedInput(checkRadio, wrapCheckRadio) {
-		if (checkRadio && checkRadio.hasAttribute('checked') && checkRadio.getAttribute('checked') !== 'false') {
+		if (this.utils.isElementChecked(checkRadio)) {
 			wrapCheckRadio.classList.add(this.config.selectors.checked);
 		} else {
 			wrapCheckRadio.classList.remove(this.config.selectors.checked);
@@ -152,6 +161,45 @@ export default class CheckboxRadioBuilder {
 			wrapCheckRadio.classList.remove(this.config.selectors.disabled);
 			this.creator.createAttribute(wrapCheckRadio, 'tabindex', 0);
 			this.creator.removeAttribute(wrapCheckRadio, 'aria-disabled');
+		}
+	}
+
+	checkUncheckCheckbox(checkbox) {
+		if (checkbox) {
+			if (this.utils.isElementChecked(checkbox)) {
+				this.creator.removeAttribute(checkbox, 'checked');
+			} else {
+				this.creator.createAttribute(checkbox, 'checked', 'true');
+			}
+		}
+	}
+
+	checkUncheckRadio(radio) {
+		if (radio.hasAttribute('name')) {
+			const name = radio.getAttribute('name');
+			const radiosSameName = this.$.getElements('input[name="' + name + '"]');
+			if (radiosSameName) {
+				radiosSameName.forEach((radio) => {
+					this.creator.removeAttribute(radio, 'checked');
+					this.updateCheckedInput(radio, radio.parentElement.parentElement);
+				});
+			}
+			this.creator.createAttribute(radio, 'checked', 'true');
+		}
+	}
+
+	onCheckRadioClick(args) {
+		const event = arguments[(arguments.length - 1)];
+		const self = args[0];
+		event.stopPropagation();
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			const inp = self.$.getElement('input', this);
+			if (this.classList.contains(self.config.selectors.isCheckbox)) {
+				self.checkUncheckCheckbox(inp);
+			} else if(this.classList.contains(self.config.selectors.isRadio)) {
+				self.checkUncheckRadio(inp);
+			}
+			self.updateCheckedInput(inp, this);
 		}
 	}
 }
