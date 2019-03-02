@@ -36,7 +36,16 @@ export default class CheckboxRadioBuilder {
 				labelLeft: 'cff-text-left',
 				labelRight: 'cff-text-right'
 			},
-			callbacks: {}
+			callbacks: {
+				beforeBuildInputs: null,
+				afterBuildInputs: null,
+				beforeConstroyInput: null,
+				afterConstroyInput: null,
+				beforeDestroyInput: null,
+				afterDestroyInput: null,
+				beforeCheckInput: null,
+				afterCheckInput: null
+			}
 		};
 		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
 	}
@@ -46,11 +55,14 @@ export default class CheckboxRadioBuilder {
 	 */
 	build() {
 		const checkboxesRadios = this.$.getElements(this.config.element);
+		const wrapCheckboxesRadios = [];
+		this.utils.callCallbackFunction(this.config.callbacks.beforeBuildInputs, this, checkboxesRadios);
 		if (checkboxesRadios) {
 			checkboxesRadios.forEach((checkRadio, index) => {
-				this.constroy(checkRadio);
+				wrapCheckboxesRadios.push(this.constroy(checkRadio));
 			});
 		}
+		this.utils.callCallbackFunction(this.config.callbacks.afterBuildInputs, this, wrapCheckboxesRadios);
 	}
 
 	constroy(checkRadio) {
@@ -58,6 +70,7 @@ export default class CheckboxRadioBuilder {
 		if (parent && parent.classList.contains(this.config.selectors.wrapCheckRadio)) {
 			return null;
 		}
+		this.utils.callCallbackFunction(this.config.callbacks.beforeConstroyInput, this, checkRadio);
 		this.creator.createAttribute(checkRadio, 'tabindex', -1);
 		const wrapCheckRadio = this.createWrapCheckRadio(checkRadio);
 		this.setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio);
@@ -65,6 +78,8 @@ export default class CheckboxRadioBuilder {
 		this.updateCheckedInput(checkRadio, wrapCheckRadio);
 		this.updateDisabledInput(checkRadio, wrapCheckRadio);
 		this.resolveEventsToUiSelect(wrapCheckRadio);
+		this.utils.callCallbackFunction(this.config.callbacks.afterConstroyInput, this, wrapCheckRadio);
+		return wrapCheckRadio;
 	}
 
 	destroy(checkRadio) {
@@ -73,8 +88,10 @@ export default class CheckboxRadioBuilder {
 			if (wrapCheckRadio && wrapCheckRadio.classList.contains(this.config.selectors.wrapCheckRadio)) {
 				const target = wrapCheckRadio.parentElement;
 				if (target) {
+					this.utils.callCallbackFunction(this.config.callbacks.beforeDestroyInput, this, wrapCheckRadio);
 					target.appendChild(checkRadio.parentElement);
 					target.removeChild(wrapCheckRadio);
+					this.utils.callCallbackFunction(this.config.callbacks.afterDestroyInput, this, checkRadio);
 				}
 			}
 		}
@@ -215,12 +232,14 @@ export default class CheckboxRadioBuilder {
 		event.stopPropagation();
 		if (!this.classList.contains(self.config.selectors.disabled)) {
 			const inp = self.$.getElement('input', this);
+			self.utils.callCallbackFunction(self.config.callbacks.beforeCheckInput, self, inp);
 			if (this.classList.contains(self.config.selectors.isCheckbox)) {
 				self.checkUncheckCheckbox(inp);
 			} else if(this.classList.contains(self.config.selectors.isRadio)) {
 				self.checkUncheckRadio(inp);
 			}
 			self.updateCheckedInput(inp, this);
+			self.utils.callCallbackFunction(self.config.callbacks.afterCheckInput, self, inp);
 		}
 	}
 }

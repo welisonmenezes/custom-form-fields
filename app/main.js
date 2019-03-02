@@ -11,13 +11,39 @@ const options = {
 		},
 		callbacks: {
 			beforeBuildSelects: function(selects) {
-				console.log('beforeBuildSelects', selects);
+				//console.log('beforeBuildSelects', selects);
 			}
 		}
 	},
 	checkboxesRadios: {
 		selectors: {
 			checked: 'cff-is-checked'
+		},
+		callbacks: {
+			beforeBuildInputs: function(checkboxesRadios) {
+				console.log('beforeBuildInputs', checkboxesRadios);
+			},
+			afterBuildInputs: function(checkboxesRadios) {
+				console.log('afterBuildInputs', checkboxesRadios);
+			},
+			beforeConstroyInput: function(checkboxRadio) {
+				console.log('beforeConstroyInput', checkboxRadio);
+			},
+			afterConstroyInput: function(wrapCheckRadio) {
+				console.log('afterConstroyInput', wrapCheckRadio);
+			},
+			beforeDestroyInput: function(wrapCheckRadio) {
+				console.log('beforeDestroyInput', wrapCheckRadio);
+			},
+			afterDestroyInput: function(checkboxRadio) {
+				console.log('afterDestroyInput', checkboxRadio);
+			},
+			beforeCheckInput: function(checkboxRadio) {
+				console.log('beforeCheckInput', checkboxRadio);
+			},
+			afterCheckInput: function(checkboxRadio) {
+				console.log('afterCheckInput', checkboxRadio);
+			}
 		}
 	}
 };
