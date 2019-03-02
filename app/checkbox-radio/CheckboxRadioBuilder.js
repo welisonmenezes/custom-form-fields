@@ -281,4 +281,17 @@ export default class CheckboxRadioBuilder {
 			self.utils.callCallbackFunction(self.config.callbacks.afterCheckInput, self, inp);
 		}
 	}
+
+	/**
+	 * Set checked input radio or toggle input checkbox
+	 * @param { HTMLElement } input - The input of type radio or checkbox
+	 */
+	setChecked(input) {
+		if (input && (this.check.isInputRadio(input) || this.check.isInputCheckbox(input))) {
+			const wrapCheckRadio = input.parentElement.parentElement;
+			if (wrapCheckRadio && wrapCheckRadio.classList.contains(this.config.selectors.wrapCheckRadio)) {
+				wrapCheckRadio.click();
+			}
+		}
+	}
 }

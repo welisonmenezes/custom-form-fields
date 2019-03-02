@@ -66,3 +66,8 @@ document.getElementById('constroyCheckRadio').addEventListener('click', function
 		});
 	}
 });
+
+document.getElementById('setChecked').addEventListener('click', function() {
+	const input = document.getElementById('radio-1');
+	cff.checkboxesRadios.setChecked(input);
+});
