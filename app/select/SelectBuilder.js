@@ -23,6 +23,7 @@ export default class SelectBuilder {
 	 */
 	_setConfiguration(userConfigurations) {
 		this.config = {
+			buildUiSelects: true,
 			element: 'select',
 			selectByArrows: true,
 			selectByDigit: true,

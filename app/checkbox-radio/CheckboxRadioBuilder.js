@@ -22,6 +22,7 @@ export default class CheckboxRadioBuilder {
 	 */
 	_setConfiguration(userConfigurations) {
 		this.config = {
+			buildUiCheckboxesRadios: true,
 			element: 'input[type="checkbox"], input[type="radio"]',
 			labelPosition: 'right', // ['right', 'left']
 			selectors: {

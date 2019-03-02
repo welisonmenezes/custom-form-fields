@@ -5,6 +5,7 @@ import CustomFormFields from './CustomFormFields.js';
 
 const options = {
 	selects: {
+		buildUiSelects: true,
 		selectByDigit: true,
 		selectors: {
 			selected: 'cff-selected'
@@ -16,6 +17,7 @@ const options = {
 		}
 	},
 	checkboxesRadios: {
+		buildUiCheckboxesRadios: true,
 		selectors: {
 			checked: 'cff-is-checked'
 		},
@@ -25,7 +27,9 @@ const options = {
 			}
 		}
 	},
-	inputsFile: {}
+	inputsFile: {
+		buildUiInputsFile: true
+	}
 };
 const cff = new CustomFormFields(options);
 

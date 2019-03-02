@@ -22,6 +22,7 @@ export default class InputFileBuilder {
 	 */
 	_setConfiguration(userConfigurations) {
 		this.config = {
+			buildUiInputsFile: true,
 			element: 'input[type="file"]',
 			selectors: {},
 			callbacks: {}
