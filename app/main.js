@@ -42,3 +42,22 @@ document.getElementById('constroySelect').addEventListener('click', function() {
 	const select = document.getElementById('sel-1');
 	cff.selects.constroy(select);
 });
+
+
+document.getElementById('destroyCheckRadio').addEventListener('click', function() {
+	const inputs = document.querySelectorAll('input[name="r-1"]');
+	if (inputs) {
+		inputs.forEach((input) => {
+			cff.checkboxesRadios.destroy(input);
+		});
+	}
+});
+
+document.getElementById('constroyCheckRadio').addEventListener('click', function() {
+	const inputs = document.querySelectorAll('input[name="r-1"]');
+	if (inputs) {
+		inputs.forEach((input) => {
+			cff.checkboxesRadios.constroy(input);
+		});
+	}
+});

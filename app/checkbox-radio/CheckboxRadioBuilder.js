@@ -48,14 +48,35 @@ export default class CheckboxRadioBuilder {
 		const checkboxesRadios = this.$.getElements(this.config.element);
 		if (checkboxesRadios) {
 			checkboxesRadios.forEach((checkRadio, index) => {
-				this.creator.createAttribute(checkRadio, 'tabindex', -1);
-				const wrapCheckRadio = this.createWrapCheckRadio(checkRadio);
-				this.setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio);
-				const uiCheckRadio = this.createUICheckRadio(wrapCheckRadio);
-				this.updateCheckedInput(checkRadio, wrapCheckRadio);
-				this.updateDisabledInput(checkRadio, wrapCheckRadio);
-				this.resolveEventsToUiSelect(wrapCheckRadio);
+				this.constroy(checkRadio);
 			});
+		}
+	}
+
+	constroy(checkRadio) {
+		const parent = checkRadio.parentElement.parentElement;
+		if (parent && parent.classList.contains(this.config.selectors.wrapCheckRadio)) {
+			return null;
+		}
+		this.creator.createAttribute(checkRadio, 'tabindex', -1);
+		const wrapCheckRadio = this.createWrapCheckRadio(checkRadio);
+		this.setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio);
+		const uiCheckRadio = this.createUICheckRadio(wrapCheckRadio);
+		this.updateCheckedInput(checkRadio, wrapCheckRadio);
+		this.updateDisabledInput(checkRadio, wrapCheckRadio);
+		this.resolveEventsToUiSelect(wrapCheckRadio);
+	}
+
+	destroy(checkRadio) {
+		if (checkRadio && this.check.isHTMLElement(checkRadio)) {
+			const wrapCheckRadio = checkRadio.parentElement.parentElement;
+			if (wrapCheckRadio && wrapCheckRadio.classList.contains(this.config.selectors.wrapCheckRadio)) {
+				const target = wrapCheckRadio.parentElement;
+				if (target) {
+					target.appendChild(checkRadio.parentElement);
+					target.removeChild(wrapCheckRadio);
+				}
+			}
 		}
 	}
 
