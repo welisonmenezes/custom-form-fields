@@ -24,7 +24,8 @@ const options = {
 				//console.log('beforeBuildInputs', checkboxesRadios);
 			}
 		}
-	}
+	},
+	inputsFile: {}
 };
 const cff = new CustomFormFields(options);
 
