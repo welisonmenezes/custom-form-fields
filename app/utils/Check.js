@@ -56,12 +56,30 @@ export default class Check {
         return (/^[0-9]+$/.test(value));
     }
 
+    /**
+     * Checks if element is an input of type radio
+     * @param { Any } element - The object the will be verified
+     * @returns { Boolean } if is an input of type radio (true)
+     */
     isInputRadio(element) {
         return (element && element.tagName === 'INPUT' && element.getAttribute('type') === 'radio');
     }
 
+    /**
+     * Checks if element is an input of type checkbox
+     * @param { Any } element - The object the will be verified
+     * @returns { Boolean } if is an input of type checkbox (true)
+     */
     isInputCheckbox(element) {
         return (element && element.tagName === 'INPUT' && element.getAttribute('type') === 'checkbox');
     }
 	
+    /**
+     * Checks if element is checked
+     * @param { HTMLElement } element - The element the will be verified
+     * @returns { Boolean } if the element is checked (true)
+     */
+    isElementChecked(element) {
+        return (element && element.hasAttribute('checked') && element.getAttribute('checked') !== 'false');
+    }
 }

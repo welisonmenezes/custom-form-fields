@@ -51,7 +51,7 @@ export default class CheckboxRadioBuilder {
 	}
 
 	/**
-	 * Build UI checkboxesRadios from default inputs types checkbox and radio
+	 * Build UI checkboxesRadios from default inputs type checkbox or radio
 	 */
 	build() {
 		const checkboxesRadios = this.$.getElements(this.config.element);
@@ -65,6 +65,9 @@ export default class CheckboxRadioBuilder {
 		this.utils.callCallbackFunction(this.config.callbacks.afterBuildInputs, this, wrapCheckboxesRadios);
 	}
 
+	/**
+	 * Cosntroy UI checkboxRadio from default input type checkbox or radio
+	 */
 	constroy(checkRadio) {
 		const parent = checkRadio.parentElement.parentElement;
 		if (parent && parent.classList.contains(this.config.selectors.wrapCheckRadio)) {
@@ -82,6 +85,9 @@ export default class CheckboxRadioBuilder {
 		return wrapCheckRadio;
 	}
 
+	/**
+	 * Destroy UI checkboxRadio from default input type checkbox or radio
+	 */
 	destroy(checkRadio) {
 		if (checkRadio && this.check.isHTMLElement(checkRadio)) {
 			const wrapCheckRadio = checkRadio.parentElement.parentElement;
@@ -98,8 +104,8 @@ export default class CheckboxRadioBuilder {
 	}
 
 	/**
-	 * Add event listeners to ui selects and your ui options
-	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The ui select container
+	 * Add event listeners to ui checkboxRadio
+	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The ui checkboxRadio container
 	 */
 	resolveEventsToUiSelect(wrapCheckRadio) {
 		this.utils.addEventListenerToElement(wrapCheckRadio, 'click', this.onCheckRadioClick, [this]);
@@ -132,6 +138,11 @@ export default class CheckboxRadioBuilder {
 		return null;
 	}
 
+	/**
+	 * Set if input is type checkbox or radio
+	 * @param { HTMLElement || HTMLFormElement } checkRadio - The input that will be verified
+	 * @param { HTMLElement } the ui input container of the first param
+	 */
 	setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio) {
 		if (this.check.isInputRadio(checkRadio)) {
 			wrapCheckRadio.classList.add(this.config.selectors.isRadio);
@@ -167,6 +178,12 @@ export default class CheckboxRadioBuilder {
 		return uiCheckRadio;
 	}
 
+	/**
+	 * Add text label at your corresponding pasition to ui container 
+	 * @param { String } textLabel - The text that will be added
+	 * @param { Object } fieldsChildObj - The object that configure the creation of ui children container
+	 * @param { Object } divParentObj - The object that configure the creatin of ui container
+	 */
 	addTextLabel(textLabel, fieldsChildObj, divParentObj) {
 		const labelObj = {
 			name: 'SPAN',
@@ -182,14 +199,24 @@ export default class CheckboxRadioBuilder {
 		}
 	}
 
+	/**
+	 * Update the checked input in ui container
+	 * @param { HTMLElement } checkRadio - The input element
+	 * @param { HTMLElement } wrapChekRadio - The ui container of the first param
+	 */
 	updateCheckedInput(checkRadio, wrapCheckRadio) {
-		if (this.utils.isElementChecked(checkRadio)) {
+		if (this.check.isElementChecked(checkRadio)) {
 			wrapCheckRadio.classList.add(this.config.selectors.checked);
 		} else {
 			wrapCheckRadio.classList.remove(this.config.selectors.checked);
 		}
 	}
 
+	/**
+	 * Update the disabled/enable input in ui container
+	 * @param { HTMLElement } checkRadio - The input element
+	 * @param { HTMLElement } wrapChekRadio - The ui container of the first param
+	 */
 	updateDisabledInput(checkRadio, wrapCheckRadio) {
 		if (checkRadio && checkRadio.hasAttribute('disabled') && checkRadio.getAttribute('disabled') !== 'false') {
 			wrapCheckRadio.classList.add(this.config.selectors.disabled);
@@ -202,9 +229,13 @@ export default class CheckboxRadioBuilder {
 		}
 	}
 
+	/**
+	 * Toggle checked attribute of the checkbox
+	 * @param { HTMLElement } checkbox - The input of type checkbox
+	 */
 	checkUncheckCheckbox(checkbox) {
 		if (checkbox) {
-			if (this.utils.isElementChecked(checkbox)) {
+			if (this.check.isElementChecked(checkbox)) {
 				this.creator.removeAttribute(checkbox, 'checked');
 			} else {
 				this.creator.createAttribute(checkbox, 'checked', 'true');
@@ -212,6 +243,10 @@ export default class CheckboxRadioBuilder {
 		}
 	}
 
+	/**
+	 * Check the radio button (All input with same name will be unchecked)
+	 * @param { HTMLElement } radio - The input of type radio
+	 */
 	checkUncheckRadio(radio) {
 		if (radio.hasAttribute('name')) {
 			const name = radio.getAttribute('name');
@@ -226,6 +261,10 @@ export default class CheckboxRadioBuilder {
 		}
 	}
 
+	/**
+	 * The callback to ui checkRadio click event
+	 * @param { Array } args - Params received by callback
+	 */
 	onCheckRadioClick(args) {
 		const event = arguments[(arguments.length - 1)];
 		const self = args[0];

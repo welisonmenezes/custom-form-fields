@@ -128,8 +128,4 @@ export default class Utils {
 			callback.call(ref, element, otherParams);
 		}
 	}
-
-	isElementChecked(element) {
-		return (element && element.hasAttribute('checked') && element.getAttribute('checked') !== 'false');
-	}
 }

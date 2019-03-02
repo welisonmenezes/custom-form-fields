@@ -142,7 +142,7 @@ export default class Creator {
 	}
 
 	/**
-	 * Creat HTML attribute with given name and value to given element
+	 * Create HTML attribute with given name and value to given element
 	 * @param { HTMLElement } select - The select element
 	 * @param { String } attrName - The attribute's name
 	 * @param { String } attrValue - The attribute's value
@@ -153,6 +153,11 @@ export default class Creator {
 		element.setAttributeNode(tempAtt);
 	}
 
+	/**
+	 * Remove a given HTML attribute of a given element
+	 * @param { HTMLElement } element - The element that your attribute will be removed
+	 * @param { String } attrName - The attribute's name
+	 */
 	removeAttribute(element, attrName) {
 		if (element.hasAttribute(attrName)) {
 			element.removeAttribute(attrName);
