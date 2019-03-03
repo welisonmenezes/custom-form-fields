@@ -1,5 +1,7 @@
 import '../scss/app.scss';
-import './polyfills/Array.js';
+import polyfills from './polyfills/Array.js';
+
+polyfills();
 
 import CustomFormFields from './CustomFormFields.js';
 

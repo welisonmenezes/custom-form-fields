@@ -25,9 +25,11 @@ export default class SelectBuilder {
 		const wrapSelects = [];
 		this.utils.callCallbackFunction(this.config.callbacks.beforeBuildSelects, this, selects);
 		if (selects) {
-			selects.forEach((select)  => {
-				wrapSelects.push(this.constroy(select));
-			});
+			const total = selects.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				wrapSelects.push(this.constroy(selects[i]));
+			}
 		}
 		this.utils.callCallbackFunction(this.config.callbacks.afterBuildSelects, this, wrapSelects);
 	}
@@ -85,10 +87,12 @@ export default class SelectBuilder {
 			this.utils.addEventListenerToElement(wrapSelect, 'keyup', this.onKeyupSelect, [this]);
 		}
 		const options = this.$.getElements('.' + this.config.selectors.uiOption, wrapSelect);
-		if (options.length) {
-			options.forEach((opt) => {
-				this.utils.addEventListenerToElement(opt, 'click', this.onSelectItem, [this, wrapSelect]);
-			});
+		if (options && options.length) {
+			const total = options.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				this.utils.addEventListenerToElement(options[i], 'click', this.onSelectItem, [this, wrapSelect]);
+			}
 		}
 	}
 
@@ -112,7 +116,7 @@ export default class SelectBuilder {
 				const opt = this.creator.createASingleElement(optObj);
 				this.utils.callCallbackFunction(this.config.callbacks.beforeAddNewOption, this, opt);
 				if (opt) {
-					select.append(opt);
+					select.appendChild(opt);
 					this.addNewUiOption(select, opt);
 				}
 			}
@@ -132,7 +136,7 @@ export default class SelectBuilder {
 				if (uiOptContainer) {
 					const uiOpt = this.creator.createASingleElement(this.createOptionObj(newOpt));
 					if (uiOpt) {
-						uiOptContainer.append(uiOpt);
+						uiOptContainer.appendChild(uiOpt);
 						this.utils.addEventListenerToElement(uiOpt, 'click', this.onSelectItem, [this, wrapSelect]);
 						this.utils.callCallbackFunction(this.config.callbacks.afterAddNewOption, this, uiOpt);
 					}
@@ -249,10 +253,12 @@ export default class SelectBuilder {
 		};
 		if (groupElement.children.length) {
 			const grupOptsArr = this.createOptionsAndGroupsObj(groupElement);
-			if (grupOptsArr.length) {
-				grupOptsArr.forEach((optObj) => {
-					group.children.elements.push(optObj);
-				});
+			if (grupOptsArr && grupOptsArr.length) {
+				const total = grupOptsArr.length;
+				let i;
+				for (i = 0; i < total; i++) {
+					group.children.elements.push(grupOptsArr[i]);
+				}
 			}
 		}
 		return group;
@@ -324,7 +330,7 @@ export default class SelectBuilder {
 	 * @returns { HTMLElement || null } The display of selected ui options if exists or null
 	 */
 	createSelectedOptsDisplay(select) {
-		const wrapSelect = select.parentNode;
+		const wrapSelect = select.parentElement;
 		const selectedOptions = this.getSelectedOptions(select);
 		if (wrapSelect && selectedOptions) {
 			const displayContainer = {
@@ -335,9 +341,11 @@ export default class SelectBuilder {
 				}
 			};
 			if (selectedOptions && selectedOptions.length) {
-				selectedOptions.forEach((opt) => {
-					displayContainer.children.elements.push(this.createSelectedOptionsObj(opt));
-				});
+				const total = selectedOptions.length;
+				let i;
+				for (i = 0; i < total; i++) {
+					displayContainer.children.elements.push(this.createSelectedOptionsObj(selectedOptions[i]));
+				}
 			}
 			const displayedOpts =  this.creator.createElements([displayContainer], wrapSelect);
 			this.resolveEventsToUiSelectedDisplay(wrapSelect);
@@ -376,9 +384,11 @@ export default class SelectBuilder {
 				const selectedOptions = this.getSelectedOptions(select);
 				const arr = [];
 				if (selectedOptions && selectedOptions.length) {
-					selectedOptions.forEach((opt) => {
-						arr.push(this.createSelectedOptionsObj(opt));
-					});
+					const total = selectedOptions.length;
+					let i;
+					for (i = 0; i < total; i++) {
+						arr.push(this.createSelectedOptionsObj(selectedOptions[i]));
+					}
 				}
 				const displayedOpts =  this.creator.createElements(arr, existedDisplays);
 				this.resolveEventsToUiSelectedDisplay(wrapSelect);
@@ -395,10 +405,12 @@ export default class SelectBuilder {
 	resolveEventsToUiSelectedDisplay(wrapSelect) {
 		if (wrapSelect.classList.contains(this.config.selectors.multiple)) {
 			const displayedOpts = this.$.getElements('.' + this.config.selectors.selectedDisplayed, wrapSelect);
-			if (displayedOpts.length) {
-				displayedOpts.forEach((opt) => {
-					this.utils.addEventListenerToElement(opt, 'click', this.onDeselectItem, [this, wrapSelect]);
-				});
+			if (displayedOpts && displayedOpts.length) {
+				const total = displayedOpts.length;
+				let i;
+				for (i = 0; i < total; i++) {
+					this.utils.addEventListenerToElement(displayedOpts[i], 'click', this.onDeselectItem, [this, wrapSelect]);
+				}
 			}
 		}
 	}
@@ -410,7 +422,10 @@ export default class SelectBuilder {
 		const wrapSelects =  this.$.getElements('.' + this.config.selectors.wrapSelect + '.' + this.config.selectors.opened);
 		if (wrapSelects && wrapSelects.length) {
 			this.utils.callCallbackFunction(this.config.callbacks.beforeCloseSelects, this, wrapSelects);
-			wrapSelects.forEach((wrapSelect) => {
+			const total  = wrapSelects.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				const wrapSelect = wrapSelects[i];
 				wrapSelect.classList.remove(this.config.selectors.opened);
 				if (this.config.autoHeight) {
 					const contOpts = this.$.getElement('.' + this.config.selectors.containerOptions, wrapSelect);
@@ -418,7 +433,7 @@ export default class SelectBuilder {
 						contOpts.style.height = 0;	
 					}
 				}
-			});
+			}
 			this.utils.callCallbackFunction(this.config.callbacks.afterCloseSelects, this, wrapSelects);
 		}
 	}
@@ -433,9 +448,11 @@ export default class SelectBuilder {
 		const items = this.$.getElements('.' + this.config.selectors.uiItemSelect, wrapSelect);
 		let heightAll = 0;
 		if (items && items.length) {
-			items.forEach((item) => {
-				heightAll = heightAll + item.clientHeight;
-			});
+			const total = items.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				heightAll = heightAll + items[i].clientHeight;
+			}
 		}
 		if (this.config.autoHeight) {
 			this.setHeightOptionContainer(wrapSelect, heightAll);
@@ -455,14 +472,18 @@ export default class SelectBuilder {
 		const divSelectedOpts = this.$.getElements('.' + this.config.selectors.uiOption + '.' + this.config.selectors.selected, wrapSelect);
 		const opts = this.$.getElements('option', select);
 		if (opts && opts.length) {
-			opts.forEach((opt) => {
-				this.creator.removeAttribute(opt, 'selected');
-			});
+			const total = opts.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				this.creator.removeAttribute(opts[i], 'selected');
+			}
 		}
 		if (divSelectedOpts && divSelectedOpts.length) {
-			divSelectedOpts.forEach((opt) => {
-				opt.classList.remove(this.config.selectors.selected);
-			});
+			const total = divSelectedOpts.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				divSelectedOpts[i].classList.remove(this.config.selectors.selected);
+			}
 		}
 		select.value = '';
 	}
@@ -486,10 +507,14 @@ export default class SelectBuilder {
 					oldSelected = selected[(selected.length -1)];
 				}
 				if (!event.shiftKey) {
-					uiOpts.forEach((opt, ind) => {
-						this.creator.removeAttribute(opts[ind], 'selected');
-						opt.classList.remove(this.config.selectors.selected);
-					});
+					if (uiOpts.length) {
+						const total = uiOpts.length;
+						let i;
+						for (i = 0; i < total; i++) {
+							this.creator.removeAttribute(opts[i], 'selected');
+							uiOpts[i].classList.remove(this.config.selectors.selected);
+						}
+					}
 				}
 			} else {
 				oldSelected = selected[0];

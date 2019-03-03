@@ -160,6 +160,7 @@ export default class Creator {
 	 */
 	removeAttribute(element, attrName) {
 		if (element.hasAttribute(attrName)) {
+			element.setAttribute(attrName, 'false'); // to make works in ie
 			element.removeAttribute(attrName);
 		}
 	}

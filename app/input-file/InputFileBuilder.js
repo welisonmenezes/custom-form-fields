@@ -21,12 +21,15 @@ export default class InputFileBuilder {
 	 */
 	build() {
 		const inputsFile = this.$.getElements(this.config.element);
-		if (inputsFile) {
-			inputsFile.forEach((inputFile, index) => {
+		if (inputsFile && inputsFile.length) {
+			const total = inputsFile.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				const inputFile = inputsFile[i];
 				console.log(inputFile);
 				this.creator.createAttribute(inputFile, 'tabindex', -1);
 				const wrapInputFile = this.createWrapInput(inputFile);
-			});
+			}
 		}	
 	}
 

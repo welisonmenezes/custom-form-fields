@@ -23,10 +23,12 @@ export default class CheckboxRadioBuilder {
 		const checkboxesRadios = this.$.getElements(this.config.element);
 		const wrapCheckboxesRadios = [];
 		this.utils.callCallbackFunction(this.config.callbacks.beforeBuildInputs, this, checkboxesRadios);
-		if (checkboxesRadios) {
-			checkboxesRadios.forEach((checkRadio, index) => {
-				wrapCheckboxesRadios.push(this.constroy(checkRadio));
-			});
+		if (checkboxesRadios && checkboxesRadios.length) {
+			const total = checkboxesRadios.length;
+			let i;
+			for (i = 0; i < total; i++) {
+				wrapCheckboxesRadios.push(this.constroy(checkboxesRadios[i]));
+			}
 		}
 		this.utils.callCallbackFunction(this.config.callbacks.afterBuildInputs, this, wrapCheckboxesRadios);
 	}
@@ -217,11 +219,14 @@ export default class CheckboxRadioBuilder {
 		if (radio.hasAttribute('name')) {
 			const name = radio.getAttribute('name');
 			const radiosSameName = this.$.getElements('input[name="' + name + '"]');
-			if (radiosSameName) {
-				radiosSameName.forEach((radio) => {
+			if (radiosSameName && radiosSameName.length) {
+				const total = radiosSameName.length;
+				let i;
+				for (i = 0; i < total; i++) {
+					const radio = radiosSameName[i];
 					this.creator.removeAttribute(radio, 'checked');
 					this.updateCheckedInput(radio, radio.parentElement.parentElement);
-				});
+				}
 			}
 			this.creator.createAttribute(radio, 'checked', 'true');
 		}
