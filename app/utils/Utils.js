@@ -128,4 +128,10 @@ export default class Utils {
 			callback.call(ref, element, otherParams);
 		}
 	}
+
+	createTempEvent() {
+		const evt = document.createEvent('HTMLEvents');
+		evt.initEvent('click', true, true);
+		return evt;
+	}
 }

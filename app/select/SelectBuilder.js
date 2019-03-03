@@ -530,7 +530,8 @@ export default class SelectBuilder {
 			newIndex = this.setNewIndexIfOptIsDisabled(direction, newIndex, uiOpts);
 			let newSelected = uiOpts[newIndex];
 			if (newSelected) {
-				newSelected.click();
+				const evt = this.utils.createTempEvent();
+				newSelected.dispatchEvent(evt);
 			}
 		}
 	}
@@ -574,7 +575,8 @@ export default class SelectBuilder {
 					const firstLetter = uiOpts[i].innerHTML.charAt(0).toLowerCase();
 					const value = uiOpts[i].getAttribute('data-value');
 					if (digit === firstLetter && value !== '') {
-						uiOpts[i].click();
+						const evt = this.utils.createTempEvent();
+						uiOpts[i].dispatchEvent(evt);
 						break;
 					}
 				}
@@ -611,11 +613,11 @@ export default class SelectBuilder {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		if (!this.classList.contains(self.config.selectors.disabled)) {
-			if (event.key === 'ArrowUp') {
+			if (event.keyCode === 38) {
 				if (self.config.selectByArrows) {
 					self.changeSelectedOptionByArrowKey(this, 'top', event);
 				}
-			} else if (event.key === 'ArrowDown') {
+			} else if (event.keyCode === 40) {
 				if (self.config.selectByArrows) {
 					self.changeSelectedOptionByArrowKey(this, 'bottom', event);
 				}
@@ -779,7 +781,8 @@ export default class SelectBuilder {
 						let i;
 						for(i = 0; i < total; i++) {
 							if (i === itemIndex) {
-								items[i].click();
+								const evt = this.utils.createTempEvent();
+								items[i].dispatchEvent(evt);
 								break;
 							}
 						}

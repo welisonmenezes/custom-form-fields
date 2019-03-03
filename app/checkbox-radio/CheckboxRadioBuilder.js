@@ -261,7 +261,8 @@ export default class CheckboxRadioBuilder {
 		if (input && (this.check.isInputRadio(input) || this.check.isInputCheckbox(input))) {
 			const wrapCheckRadio = input.parentElement.parentElement;
 			if (wrapCheckRadio && wrapCheckRadio.classList.contains(this.config.selectors.wrapCheckRadio)) {
-				wrapCheckRadio.click();
+				const evt = this.utils.createTempEvent();
+				wrapCheckRadio.dispatchEvent(evt);
 			}
 		}
 	}
