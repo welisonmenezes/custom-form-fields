@@ -5,31 +5,27 @@ import CustomFormFields from './CustomFormFields.js';
 
 const options = {
 	selects: {
-		buildUiSelects: true,
 		selectByDigit: true,
 		selectors: {
 			selected: 'cff-selected'
 		},
 		callbacks: {
 			beforeBuildSelects: function(selects) {
-				console.log('beforeBuildSelects', selects);
+				//console.log('beforeBuildSelects', selects);
 			}
 		}
 	},
 	checkboxesRadios: {
-		buildUiCheckboxesRadios: true,
 		selectors: {
 			checked: 'cff-is-checked'
 		},
 		callbacks: {
 			beforeBuildInputs: function(checkboxesRadios) {
-				console.log('beforeBuildInputs', checkboxesRadios);
+				//console.log('beforeBuildInputs', checkboxesRadios);
 			}
 		}
 	},
-	inputsFile: {
-		buildUiInputsFile: true
-	}
+	inputsFile: {}
 };
 const cff = new CustomFormFields(options);
 

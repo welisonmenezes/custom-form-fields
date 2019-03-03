@@ -24,7 +24,34 @@ export default class InputFileBuilder {
 		if (inputsFile) {
 			inputsFile.forEach((inputFile, index) => {
 				console.log(inputFile);
+				this.createWrapInput(inputFile);
 			});
 		}	
+	}
+
+
+	/**
+	 * Create the ui input container and insert on page
+	 * @param { HTMLElement || HTMLFormElement } inputFile - The input that will be transformed
+	 * @returns { HTMLElement } the ui input container that was created
+	 */
+	createWrapInput(inputFile) {
+		const wrapArr = [
+			{
+				name: 'DIV',
+				class: [this.config.selectors.wrapInputFile]
+			}
+		];
+		const parent = inputFile.parentNode;
+		if (parent) {
+			const parentInputFile = this.creator.createElements(wrapArr, parent);
+			const wrapInputFile = this.$.getElement('.' + this.config.selectors.wrapInputFile, parent);
+			if (wrapInputFile) {
+				parent.insertAdjacentElement('beforeend', wrapInputFile);
+				wrapInputFile.appendChild(inputFile);
+			}
+			return wrapInputFile;
+		}
+		return null;
 	}
 }

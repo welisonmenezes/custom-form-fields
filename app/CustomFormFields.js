@@ -122,7 +122,9 @@ export default class CustomFormFields {
 			},
 			inputsFile: {
 				element: 'input[type="file"]',
-				selectors: {},
+				selectors: {
+					wrapInputFile: 'cff-wrap-input-file'
+				},
 				callbacks: {}
 			}
 		};
