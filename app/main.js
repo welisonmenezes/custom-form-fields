@@ -12,7 +12,7 @@ const options = {
 		},
 		callbacks: {
 			beforeBuildSelects: function(selects) {
-				//console.log('beforeBuildSelects', selects);
+				console.log('beforeBuildSelects', selects);
 			}
 		}
 	},
@@ -23,7 +23,7 @@ const options = {
 		},
 		callbacks: {
 			beforeBuildInputs: function(checkboxesRadios) {
-				//console.log('beforeBuildInputs', checkboxesRadios);
+				console.log('beforeBuildInputs', checkboxesRadios);
 			}
 		}
 	},

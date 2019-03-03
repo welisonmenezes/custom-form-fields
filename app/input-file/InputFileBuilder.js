@@ -9,25 +9,11 @@ export default class InputFileBuilder {
 	 * @param { Object } Utils - An instance of the Utils
 	 */
 	constructor(userConfigurations, Selector, Creator, Check, Utils) {
+		this.config = userConfigurations;
 		this.$ = Selector;
 		this.creator = Creator;
 		this.check = Check;
 		this.utils = Utils;
-		this._setConfiguration(userConfigurations);
-	}
-
-	/**
-	 * Sets configurations by merging user configurations with default configurations
-	 * @param {Object} userConfigurations - The user configurations
-	 */
-	_setConfiguration(userConfigurations) {
-		this.config = {
-			buildUiInputsFile: true,
-			element: 'input[type="file"]',
-			selectors: {},
-			callbacks: {}
-		};
-		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
 	}
 
 	/**

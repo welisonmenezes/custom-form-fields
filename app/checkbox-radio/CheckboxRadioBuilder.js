@@ -9,46 +9,11 @@ export default class CheckboxRadioBuilder {
 	 * @param { Object } Utils - An instance of the Utils
 	 */
 	constructor(userConfigurations, Selector, Creator, Check, Utils) {
+		this.config = userConfigurations;
 		this.$ = Selector;
 		this.creator = Creator;
 		this.check = Check;
 		this.utils = Utils;
-		this._setConfiguration(userConfigurations);
-	}
-
-	/**
-	 * Sets configurations by merging user configurations with default configurations
-	 * @param {Object} userConfigurations - The user configurations
-	 */
-	_setConfiguration(userConfigurations) {
-		this.config = {
-			buildUiCheckboxesRadios: true,
-			element: 'input[type="checkbox"], input[type="radio"]',
-			labelPosition: 'right', // ['right', 'left']
-			selectors: {
-				checked: 'cff-checked',
-				disabled: 'cff-disabled',
-				wrapCheckRadio: 'cff-wrap-check-radio',
-				containerCheckRadio: 'cff-container-check-radio',
-				isRadio: 'cff-is-radio',
-				isCheckbox: 'cff-is-checkbox',
-				uiInput: 'cff-ui-input',
-				uiLabel: 'cff-ui-label',
-				labelLeft: 'cff-text-left',
-				labelRight: 'cff-text-right'
-			},
-			callbacks: {
-				beforeBuildInputs: null,
-				afterBuildInputs: null,
-				beforeConstroyInput: null,
-				afterConstroyInput: null,
-				beforeDestroyInput: null,
-				afterDestroyInput: null,
-				beforeCheckInput: null,
-				afterCheckInput: null
-			}
-		};
-		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
 	}
 
 	/**
