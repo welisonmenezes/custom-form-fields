@@ -90,7 +90,7 @@ export default class Utils {
      */
 	disableScroll() {
     	window.onkeydown  = function(e) {
-    		if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    		if (e.keyCode === 40 || e.keyCode === 38) {
 		        e.preventDefault();
 		    }
     	};
@@ -129,9 +129,15 @@ export default class Utils {
 		}
 	}
 
-	createTempEvent() {
+	/**
+	 * Create a temp event to trigger programaticaly
+	 * @param { String } eventName - The name of the event [optional]
+	 * @returns { Event } The new temp event
+	 */
+	createTempEvent(eventName) {
+		const evName = (eventName) ? eventName : 'click';
 		const evt = document.createEvent('HTMLEvents');
-		evt.initEvent('click', true, true);
+		evt.initEvent(evName, true, true);
 		return evt;
 	}
 }

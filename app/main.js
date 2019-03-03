@@ -54,19 +54,23 @@ document.getElementById('constroySelect').addEventListener('click', function() {
 
 document.getElementById('destroyCheckRadio').addEventListener('click', function() {
 	const inputs = document.querySelectorAll('input[name="r-1"]');
-	if (inputs) {
-		inputs.forEach((input) => {
-			cff.checkboxesRadios.destroy(input);
-		});
+	if (inputs && inputs.length) {
+		const total = inputs.length;
+		let i;
+		for (i = 0; i < total; i++) {
+			cff.checkboxesRadios.destroy(inputs[i]);
+		}
 	}
 });
 
 document.getElementById('constroyCheckRadio').addEventListener('click', function() {
 	const inputs = document.querySelectorAll('input[name="r-1"]');
-	if (inputs) {
-		inputs.forEach((input) => {
-			cff.checkboxesRadios.constroy(input);
-		});
+	if (inputs && inputs.length) {
+		const total = inputs.length;
+		let i;
+		for (i = 0; i < total; i++) {
+			cff.checkboxesRadios.constroy(inputs[i]);
+		}
 	}
 });
 
