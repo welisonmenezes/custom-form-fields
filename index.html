@@ -8,7 +8,7 @@
 <body>
 	<h1>Custom Form Fields</h1>
 
-	<form action="./">
+	<form action="../process.php" target="_blank" method="post" enctype="multipart/form-data">
 		<div class="f-row">
 			<h4>Menu Selects</h4>
 			<ul>
@@ -135,8 +135,39 @@
 		</div>
 
 		<div class="f-row">
-			<input type="file" multiple>
+			<input type="file" id="m-files" name="m-files[]" multiple>
+			<a onclick="seeInfo()">teste</a>
 		</div>
+
+		<script>
+			function FileListItem(a) {
+			  a = [].slice.call(Array.isArray(a) ? a : arguments)
+			  for (var c, b = c = a.length, d = !0; b-- && d;) {
+			  		d = a[b] instanceof File;
+			  }
+			  if (!d) {
+			  	throw new TypeError("expected argument to FileList is File or array of File objects")
+			  }
+			  for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) {
+			  	b.items.add(a[c]);
+			  }
+			  return b.files;
+			}
+			function seeInfo() {
+				var input = document.getElementById('m-files');
+				if(input){
+					var files = Array.from(input.files);
+					if(files){
+						if(files.length > 1){
+							console.log(files);
+							[].splice.call( files, 1,1 );
+							console.log(files);
+							input.files = new FileListItem(files);
+						}
+					}
+				}
+			}
+		</script>
 
 		<div class="f-row">
 			<button type="submit">Send</button>

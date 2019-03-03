@@ -24,7 +24,8 @@ export default class InputFileBuilder {
 		if (inputsFile) {
 			inputsFile.forEach((inputFile, index) => {
 				console.log(inputFile);
-				this.createWrapInput(inputFile);
+				this.creator.createAttribute(inputFile, 'tabindex', -1);
+				const wrapInputFile = this.createWrapInput(inputFile);
 			});
 		}	
 	}
