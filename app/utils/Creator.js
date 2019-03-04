@@ -83,23 +83,23 @@ export default class Creator {
      * @returns { HTMLElement } The parentTree with the new created element into or null 
      */
 	createElements(elements, parentTree) {
-		if( elements && Array.isArray(elements) ) {
+		if ( elements && Array.isArray(elements) ) {
 			const tempEls = [];
 			let parent = document.createElement('DIV');
-			if(this.check.isHTMLElement(parentTree)) {
+			if (this.check.isHTMLElement(parentTree)) {
 				parent = parentTree;
 			} else if (parentTree && parentTree.name) {
 				parent = this.createASingleElement(parentTree);
 			}
 			elements.forEach((element) => {
-				if( element && element.name ) {
+				if ( element && element.name ) {
 					const tempEl = this.createASingleElement(element);
 					tempEls.push(tempEl);
 				}
 			});
 			let lastEl, i;
 			const total = tempEls.length;
-			for(i = 0; i < total; i++) {
+			for (i = 0; i < total; i++) {
 				parent.appendChild(tempEls[i]);
 			}
 			return parent;
@@ -119,24 +119,24 @@ export default class Creator {
 	 */
 	createASingleElement(element) {
 		const tempEl = document.createElement(element.name);
-		if(element.class && Array.isArray(element.class)) {
+		if (element.class && Array.isArray(element.class)) {
 			element.class.forEach((cls) => {
 				tempEl.classList.add(cls);
 			});
 		}
-		if(element.attributes && Array.isArray(element.attributes)) {
+		if (element.attributes && Array.isArray(element.attributes)) {
 			element.attributes.forEach((attr) => {
 				this.createAttribute(tempEl, attr.name, attr.value);
 			});
 		}
-		if(element.text) {
+		if (element.text) {
 			const tempText = document.createTextNode(element.text);
 			tempEl.appendChild(tempText);
 		}
-		if(element.children && element.children.elements) {
+		if (element.children && element.children.elements) {
 			const parentTree = (element.children.parentTree) ? element.children.parentTree : tempEl;
 			const tempChild = this.createElements(element.children.elements, parentTree);
-			if(element.children.parentTree) tempEl.appendChild(tempChild);
+			if (element.children.parentTree) tempEl.appendChild(tempChild);
 		}
 		return tempEl;
 	}

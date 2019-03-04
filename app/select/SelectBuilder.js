@@ -41,7 +41,7 @@ export default class SelectBuilder {
 	 */
 	constroy(select) {
 		const parent = select.parentElement;
-		if(parent && parent.classList.contains(this.config.selectors.wrapSelect)) {
+		if (parent && parent.classList.contains(this.config.selectors.wrapSelect)) {
 			return null;
 		}
 		this.utils.callCallbackFunction(this.config.callbacks.beforeConstroySelect, this, select);
@@ -275,7 +275,7 @@ export default class SelectBuilder {
 	setSelectedOption(select) {
 		const options = this.$.getElements('option', select);
 		const divOptions = this.$.getElements('.' + this.config.selectors.uiOption, select.parentElement);
-		if(options && divOptions) {
+		if (options && divOptions) {
 			const isMultiple = (select.hasAttribute('multiple'));
 			const total = options.length;
 			let i;
@@ -771,7 +771,7 @@ export default class SelectBuilder {
 					if (items) {
 						const total = items.length;
 						let i;
-						for(i = 0; i < total; i++) {
+						for (i = 0; i < total; i++) {
 							if (i === itemIndex) {
 								const evt = this.utils.createTempEvent();
 								items[i].dispatchEvent(evt);

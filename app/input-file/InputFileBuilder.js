@@ -101,9 +101,14 @@ export default class InputFileBuilder {
 		const selectButton = this.$.getElement('.' + this.config.selectors.uiSelectButton, wrapInputFile);
 		if (selectButton) {
 			this.utils.addEventListenerToElement(selectButton, 'click', this.onSelectButtonClick, [this, wrapInputFile]);
+			this.utils.addEventListenerToElement(wrapInputFile, 'keyup', this.onKeyEnterPress, [this, selectButton]);
 		}
 	}
 
+	/**
+	 * The callback to select button click
+	 * @param { Array } args - Params received by callback
+	 */
 	onSelectButtonClick(args) {
 		const event = arguments[(arguments.length - 1)];
 		const self = args[0];
@@ -111,6 +116,23 @@ export default class InputFileBuilder {
 		event.stopPropagation();
 		if (!wrapInputFile.classList.contains(self.config.selectors.disabled)) {
 			console.log('clicked!');
+		}
+	}
+
+	/**
+	 * The callback to ui input file key enter press
+	 * @param { Array } args - Params received by callback
+	 */
+	onKeyEnterPress(args) {
+		const event = arguments[(arguments.length - 1)];
+		const self = args[0];
+		const selectButton = args[1];
+		event.stopPropagation();
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			if (event.keyCode === 13) {
+				const evt = self.utils.createTempEvent();
+				selectButton.dispatchEvent(evt);
+			}
 		}
 	}
 }

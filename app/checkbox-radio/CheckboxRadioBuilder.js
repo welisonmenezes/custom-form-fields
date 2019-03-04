@@ -228,7 +228,7 @@ export default class CheckboxRadioBuilder {
 			self.utils.callCallbackFunction(self.config.callbacks.beforeCheckInput, self, inp);
 			if (this.classList.contains(self.config.selectors.isCheckbox)) {
 				self.checkUncheckCheckbox(inp);
-			} else if(this.classList.contains(self.config.selectors.isRadio)) {
+			} else if (this.classList.contains(self.config.selectors.isRadio)) {
 				self.checkUncheckRadio(inp);
 			}
 			self.updateCheckedInput(inp, this);

@@ -9,7 +9,7 @@ export default class Selector {
 	 * @returns { NodeList } The query's result or null
 	 */
 	getElements(query, parent) {
-		if(query){
+		if (query) {
 			const wrap = (parent) ? parent : document;
 			const nodes = wrap.querySelectorAll(query);
 			return (nodes.length) ? nodes : null;
@@ -24,7 +24,7 @@ export default class Selector {
 	 * @returns { HTMLElement } The query's result or null
 	 */
 	getElement(query, parent) {
-		if(query){
+		if (query) {
 			const wrap = (parent) ? parent : document;
 			const node = wrap.querySelector(query);
 			return (node) ? node : null;

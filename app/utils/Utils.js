@@ -17,18 +17,18 @@ export default class Utils {
 	 * @returns { Object } A new object merged
 	 */
 	mergeObjectsDeeply(target, objectDefault, objectUser) {
-		if(this.check.isObject(objectDefault) && this.check.isObject(objectUser) && this.check.isObject(target)) {
+		if (this.check.isObject(objectDefault) && this.check.isObject(objectUser) && this.check.isObject(target)) {
 			var t;
-			for(t in objectDefault){
-				if(objectDefault.hasOwnProperty(t)){
-					if(this.check.isObject(objectDefault[t]) && this.check.isObject(objectDefault[t])){
+			for (t in objectDefault) {
+				if (objectDefault.hasOwnProperty(t)) {
+					if (this.check.isObject(objectDefault[t]) && this.check.isObject(objectDefault[t])) {
 						target[t] = objectDefault[t];
 						// applying recursion to copy deeply
 						this.mergeObjectsDeeply(target[t], objectDefault[t], objectUser[t]);
-					}else{
-						if(objectUser[t] !== undefined){
+					} else {
+						if (objectUser[t] !== undefined) {
 							target[t] = objectUser[t];
-						}else{
+						} else {
 							target[t] = objectDefault[t];
 						}
 					}
@@ -101,7 +101,7 @@ export default class Utils {
      * Enable the windows scroll
      */
 	enableScroll() {
-		window.onkeydown = function(){};
+		window.onkeydown = function() {};
 	}
 
 	/**
