@@ -207,10 +207,12 @@ export default class CheckboxRadioBuilder {
 				let i;
 				for (i = 0; i < total; i++) {
 					const radio = radiosSameName[i];
+					radio.checked = false;
 					this.creator.removeAttribute(radio, 'checked');
 					this.updateCheckedInput(radio, radio.parentElement.parentElement);
 				}
 			}
+			radio.checked = true;
 			this.creator.createAttribute(radio, 'checked', 'true');
 		}
 	}

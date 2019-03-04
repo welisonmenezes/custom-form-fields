@@ -80,7 +80,7 @@ export default class Check {
      * @returns { Boolean } if the element is checked (true)
      */
     isElementChecked(element) {
-        return (element && element.hasAttribute('checked') && element.getAttribute('checked') !== 'false');
+        return (element && element.checked);
     }
 
     isElementDisabled(element) {
