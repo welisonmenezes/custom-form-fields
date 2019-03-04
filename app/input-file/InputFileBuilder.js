@@ -26,15 +26,14 @@ export default class InputFileBuilder {
 			let i;
 			for (i = 0; i < total; i++) {
 				const inputFile = inputsFile[i];
-				console.log(inputFile);
 				this.creator.createAttribute(inputFile, 'tabindex', -1);
 				const wrapInputFile = this.createWrapInput(inputFile);
 				this.createUiInputFile(wrapInputFile);
 				this.utils.updateDisabledInput(inputFile, wrapInputFile, this.config.selectors.disabled);
+				this.resolveEventsToUiSelectButton(wrapInputFile);
 			}
 		}	
 	}
-
 
 	/**
 	 * Create the ui input container and insert on page
@@ -61,6 +60,11 @@ export default class InputFileBuilder {
 		return null;
 	}
 
+	/**
+	 * Create the ui input
+	 * @param { HTMLElement } wrapInputFile - The wrap of ui input
+	 * @returns { HTMLElement } the ui input that was created
+	 */
 	createUiInputFile(wrapInputFile) {
 		const uiInputObj = [{
 			name: 'DIV',
@@ -86,7 +90,27 @@ export default class InputFileBuilder {
 				]
 			}
 		}];
-		const uiInputFile = this.creator.createElements(uiInputObj, wrapInputFile);
-		return uiInputFile;
+		return this.creator.createElements(uiInputObj, wrapInputFile);
+	}
+
+	/**
+	 * Add event listeners to ui checkboxRadio
+	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The ui checkboxRadio container
+	 */
+	resolveEventsToUiSelectButton(wrapInputFile) {
+		const selectButton = this.$.getElement('.' + this.config.selectors.uiSelectButton, wrapInputFile);
+		if (selectButton) {
+			this.utils.addEventListenerToElement(selectButton, 'click', this.onSelectButtonClick, [this, wrapInputFile]);
+		}
+	}
+
+	onSelectButtonClick(args) {
+		const event = arguments[(arguments.length - 1)];
+		const self = args[0];
+		const wrapInputFile = args[1];
+		event.stopPropagation();
+		if (!wrapInputFile.classList.contains(self.config.selectors.disabled)) {
+			console.log('clicked!');
+		}
 	}
 }

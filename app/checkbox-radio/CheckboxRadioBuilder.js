@@ -121,7 +121,7 @@ export default class CheckboxRadioBuilder {
 
 	/**
 	 * Create the ui input
-	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The wrap of ui input
+	 * @param { HTMLElement } wrapCheckRadio - The wrap of ui input
 	 * @returns { HTMLElement } the ui input that was created
 	 */
 	createUICheckRadio(wrapCheckRadio) {
