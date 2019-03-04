@@ -125,6 +125,7 @@ export default class CustomFormFields {
 				defaultInputText: 'No file selected',
 				defaultButtonText: 'Select a file',
 				selectors: {
+					disabled: 'cff-disabled',
 					wrapInputFile: 'cff-wrap-input-file',
 					uiInputFile: 'cff-input-file',
 					uiInputDisplay: 'cff-input-display',

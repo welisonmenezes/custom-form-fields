@@ -82,4 +82,8 @@ export default class Check {
     isElementChecked(element) {
         return (element && element.hasAttribute('checked') && element.getAttribute('checked') !== 'false');
     }
+
+    isElementDisabled(element) {
+        return (element && element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false');
+    }
 }

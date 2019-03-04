@@ -104,7 +104,7 @@ export default class SelectBuilder {
 	 */
 	addNewOption(value, text, select) {
 		if (select && this.check.isHTMLElement(select)) {
-			if (!select.hasAttribute('disabled')) {
+			if (!this.check.isElementDisabled(select)) {
 				const optObj = {
 					name: 'OPTION',
 					class: [],
@@ -158,7 +158,7 @@ export default class SelectBuilder {
 				class: [this.config.selectors.wrapSelect, selectType]
 			}
 		];
-		if (select.hasAttribute('disabled')) {
+		if (this.check.isElementDisabled(select)) {
 			wrapArr[0].class.push(this.config.selectors.disabled);
 		}
 		const parentSelect = this.creator.createElements(wrapArr, select.parentNode);
@@ -167,7 +167,7 @@ export default class SelectBuilder {
 			wrapSelect.insertAdjacentElement('afterbegin', select);
 		}
 		
-		if (select.hasAttribute('disabled')) {
+		if (this.check.isElementDisabled(select)) {
 			this.creator.createAttribute(wrapSelect, 'aria-disabled', true);
 		} else {
 			this.creator.createAttribute(wrapSelect, 'tabindex', 0);
@@ -219,7 +219,7 @@ export default class SelectBuilder {
 	 */
 	createOptionObj(optionElement) {
 		const optClasses = [this.config.selectors.uiItemSelect, this.config.selectors.uiOption];
-		if (optionElement.hasAttribute('disabled')) {
+		if (this.check.isElementDisabled(optionElement)) {
 			optClasses.push(this.config.selectors.uiOptDisabled);
 		}
 		return {
@@ -772,7 +772,7 @@ export default class SelectBuilder {
 	 */
 	selectItem(itemIndex, select) {
 		if (this.check.isInteger(itemIndex) && select && this.check.isHTMLElement(select)) {
-			if (!select.hasAttribute('disabled')) {
+			if (!this.check.isElementDisabled(select)) {
 				const wrapSelect = select.parentElement;
 				if (wrapSelect) {
 					const items = this.$.getElements('.' + this.config.selectors.uiOption, wrapSelect);

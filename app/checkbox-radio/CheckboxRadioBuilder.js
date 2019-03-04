@@ -186,7 +186,7 @@ export default class CheckboxRadioBuilder {
 	 * @param { HTMLElement } wrapChekRadio - The ui container of the first param
 	 */
 	updateDisabledInput(checkRadio, wrapCheckRadio) {
-		if (checkRadio && checkRadio.hasAttribute('disabled') && checkRadio.getAttribute('disabled') !== 'false') {
+		if (this.check.isElementDisabled(checkRadio)) {
 			wrapCheckRadio.classList.add(this.config.selectors.disabled);
 			this.creator.createAttribute(wrapCheckRadio, 'aria-disabled', true);
 			this.creator.removeAttribute(wrapCheckRadio, 'tabindex');
