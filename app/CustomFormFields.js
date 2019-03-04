@@ -122,8 +122,14 @@ export default class CustomFormFields {
 			},
 			inputsFile: {
 				element: 'input[type="file"]',
+				defaultInputText: 'No file selected',
+				defaultButtonText: 'Select a file',
 				selectors: {
-					wrapInputFile: 'cff-wrap-input-file'
+					wrapInputFile: 'cff-wrap-input-file',
+					uiInputFile: 'cff-input-file',
+					uiInputDisplay: 'cff-input-display',
+					uiInputLabel: 'cff-input-label',
+					uiSelectButton: 'cff-select-button'
 				},
 				callbacks: {}
 			}

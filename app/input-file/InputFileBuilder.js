@@ -29,6 +29,7 @@ export default class InputFileBuilder {
 				console.log(inputFile);
 				this.creator.createAttribute(inputFile, 'tabindex', -1);
 				const wrapInputFile = this.createWrapInput(inputFile);
+				this.createUiInputFile(wrapInputFile);
 			}
 		}	
 	}
@@ -57,5 +58,35 @@ export default class InputFileBuilder {
 			return wrapInputFile;
 		}
 		return null;
+	}
+
+	createUiInputFile(wrapInputFile) {
+		const uiInputObj = [{
+			name: 'DIV',
+			class: [this.config.selectors.uiInputFile],
+			children: {
+				elements: [
+					{
+					name: 'DIV',
+						class: [this.config.selectors.uiInputDisplay],
+						children: {
+							elements: [{
+								name: 'SPAN',
+								class: [this.config.selectors.uiInputLabel],
+								text: this.config.defaultInputText
+							}]
+						}
+					},
+					{
+						name: 'SPAN',
+						class: [this.config.selectors.uiSelectButton],
+						text: this.config.defaultButtonText
+					}
+				]
+			}
+		}];
+		console.log(wrapInputFile)
+		const uiInputFile = this.creator.createElements(uiInputObj, wrapInputFile);
+		return uiInputFile;
 	}
 }

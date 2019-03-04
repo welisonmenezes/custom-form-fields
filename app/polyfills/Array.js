@@ -19,7 +19,6 @@ export default function polyfills() {
 		};
 	}
 
-
 	if (!Array.from) {
 	  Array.from = (function () {
 	    var toStr = Object.prototype.toString;
