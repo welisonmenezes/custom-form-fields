@@ -77,6 +77,7 @@ export default class CheckboxRadioBuilder {
 	 */
 	resolveEventsToUiSelect(wrapCheckRadio) {
 		this.utils.addEventListenerToElement(wrapCheckRadio, 'click', this.onCheckRadioClick, [this]);
+		this.utils.addEventListenerToElement(wrapCheckRadio, 'keyup', this.onCheckRadioKeyup, [this]);
 	}
 
 	/**
@@ -235,6 +236,22 @@ export default class CheckboxRadioBuilder {
 			}
 			self.updateCheckedInput(inp, this);
 			self.utils.callCallbackFunction(self.config.callbacks.afterCheckInput, self, inp);
+		}
+	}
+
+	/**
+	 * The callback to ui checkRadio keyup event
+	 * @param { Array } args - Params received by callback
+	 */
+	onCheckRadioKeyup(args) {
+		const event = arguments[(arguments.length - 1)];
+		const self = args[0];
+		event.stopPropagation();
+		if (!this.classList.contains(self.config.selectors.disabled)) {
+			if (event.keyCode === 13) { // key enter
+				const evt = self.utils.createTempEvent();
+				this.dispatchEvent(evt);
+			}
 		}
 	}
 

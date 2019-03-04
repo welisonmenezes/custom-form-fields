@@ -605,15 +605,18 @@ export default class SelectBuilder {
 		const event = arguments[(arguments.length - 1)];
 		event.stopPropagation();
 		if (!this.classList.contains(self.config.selectors.disabled)) {
-			if (event.keyCode === 38) {
+			if (event.keyCode === 38) { // key up
 				if (self.config.selectByArrows) {
 					self.changeSelectedOptionByArrowKey(this, 'top', event);
 				}
-			} else if (event.keyCode === 40) {
+			} else if (event.keyCode === 40) { // key down
 				if (self.config.selectByArrows) {
 					self.changeSelectedOptionByArrowKey(this, 'bottom', event);
 				}
-			} else {
+			} else if(event.keyCode === 13) { // key enter
+				const evt = self.utils.createTempEvent();
+				this.dispatchEvent(evt);
+			} else { // others key
 				if (self.config.selectByDigit) {
 					self.changeSelectedOptionByDigitKey(this, event);
 				}
