@@ -4,8 +4,9 @@ export default class Utils {
      * The constructor
      * @param { Check } An instance of the Check class
      */
-	constructor(Check) {
+	constructor(Check, Creator) {
 		this.check = Check;
+		this.creator = Creator;
 	}
 
 	/**
@@ -139,5 +140,24 @@ export default class Utils {
 		const evt = document.createEvent('HTMLEvents');
 		evt.initEvent(evName, true, true);
 		return evt;
+	}
+
+
+	/**
+	 * Update the disabled/enable input in ui container
+	 * @param { HTMLElement } element - The default html element
+	 * @param { HTMLElement } wrapUiElement - The ui container of the first param
+	 * @param { String } cls - The disabled corresponding css class
+	 */
+	updateDisabledInput(element, wrapUiElement, cls) {
+		if (this.check.isElementDisabled(element)) {
+			wrapUiElement.classList.add(cls);
+			this.creator.createAttribute(wrapUiElement, 'aria-disabled', true);
+			this.creator.removeAttribute(wrapUiElement, 'tabindex');
+		} else {
+			wrapUiElement.classList.remove(cls);
+			this.creator.createAttribute(wrapUiElement, 'tabindex', 0);
+			this.creator.removeAttribute(wrapUiElement, 'aria-disabled');
+		}
 	}
 }

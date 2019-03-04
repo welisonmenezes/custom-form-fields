@@ -48,6 +48,7 @@ export default class SelectBuilder {
 		this.creator.createAttribute(select, 'tabindex', -1);
 		const wrapSelect = this.createWrapSelect(select);
 		const createdUISelect = this.createUISelect(select);
+		this.utils.updateDisabledInput(select, wrapSelect, this.config.selectors.disabled);
 		this.insertCreatedUISelect(createdUISelect, wrapSelect);
 		this.setSelectedOption(select);
 		this.createSelectedOptsDisplay(select);
@@ -158,19 +159,10 @@ export default class SelectBuilder {
 				class: [this.config.selectors.wrapSelect, selectType]
 			}
 		];
-		if (this.check.isElementDisabled(select)) {
-			wrapArr[0].class.push(this.config.selectors.disabled);
-		}
 		const parentSelect = this.creator.createElements(wrapArr, select.parentNode);
 		const wrapSelect = this.$.getElement('.' + this.config.selectors.wrapSelect, parentSelect);
 		if (wrapSelect) {
 			wrapSelect.insertAdjacentElement('afterbegin', select);
-		}
-		
-		if (this.check.isElementDisabled(select)) {
-			this.creator.createAttribute(wrapSelect, 'aria-disabled', true);
-		} else {
-			this.creator.createAttribute(wrapSelect, 'tabindex', 0);
 		}
 		return wrapSelect;
 	}

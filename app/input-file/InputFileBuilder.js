@@ -30,7 +30,7 @@ export default class InputFileBuilder {
 				this.creator.createAttribute(inputFile, 'tabindex', -1);
 				const wrapInputFile = this.createWrapInput(inputFile);
 				this.createUiInputFile(wrapInputFile);
-				this.updateDisabledInput(inputFile, wrapInputFile);
+				this.utils.updateDisabledInput(inputFile, wrapInputFile, this.config.selectors.disabled);
 			}
 		}	
 	}
@@ -88,22 +88,5 @@ export default class InputFileBuilder {
 		}];
 		const uiInputFile = this.creator.createElements(uiInputObj, wrapInputFile);
 		return uiInputFile;
-	}
-
-	/**
-	 * Update the disabled/enable input in ui container
-	 * @param { HTMLElement } inputFile - The input file element
-	 * @param { HTMLElement } wrapInputFile - The ui container of the first param
-	 */
-	updateDisabledInput(inputFile, wrapInputFile) {
-		if (this.check.isElementDisabled(inputFile)) {
-			wrapInputFile.classList.add(this.config.selectors.disabled);
-			this.creator.createAttribute(wrapInputFile, 'aria-disabled', true);
-			this.creator.removeAttribute(wrapInputFile, 'tabindex');
-		} else {
-			wrapInputFile.classList.remove(this.config.selectors.disabled);
-			this.creator.createAttribute(wrapInputFile, 'tabindex', 0);
-			this.creator.removeAttribute(wrapInputFile, 'aria-disabled');
-		}
 	}
 }

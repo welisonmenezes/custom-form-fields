@@ -47,7 +47,7 @@ export default class CheckboxRadioBuilder {
 		this.setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio);
 		const uiCheckRadio = this.createUICheckRadio(wrapCheckRadio);
 		this.updateCheckedInput(checkRadio, wrapCheckRadio);
-		this.updateDisabledInput(checkRadio, wrapCheckRadio);
+		this.utils.updateDisabledInput(checkRadio, wrapCheckRadio, this.config.selectors.disabled);
 		this.resolveEventsToUiSelect(wrapCheckRadio);
 		this.utils.callCallbackFunction(this.config.callbacks.afterConstroyInput, this, wrapCheckRadio);
 		return wrapCheckRadio;
@@ -177,23 +177,6 @@ export default class CheckboxRadioBuilder {
 			wrapCheckRadio.classList.add(this.config.selectors.checked);
 		} else {
 			wrapCheckRadio.classList.remove(this.config.selectors.checked);
-		}
-	}
-
-	/**
-	 * Update the disabled/enable input in ui container
-	 * @param { HTMLElement } checkRadio - The input element
-	 * @param { HTMLElement } wrapChekRadio - The ui container of the first param
-	 */
-	updateDisabledInput(checkRadio, wrapCheckRadio) {
-		if (this.check.isElementDisabled(checkRadio)) {
-			wrapCheckRadio.classList.add(this.config.selectors.disabled);
-			this.creator.createAttribute(wrapCheckRadio, 'aria-disabled', true);
-			this.creator.removeAttribute(wrapCheckRadio, 'tabindex');
-		} else {
-			wrapCheckRadio.classList.remove(this.config.selectors.disabled);
-			this.creator.createAttribute(wrapCheckRadio, 'tabindex', 0);
-			this.creator.removeAttribute(wrapCheckRadio, 'aria-disabled');
 		}
 	}
 

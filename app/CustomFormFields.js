@@ -16,7 +16,7 @@ export default class CustomFormFields {
 		this.check = new Check();
 		this.selector = new Selector();
 		this.creator = new Creator(this.check);
-		this.utils = new Utils(this.check);
+		this.utils = new Utils(this.check, this.creator);
 		this._setConfiguration(userConfigurations);
 		this.buildElements();
 	}
