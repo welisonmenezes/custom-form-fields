@@ -124,6 +124,8 @@ export default class CustomFormFields {
 				element: 'input[type="file"]',
 				defaultInputText: 'No file selected',
 				defaultButtonText: 'Select a file',
+				multipleSelecteText: '[x] selected files', // [x] will be change by real amount,
+				maxLengthFileName: 50,
 				selectors: {
 					disabled: 'cff-disabled',
 					wrapInputFile: 'cff-wrap-input-file',

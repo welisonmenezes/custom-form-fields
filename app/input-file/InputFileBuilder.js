@@ -95,7 +95,7 @@ export default class InputFileBuilder {
 
 	/**
 	 * Add event listeners to ui checkboxRadio
-	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The ui checkboxRadio container
+	 * @param { HTMLElement } wrapCheckRadio - The ui checkboxRadio container
 	 */
 	resolveEventsToUiSelectButton(wrapInputFile) {
 		const selectButton = this.$.getElement('.' + this.config.selectors.uiSelectButton, wrapInputFile);
@@ -106,6 +106,28 @@ export default class InputFileBuilder {
 		}
 		if (input) {
 			this.utils.addEventListenerToElement(input, 'change', this.onChangeInput, [this, wrapInputFile]);
+		}
+	}
+
+	/**
+	 * The method called when the input file fires a change event
+	 * @param { HTMLElement } inputFile - The input file (in this case the event's target)
+	 * @param { HTMLElement } wrapInputFile - The ui container of input file
+	 */
+	selectFilesBehavior(inputFile, wrapInputFile) {
+		if (inputFile.files) {
+			const label = this.$.getElement('.' + this.config.selectors.uiInputLabel, wrapInputFile);
+			if (label) {
+				if (inputFile.files.length < 1) {
+					label.innerHTML = this.config.defaultInputText;
+				} else if (inputFile.files.length === 1) {
+					label.innerHTML = inputFile.files[0].name;
+				} else {
+					label.innerHTML = this.config.multipleSelecteText.replace('[x]', inputFile.files.length);
+				}
+			}
+		} else {
+			label.innerHTML = this.config.selectors.defaultInputText;
 		}
 	}
 
@@ -153,8 +175,7 @@ export default class InputFileBuilder {
 		const wrapInputFile = args[1];
 		event.stopPropagation();
 		if (!wrapInputFile.classList.contains(self.config.selectors.disabled)) {
-			console.log(this);
-			// todo - select file behaviors
+			self.selectFilesBehavior(this, wrapInputFile);
 		}
 	}
 }
