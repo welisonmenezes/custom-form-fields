@@ -121,7 +121,7 @@ export default class InputFileBuilder {
 				if (inputFile.files.length < 1) {
 					label.innerHTML = this.config.defaultInputText;
 				} else if (inputFile.files.length === 1) {
-					label.innerHTML = inputFile.files[0].name;
+					label.innerHTML = this.utils.limitString(inputFile.files[0].name, this.config.maxLengthFileName);
 				} else {
 					label.innerHTML = this.config.multipleSelecteText.replace('[x]', inputFile.files.length);
 				}

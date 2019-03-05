@@ -160,4 +160,16 @@ export default class Utils {
 			this.creator.removeAttribute(wrapUiElement, 'aria-disabled');
 		}
 	}
+
+	/**
+	 * Limit string length 
+	 * @param { String } text - The string that will be limited
+	 * @param { Integer } limit - The max lenght of string
+	 */
+	limitString(text, limit) {
+		if (text.length > limit) {
+			return text.substring(0, limit) + '...';
+		}
+		return text;
+	}
 }
