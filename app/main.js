@@ -27,7 +27,40 @@ const options = {
 			}
 		}
 	},
-	inputsFile: {}
+	inputsFile: {
+		callbacks: {
+			beforeBuildInputs: function(inputsFile) {
+				console.log('inputsFile', inputsFile);
+			},
+			afterBuildInputs: function(wrapInputsFile) {
+				console.log('wrapInputsFile', wrapInputsFile);
+			},
+			beforeConstroyInput: function(inputFile) {
+				console.log('inputFile', inputFile);
+			},
+			afterConstroyInput: function(wrapInputFile) {
+				console.log('wrapInputFile', wrapInputFile);
+			},
+			beforeDestroyInput: function(wrapInputFile) {
+				console.log('wrapInputFile', wrapInputFile);
+			},
+			afterDestroyInput: function(inputFile) {
+				console.log('inputFile', inputFile);
+			},
+			beforeSelectFile: function(inputFile) {
+				console.log('inputFile', inputFile);
+			},
+			afterSelectFile: function(inputFile) {
+				console.log('inputFile', inputFile);
+			},
+			beforeClearInput: function(inputFile) {
+				console.log('inputFile', inputFile);
+			},
+			afterClearInput: function(inputFile) {
+				console.log('inputFile', inputFile);
+			}
+		}
+	}
 };
 const cff = new CustomFormFields(options);
 

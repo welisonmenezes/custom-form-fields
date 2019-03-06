@@ -35,6 +35,8 @@ export default class CheckboxRadioBuilder {
 
 	/**
 	 * Cosntroy UI checkboxRadio from default input type checkbox or radio
+	 * @param { HTMLElement } checkRadio - The input element
+	 * @returns { HTMLElement } The ui input checkbox or radio
 	 */
 	constroy(checkRadio) {
 		const parent = checkRadio.parentElement.parentElement;
@@ -55,6 +57,7 @@ export default class CheckboxRadioBuilder {
 
 	/**
 	 * Destroy UI checkboxRadio from default input type checkbox or radio
+	 * @param { HTMLElement } checkRadio - The input element
 	 */
 	destroy(checkRadio) {
 		if (checkRadio && this.check.isHTMLElement(checkRadio)) {

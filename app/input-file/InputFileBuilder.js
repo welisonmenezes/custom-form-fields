@@ -21,30 +21,37 @@ export default class InputFileBuilder {
 	 */
 	build() {
 		const inputsFile = this.$.getElements(this.config.element);
+		const wrapInputsFile = [];
+		this.utils.callCallbackFunction(this.config.callbacks.beforeBuildInputs, this, inputsFile);
 		if (inputsFile && inputsFile.length) {
 			const total = inputsFile.length;
 			let i;
 			for (i = 0; i < total; i++) {
-				this.constroy(inputsFile[i]);
+				wrapInputsFile.push(this.constroy(inputsFile[i]));
 			}
-		}	
+		}
+		this.utils.callCallbackFunction(this.config.callbacks.afterBuildInputs, this, wrapInputsFile);
 	}
 
 	/**
 	 * Constroy ui input file from given default input file
 	 * @param { HTMLElement } inputFile - The input file element
+	 * @returns { HTMLElement } The ui input file
 	 */
 	constroy(inputFile) {
 		const parent = inputFile.parentElement;
 		if (parent && parent.classList.contains('.' + this.config.selectors.wrapInputFile)) {
 			return null;
 		}
+		this.utils.callCallbackFunction(this.config.callbacks.beforeConstroyInput, this, inputFile);
 		this.creator.createAttribute(inputFile, 'tabindex', -1);
 		const wrapInputFile = this.createWrapInput(inputFile);
 		this.createUiInputFile(wrapInputFile);
 		this.utils.updateDisabledInput(inputFile, wrapInputFile, this.config.selectors.disabled);
 		this.resolveEventsToUiSelectButton(wrapInputFile);
 		this.selectFilesBehavior(inputFile, wrapInputFile);
+		this.utils.callCallbackFunction(this.config.callbacks.afterConstroyInput, this, wrapInputFile);
+		return wrapInputFile;
 	}
 
 	/**
@@ -57,8 +64,10 @@ export default class InputFileBuilder {
 			if (wrapInputFile && wrapInputFile.classList.contains(this.config.selectors.wrapInputFile)) {
 				const target = wrapInputFile.parentElement;
 				if (target) {
+					this.utils.callCallbackFunction(this.config.callbacks.beforeDestroyInput, this, wrapInputFile);
 					target.appendChild(inputFile);
 					target.removeChild(wrapInputFile);
+					this.utils.callCallbackFunction(this.config.callbacks.afterDestroyInput, this, inputFile);
 				}
 			}
 		}
@@ -172,6 +181,7 @@ export default class InputFileBuilder {
 		if (!wrapInputFile.classList.contains(self.config.selectors.disabled)) {
 			const input = self.$.getElement('input', wrapInputFile);
 			if (input) {
+				self.utils.callCallbackFunction(self.config.callbacks.beforeSelectFile, self, input);
 				input.click();
 			}
 		}
@@ -205,6 +215,7 @@ export default class InputFileBuilder {
 		event.stopPropagation();
 		if (!wrapInputFile.classList.contains(self.config.selectors.disabled)) {
 			self.selectFilesBehavior(this, wrapInputFile);
+			self.utils.callCallbackFunction(self.config.callbacks.afterSelectFile, self, this);
 		}
 	}
 
@@ -216,8 +227,10 @@ export default class InputFileBuilder {
 		if (inputFile && this.check.isHTMLElement(inputFile)) {
 			const wrapInputFile = inputFile.parentElement;
 			if (wrapInputFile) {
+				this.utils.callCallbackFunction(this.config.callbacks.beforeClearInput, this, inputFile);
 				inputFile.value = '';
 				this.selectFilesBehavior(inputFile, wrapInputFile);
+				this.utils.callCallbackFunction(this.config.callbacks.afterClearInput, this, inputFile);
 			}
 		}
 	}

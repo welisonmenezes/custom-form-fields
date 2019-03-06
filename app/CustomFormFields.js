@@ -134,7 +134,18 @@ export default class CustomFormFields {
 					uiInputLabel: 'cff-input-label',
 					uiSelectButton: 'cff-select-button'
 				},
-				callbacks: {}
+				callbacks: {
+					beforeBuildInputs: null,
+					afterBuildInputs: null,
+					beforeConstroyInput: null,
+					afterConstroyInput: null,
+					beforeDestroyInput: null,
+					afterDestroyInput: null,
+					beforeSelectFile: null,
+					afterSelectFile: null,
+					beforeClearInput: null,
+					afterClearInput: null
+				}
 			}
 		};
 		this.config = this.utils.mergeObjectsDeeply({}, this.config, userConfigurations);
