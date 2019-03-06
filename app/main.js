@@ -88,3 +88,8 @@ document.getElementById('constroyInputFile').addEventListener('click', function(
 	const input = document.getElementById('m-files');
 	cff.inputsFile.constroy(input);
 });
+
+document.getElementById('clearInputFile').addEventListener('click', function() {
+	const input = document.getElementById('m-files');
+	cff.inputsFile.clear(input);
+});

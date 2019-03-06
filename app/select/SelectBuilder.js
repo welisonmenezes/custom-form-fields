@@ -78,7 +78,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Add event listeners to ui selects and your ui options
-	 * @param { HTMLElement || HTMLFormElement } wrapSelect - The ui select container
+	 * @param { HTMLElement } wrapSelect - The ui select container
 	 */
 	resolveEventsToUiSelect(wrapSelect) {
 		this.utils.addEventListenerToElement(wrapSelect, 'click', this.onToggleSelectClick, [this]);
@@ -101,7 +101,7 @@ export default class SelectBuilder {
 	 * Add new option to normal select
 	 * @param { String } value - The value of the option
 	 * @param { String } text - The text of the option
-	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 * @param { HTMLElement } select - The select that will receive the option
 	 */
 	addNewOption(value, text, select) {
 		if (select && this.check.isHTMLElement(select)) {
@@ -126,8 +126,8 @@ export default class SelectBuilder {
 
 	/**
 	 * Add new option to ui select and add yor corresponding event
-	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
-	 * @param { HTMLElement || HTMLFormElement } newOpt - The new opt that was created
+	 * @param { HTMLElement } select - The select that will receive the option
+	 * @param { HTMLElement } newOpt - The new opt that was created
 	 */
 	addNewUiOption(select, newOpt) {
 		if (select) {
@@ -148,7 +148,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Create the ui select container and insert on page
-	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 * @param { HTMLElement } select - The select that will receive the option
 	 * @returns { HTMLElement } the ui select container that was created
 	 */
 	createWrapSelect(select) {
@@ -169,7 +169,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Create the ui select
-	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the option
+	 * @param { HTMLElement } select - The select that will receive the option
 	 * @returns { HTMLElement } the ui select that was created
 	 */
 	createUISelect(select) {
@@ -183,7 +183,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Create an array of object that will be used to create the ui options
-	 * @param { HTMLElement || HTMLFormElement } select - The select that will receive the options
+	 * @param { HTMLElement } select - The select that will receive the options
 	 * @returns { Array } An array with the configurations to create ui options
 	 */
 	createOptionsAndGroupsObj(select) {
@@ -206,7 +206,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Create an object that will be used to create an ui option
-	 * @param { HTMLElement || HTMLFormElement } optionElement - The option element
+	 * @param { HTMLElement } optionElement - The option element
 	 * @returns { Object } An object that will be used to creat an ui option
 	 */
 	createOptionObj(optionElement) {
@@ -226,7 +226,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Create an object that will be used to create an ui optgroup
-	 * @param { HTMLElement || HTMLFormElement } groupElement - The group element
+	 * @param { HTMLElement } groupElement - The group element
 	 * @returns { Object } An object that will be used to creat an ui optgroup
 	 */
 	createGroupObj(groupElement) {
@@ -258,8 +258,8 @@ export default class SelectBuilder {
 
 	/**
 	 * Insert the created ui select into ui container select
-	 * @param { HTMLElement || HTMLFormElement } createdUISelect - The created ui select
-	 * @param { HTMLElement || HTMLFormElement } wrapSelect - The ui select container
+	 * @param { HTMLElement } createdUISelect - The created ui select
+	 * @param { HTMLElement } wrapSelect - The ui select container
 	 * @returns { HTMLElement } the ui select that was created
 	 */
 	insertCreatedUISelect(createdUISelect, wrapSelect) {
@@ -270,7 +270,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Set the selected option (also ui option)
-	 * @param { HTMLElement || HTMLFormElement } select - The select element
+	 * @param { HTMLElement } select - The select element
 	 */
 	setSelectedOption(select) {
 		const options = this.$.getElements('option', select);
@@ -305,7 +305,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Get the selected ui option
-	 * @param { HTMLElement || HTMLFormElement } select - The select element
+	 * @param { HTMLElement } select - The select element
 	 * @returns { HTMLElement || null } The selected ui option if exists or null
 	 */
 	getSelectedOptions(select) {
@@ -318,7 +318,7 @@ export default class SelectBuilder {
 
 	/**
 	 * Create selected options display (What will be shown as selected) - And add events
-	 * @param { HTMLElement || HTMLFormElement } select - The select element
+	 * @param { HTMLElement } select - The select element
 	 * @returns { HTMLElement || null } The display of selected ui options if exists or null
 	 */
 	createSelectedOptsDisplay(select) {

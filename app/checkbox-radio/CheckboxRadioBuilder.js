@@ -73,7 +73,7 @@ export default class CheckboxRadioBuilder {
 
 	/**
 	 * Add event listeners to ui checkboxRadio
-	 * @param { HTMLElement || HTMLFormElement } wrapCheckRadio - The ui checkboxRadio container
+	 * @param { HTMLElement } wrapCheckRadio - The ui checkboxRadio container
 	 */
 	resolveEventsToUiSelect(wrapCheckRadio) {
 		this.utils.addEventListenerToElement(wrapCheckRadio, 'click', this.onCheckRadioClick, [this]);
@@ -82,7 +82,7 @@ export default class CheckboxRadioBuilder {
 
 	/**
 	 * Create the ui input container and insert on page
-	 * @param { HTMLElement || HTMLFormElement } checkRadio - The input that will receive the option
+	 * @param { HTMLElement } checkRadio - The input that will receive the option
 	 * @returns { HTMLElement } the ui input container that was created
 	 */
 	createWrapCheckRadio(checkRadio) {
@@ -109,7 +109,7 @@ export default class CheckboxRadioBuilder {
 
 	/**
 	 * Set if input is type checkbox or radio
-	 * @param { HTMLElement || HTMLFormElement } checkRadio - The input that will be verified
+	 * @param { HTMLElement } checkRadio - The input that will be verified
 	 * @param { HTMLElement } the ui input container of the first param
 	 */
 	setIfIsCheckboxOrRadio(checkRadio, wrapCheckRadio) {

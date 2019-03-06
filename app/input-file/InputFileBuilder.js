@@ -30,6 +30,10 @@ export default class InputFileBuilder {
 		}	
 	}
 
+	/**
+	 * Constroy ui input file from given default input file
+	 * @param { HTMLElement } inputFile - The input file element
+	 */
 	constroy(inputFile) {
 		const parent = inputFile.parentElement;
 		if (parent && parent.classList.contains('.' + this.config.selectors.wrapInputFile)) {
@@ -43,6 +47,10 @@ export default class InputFileBuilder {
 		this.selectFilesBehavior(inputFile, wrapInputFile);
 	}
 
+	/**
+	 * Destroy ui input file from given default input file
+	 * @param { HTMLElement } inputFile - The input file element
+	 */
 	destroy(inputFile) {
 		if (inputFile && this.check.isHTMLElement(inputFile)) {
 			const wrapInputFile = inputFile.parentElement;
@@ -58,7 +66,7 @@ export default class InputFileBuilder {
 
 	/**
 	 * Create the ui input container and insert on page
-	 * @param { HTMLElement || HTMLFormElement } inputFile - The input that will be transformed
+	 * @param { HTMLElement } inputFile - The input that will be transformed
 	 * @returns { HTMLElement } the ui input container that was created
 	 */
 	createWrapInput(inputFile) {
@@ -197,6 +205,20 @@ export default class InputFileBuilder {
 		event.stopPropagation();
 		if (!wrapInputFile.classList.contains(self.config.selectors.disabled)) {
 			self.selectFilesBehavior(this, wrapInputFile);
+		}
+	}
+
+	/**
+	 * Clear input file with selected file
+	 * @param { HTMLElement } inputFile - The input file element
+	 */
+	clear(inputFile) {
+		if (inputFile && this.check.isHTMLElement(inputFile)) {
+			const wrapInputFile = inputFile.parentElement;
+			if (wrapInputFile) {
+				inputFile.value = '';
+				this.selectFilesBehavior(inputFile, wrapInputFile);
+			}
 		}
 	}
 }
