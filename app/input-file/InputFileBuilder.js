@@ -25,14 +25,35 @@ export default class InputFileBuilder {
 			const total = inputsFile.length;
 			let i;
 			for (i = 0; i < total; i++) {
-				const inputFile = inputsFile[i];
-				this.creator.createAttribute(inputFile, 'tabindex', -1);
-				const wrapInputFile = this.createWrapInput(inputFile);
-				this.createUiInputFile(wrapInputFile);
-				this.utils.updateDisabledInput(inputFile, wrapInputFile, this.config.selectors.disabled);
-				this.resolveEventsToUiSelectButton(wrapInputFile);
+				this.constroy(inputsFile[i]);
 			}
 		}	
+	}
+
+	constroy(inputFile) {
+		const parent = inputFile.parentElement;
+		if (parent && parent.classList.contains('.' + this.config.selectors.wrapInputFile)) {
+			return null;
+		}
+		this.creator.createAttribute(inputFile, 'tabindex', -1);
+		const wrapInputFile = this.createWrapInput(inputFile);
+		this.createUiInputFile(wrapInputFile);
+		this.utils.updateDisabledInput(inputFile, wrapInputFile, this.config.selectors.disabled);
+		this.resolveEventsToUiSelectButton(wrapInputFile);
+		this.selectFilesBehavior(inputFile, wrapInputFile);
+	}
+
+	destroy(inputFile) {
+		if (inputFile && this.check.isHTMLElement(inputFile)) {
+			const wrapInputFile = inputFile.parentElement;
+			if (wrapInputFile && wrapInputFile.classList.contains(this.config.selectors.wrapInputFile)) {
+				const target = wrapInputFile.parentElement;
+				if (target) {
+					target.appendChild(inputFile);
+					target.removeChild(wrapInputFile);
+				}
+			}
+		}
 	}
 
 	/**

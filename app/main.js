@@ -78,3 +78,13 @@ document.getElementById('setChecked').addEventListener('click', function() {
 	const input = document.getElementById('radio-1');
 	cff.checkboxesRadios.setChecked(input);
 });
+
+document.getElementById('destroyInputFile').addEventListener('click', function() {
+	const input = document.getElementById('m-files');
+	cff.inputsFile.destroy(input);
+});
+
+document.getElementById('constroyInputFile').addEventListener('click', function() {
+	const input = document.getElementById('m-files');
+	cff.inputsFile.constroy(input);
+});
