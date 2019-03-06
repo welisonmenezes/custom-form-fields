@@ -16,7 +16,7 @@ plugins.push(new CleanWebpackPlugin('./dist', {}));
 
 plugins.push(new ExtractCssChunks(
     {
-      filename: 'css/[name]' + min + '.css',
+      filename: 'css/custom-form-fields' + min + '.css',
       chunkFilename: 'css/vendors' + min + '.css',
       hot: true,
       orderWarning: true,
@@ -55,10 +55,10 @@ if (mode === 'production') {
     }));
 }
 
-plugins.push(new HtmlWebpackPlugin({
-    template: 'index.html',
-    filename: 'index.html'
-}));
+// plugins.push(new HtmlWebpackPlugin({
+//     template: 'index.html',
+//     filename: 'index.html'
+// }));
 
 module.exports = {
 	mode: mode,
@@ -67,9 +67,11 @@ module.exports = {
         bundle: ['./app/main.js']
 	},
 	output: {
-		filename: 'js/[name]' + min + '.js',
+		filename: 'js/custom-form-fields' + min + '.js',
 		path: path.resolve(__dirname, 'dist'),
         publicPath: './',
+        libraryTarget: 'umd',
+        library: 'CustomFormFields'
 	},
 	module: {
         rules: [
