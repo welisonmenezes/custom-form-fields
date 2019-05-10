@@ -6,7 +6,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const mode = 'development'; // [development, production]
+const mode = 'production'; // [development, production]
 let SERVICE_URL = JSON.stringify('http://development-url-here/');
 const minimizer = [];
 const plugins = [];
