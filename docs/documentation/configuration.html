@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Custom Form Fields</title>
+	<meta name="description" content="Custom Form Fields - A pure Javascript plugin to customize selects, inputs radio, inputs checkbox and inputs file.">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="../assets/images/favicon.png">
+	<link rel="stylesheet" href="../assets/@fortawesome/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="../assets/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../assets/rainbow-master/themes/css/tomorrow-night.css">
+	<link rel="stylesheet" href="../assets/css/fonts.css">
+	<link rel="stylesheet" href="../assets/css/styles.css">
+	<style>
+		body{
+			-moz-opacity: 0.00;
+			-khtml-opacity: 0.00;
+			opacity: 0.00;
+		}
+	</style>
+</head>
+<body class="page-about">
+	
+	<!-- header-main -->
+	<header class="header-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="navbar navbar-dark navbar-expand-md">
+						<a href="https://welisonmenezes.github.io/" class="navbar-brand" title="Portfolio Welison Menezes">
+							<img src="../assets/images/mylogo.svg" alt="Logo">
+						</a>
+						<h1>Custom Form Fields <small>A pure Javascript plugin to customize selects, inputs radio, inputs checkbox and inputs file.</small></h1>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- end header-main -->
+
+	<!-- main -->
+	<main class="main">
+		<div class="container">
+		
+			<div class="row">
+				
+				<div class="col-md-4">
+					<!-- sidebar -->
+					<div class="sidebar">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="section-title">
+									<h4 class="title">Menu</h4>
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<a href="index.html" class="active">Basic Usage</a>
+									</li>
+									<li class="list-group-item">
+										<a href="configuration.html">Configurations</a>
+										<ul>
+											<li>
+												<a href="selectors.html">Selectors</a>
+											</li>
+										</ul>
+									</li>
+									<li class="list-group-item">
+										<a href="download.html">Download</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- end sidebar -->
+				</div>
+
+				<div class="col-md-8">
+					
+					<!-- main-post -->
+					<article class="main-post">
+
+
+<header>
+	<h2>Configurations</h2>
+</header>
+
+<h3>The config object</h3>
+<pre>
+<code data-language="javascript">{
+  buildUiSelects: true, // [true, false]
+  buildUiCheckboxesRadios: true, // [true, false]
+  buildUiInputsFile: true, // [true, false]
+  selects: {
+    element: 'select', // [string (css selector)]
+    selectByArrows: true, // [true, false]
+    selectByDigit: true, // [true, false]
+    autoHeight: true, // [true, false]
+    autoPositioning: true, // [true, false]
+    selectors: {...},
+    callbacks: {...}
+  },
+  checkboxesRadios: {
+    element: 'input[type="checkbox"],input[type="radio"]', //[string (css selector)]
+    labelPosition: 'right', // ['right', 'left']
+    selectors: {...},
+    callbacks: {...}
+  },
+  inputsFile: {
+    element: 'input[type="file"]', // [string (css selector)]
+    defaultInputText: 'No file selected', // [string]
+    defaultButtonText: 'Select a file', // [string]
+    multipleSelecteText: '[x] selected files', // [x] will be change by real amount,
+    maxLengthFileName: 15, // [int]
+    selectors: {...},
+    callbacks: {...}
+  }
+};</code>
+</pre>
+
+<div class="table-wrap">
+	<table class="table table-dark">
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Type</th>
+				<th>Default</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th>buildUiSelects</th>
+				<td><code>boolean</code></td>
+				<td><em>true</em></td>
+				<td><p>If is true, enable the plugin to build custom selects field.</p></td>
+			</tr>
+			<tr>
+				<th>buildUiCheckboxesRadios</th>
+				<td><code>boolean</code></td>
+				<td><em>true</em></td>
+				<td><p>If is true, enable the plugin to build custom checkbox and radio fields.</p></td>
+			</tr>
+			<tr>
+				<th>buildUiInputsFile</th>
+				<td><code>boolean</code></td>
+				<td><em>true</em></td>
+				<td><p>If is true, enable the plugin to build custom input file fields.</p></td>
+			</tr>
+			<tr>
+				<th>selects</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>The place where you customize the custom select field options.</p></td>
+			</tr>
+			<tr>
+				<th>selects.elements</th>
+				<td><code>string</code></td>
+				<td><em>select</em></td>
+				<td><p>The css query of the select field which you want customize.</p></td>
+			</tr>
+			<tr>
+				<th>selects.selectByArrows</th>
+				<td><code>boolean</code></td>
+				<td><em>true</em></td>
+				<td><p>If true, enables the navigation for all select options by keyboard arrows.</p></td>
+			</tr>
+			<tr>
+				<th>selects.selectByDigit</th>
+				<td><code>boolean</code></td>
+				<td><em>true</em></td>
+				<td><p>If true, enables the navigation for all select options by keyboard digits.</p></td>
+			</tr>
+			<tr>
+				<th>selects.autoHeight</th>
+				<td><code>boolean</code></td>
+				<td><em>true</em></td>
+				<td><p>If true, the plugin will auto resize the options view.</p></td>
+			</tr>
+			<tr>
+				<th>selects.autoPositioning</th>
+				<td><code>boolean</code></td>
+				<td><em>true</em></td>
+				<td><p>If true, the plugin will positioning the option view dynamically according with vertical position of the select field.</p></td>
+			</tr>
+			<tr>
+				<th>selects.selectors</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>The css selectors generated by the plugin for its dynamic elements. See more in <a href="">selectors</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>selects.callbacks</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>An object with custom callbacks methods. See more in <a href="">callback</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>checkboxesRadios</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>The place where you customize the custom checkbox and radio fields options.</p></td>
+			</tr>
+			<tr>
+				<th>checkboxesRadios.element</th>
+				<td><code>string</code></td>
+				<td><em>input[type="checkbox"], input[type="radio"]</em></td>
+				<td><p>The css query of the checkbox and/or radio field which you want customize.</p></td>
+			</tr>
+			<tr>
+				<th>checkboxesRadios.labelPosition</th>
+				<td><code>string</code><br><small>[right, left]</small></td>
+				<td><em>right</em></td>
+				<td><p>The position where the element label will appear.</p></td>
+			</tr>
+			<tr>
+				<th>checkboxesRadios.selectors</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>The css selectors generated by the plugin for its dynamic elements. See more in <a href="">selectors</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>checkboxesRadios.callbacks</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>An object with custom callbacks methods. See more in <a href="">callback</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>inputsFile</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>The place where you customize the custom input file options.</p></td>
+			</tr>
+			<tr>
+				<th>inputsFile.element</th>
+				<td><code>string</code></td>
+				<td><em>input[type="file"]</em></td>
+				<td><p>The css query of the input file which you want customize.</p></td>
+			</tr>
+			<tr>
+				<th>inputsFile.defaultInputText</th>
+				<td><code>string</code></td>
+				<td><em>No file selected</em></td>
+				<td><p>The placeholder shown in empty input file.</p></td>
+			</tr>
+			<tr>
+				<th>inputsFile.defaultButtonText</th>
+				<td><code>string</code></td>
+				<td><em>Select a file</em></td>
+				<td><p>The text shown in input file button.</p></td>
+			</tr>
+			<tr>
+				<th>inptsFile.multipleSelecteText</th>
+				<td><code>string</code></td>
+				<td><em>[x] selected files</em></td>
+				<td><p>By default the name of file will be show into the input. But if more one files was selected the text defined here will be shown. The [x] will be change by real amount of files.</p></td>
+			</tr>
+			<tr>
+				<th>inputsFile.maxLengthFileName</th>
+				<td><code>int</code></td>
+				<td><em>15</em></td>
+				<td><p>The number of characters that will be shown from selected file name.</p></td>
+			</tr>
+			<tr>
+				<th>inputsFile.selectors</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>The css selectors generated by the plugin for its dynamic elements. See more in <a href="">selectors</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>inputsFile.callbacks</th>
+				<td><code>Object</code></td>
+				<td><em>{...}</em></td>
+				<td><p>An object with custom callbacks methods. See more in <a href="">callback</a> section.</p></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+					</article>
+					<!-- end main-post -->
+
+				</div>
+			</div>
+
+		</div>
+	</main>
+	<!-- end main -->
+	
+	<!-- footer-main -->
+	<footer class="footer-main">
+		<div class="dark-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<p><small>Created by Welison Menezes</small></p>
+					</div>
+					<div class="col-sm-6">
+						<ul class="nav-footer text-right">
+							<li>
+								<a href="https://welisonmenezes.github.io/" target="_blank" title="Portfolio Welison Menezes">
+									<i class="fas fa-briefcase"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://github.com/welisonmenezes" target="_blank" title="Github Welison Menezes">
+									<i class="fab fa-github"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://www.linkedin.com/in/welisonmenezes/" target="_blank" title="Linkedin Welison Menezes">
+									<i class="fab fa-linkedin"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- end footer-main -->
+
+	<script src="../assets/jquery/dist/jquery.min.js"></script>
+	<script src="../assets/popper.js/dist/umd/popper.min.js"></script>
+	<script src="../assets/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../assets/rainbow-master/dist/rainbow.min.js"></script>
+    <script src="../assets/rainbow-master/src/language/generic.js"></script>
+    <script src="../assets/rainbow-master/src/language/html.js"></script>
+    <script src="../assets/rainbow-master/src/language/css.js"></script>
+    <script src="../assets/rainbow-master/src/language/javascript.js"></script>
+	<script src="../assets/js/app.js"></script>
+</body>
+</html>
