@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Custom Form Fields</title>
+	<meta name="description" content="Custom Form Fields - A pure Javascript plugin to customize selects, inputs radio, inputs checkbox and inputs file.">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="../assets/images/favicon.png">
+	<link rel="stylesheet" href="../assets/@fortawesome/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="../assets/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../assets/rainbow-master/themes/css/tomorrow-night.css">
+	<link rel="stylesheet" href="../assets/css/fonts.css">
+	<link rel="stylesheet" href="../assets/css/styles.css">
+	<style>
+		body{
+			-moz-opacity: 0.00;
+			-khtml-opacity: 0.00;
+			opacity: 0.00;
+		}
+	</style>
+</head>
+<body class="page-about">
+	
+	<!-- header-main -->
+	<header class="header-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="navbar navbar-dark navbar-expand-md">
+						<a href="https://welisonmenezes.github.io/" class="navbar-brand" title="Portfolio Welison Menezes">
+							<img src="../assets/images/mylogo.svg" alt="Logo">
+						</a>
+						<h1>Custom Form Fields <small>A pure Javascript plugin to customize selects, inputs radio, inputs checkbox and inputs file.</small></h1>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- end header-main -->
+
+	<!-- main -->
+	<main class="main">
+		<div class="container">
+		
+			<div class="row">
+				
+				<div class="col-md-4">
+					<!-- sidebar -->
+					<div class="sidebar">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="section-title">
+									<h4 class="title">Menu</h4>
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<a href="index.html" class="active">Basic Usage</a>
+									</li>
+									<li class="list-group-item">
+										<a href="configuration.html">Configurations</a>
+										<ul>
+											<li>
+												<a href="selectors.html">Selectors</a>
+											</li>
+										</ul>
+									</li>
+									<li class="list-group-item">
+										<a href="download.html">Download</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- end sidebar -->
+				</div>
+
+				<div class="col-md-8">
+					
+					<!-- main-post -->
+					<article class="main-post">
+
+
+<header>
+	<h2>Callbacks</h2>
+</header>
+
+<h3>The callbacks config</h3>
+<pre>
+<code data-language="javascript">{
+  selects: {
+    callbacks: {
+      beforeBuildSelects: null,
+      afterBuildSelects: null,
+      beforeConstroySelect: null,
+      afterConstroySelect: null,
+      beforeDestroySelect: null,
+      afterDestroySelect: null,
+      beforeAddNewOption: null,
+      afterAddNewOption: null,
+      beforeOpenSelect: null,
+      afterOpenSelect: null,
+      beforeCloseSelects: null,
+      afterCloseSelects: null,
+      beforeSelectItem: null,
+      afterSelectItem: null,
+      beforeDeselectItem: null,
+      afterDeselectItem: null
+    }
+  },
+  checkboxesRadios: {
+    callbacks: {
+      beforeBuildInputs: null,
+      afterBuildInputs: null,
+      beforeConstroyInput: null,
+      afterConstroyInput: null,
+      beforeDestroyInput: null,
+      afterDestroyInput: null,
+      beforeCheckInput: null,
+      afterCheckInput: null
+    }
+  },
+  inputsFile: {
+    callbacks: {
+      beforeBuildInputs: null,
+      afterBuildInputs: null,
+      beforeConstroyInput: null,
+      afterConstroyInput: null,
+      beforeDestroyInput: null,
+      afterDestroyInput: null,
+      beforeSelectFile: null,
+      afterSelectFile: null,
+      beforeClearInput: null,
+      afterClearInput: null
+    }
+  }
+};</code>
+</pre>
+
+<hr>
+<h3>The select element callbacks</h3>
+
+<div class="table-wrap">
+	<table class="table table-dark">
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Type</th>
+				<th>Default</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th>beforeBuildSelects</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before the plugin build all selects. Its parameter receives the select elements.</p></td>
+			</tr>
+			<tr>
+				<th>afterBuildSelects</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after the plugin build all selects. Its parameter receives the ui select elements.</p></td>
+			</tr>
+			<tr>
+				<th>beforeConstroySelect</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before each ui select be built. Its paramerter receives the select element.</p></td>
+			</tr>
+			<tr>
+				<th>afterConstroySelect</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after each ui select be built. Its parameter receives the ui select element.</p></td>
+			</tr>
+			<tr>
+				<th>beforeDestroySelect</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before the ui select be destroyed. Its parameter receives the ui select element.</p></td>
+			</tr>
+			<tr>
+				<th>afterDestroySelect</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after the ui select be destroyed. Its parameter receives the select element.</p></td>
+			</tr>
+			<tr>
+				<th>beforeAddNewOption</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before the new option be added. Its parameter receives the new option element. The new option is added by <code>addNewOption</code> method. See more at <a href="">Methods</a></p></td>
+			</tr>
+			<tr>
+				<th>afterAddNewOption</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after the new option be add. Its parameter receives the new ui option element. The new option is added by <code>addNewOption</code> method. See more at <a href="">Methods</a></p></td>
+			</tr>
+			<tr>
+				<th>beforeOpenSelect</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before the select be opened. Its parameter receives the ui select element.</p></td>
+			</tr>
+			<tr>
+				<th>afterOpenSelect</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after the select be opened. Its parameter receives the ui select element.</p></td>
+			</tr>
+			<tr>
+				<th>beforeCloseSelects</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before the select the be closed. Its parameter receives every ui select element is opened.</p></td>
+			</tr>
+			<tr>
+				<th>afterCloseSelects</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after the select be closed. Its parameter receives every ui select element was opened.</p></td>
+			</tr>
+			<tr>
+				<th>beforeSelectItem</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before a option be selected. Its parameter receives the ui select element.</p></td>
+			</tr>
+			<tr>
+				<th>afterSelectItem</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after a option be selected. Its parameter receives the ui select element.</p></td>
+			</tr>
+			<tr>
+				<th>beforeDeselectItem</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before a option be deselected. Its parameter receives the ui select element.</p></td>
+			</tr>
+			<tr>
+				<th>afterDeselectItem</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after a option be deselected. Its parameter receives the ui select element.</p></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<hr>
+<h3>The checkbox and radio elements callbacks</h3>
+
+<div class="table-wrap">
+	<table class="table table-dark">
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Type</th>
+				<th>Default</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th></th>
+				<td><code></code></td>
+				<td><em class="nowrap"></em></td>
+				<td><p></p></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+
+<hr>
+<h3>The inputs file callbacks</h3>
+
+<div class="table-wrap">
+	<table class="table table-dark">
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Type</th>
+				<th>Default</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th></th>
+				<td><code></code></td>
+				<td><em class="nowrap"></em></td>
+				<td><p></p></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+					</article>
+					<!-- end main-post -->
+
+				</div>
+			</div>
+
+		</div>
+	</main>
+	<!-- end main -->
+	
+	<!-- footer-main -->
+	<footer class="footer-main">
+		<div class="dark-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<p><small>Created by Welison Menezes</small></p>
+					</div>
+					<div class="col-sm-6">
+						<ul class="nav-footer text-right">
+							<li>
+								<a href="https://welisonmenezes.github.io/" target="_blank" title="Portfolio Welison Menezes">
+									<i class="fas fa-briefcase"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://github.com/welisonmenezes" target="_blank" title="Github Welison Menezes">
+									<i class="fab fa-github"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://www.linkedin.com/in/welisonmenezes/" target="_blank" title="Linkedin Welison Menezes">
+									<i class="fab fa-linkedin"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- end footer-main -->
+
+	<script src="../assets/jquery/dist/jquery.min.js"></script>
+	<script src="../assets/popper.js/dist/umd/popper.min.js"></script>
+	<script src="../assets/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../assets/rainbow-master/dist/rainbow.min.js"></script>
+    <script src="../assets/rainbow-master/src/language/generic.js"></script>
+    <script src="../assets/rainbow-master/src/language/html.js"></script>
+    <script src="../assets/rainbow-master/src/language/css.js"></script>
+    <script src="../assets/rainbow-master/src/language/javascript.js"></script>
+	<script src="../assets/js/app.js"></script>
+</body>
+</html>
