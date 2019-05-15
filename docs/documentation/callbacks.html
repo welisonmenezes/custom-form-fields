@@ -333,10 +333,64 @@
 		</thead>
 		<tbody>
 			<tr>
-				<th></th>
-				<td><code></code></td>
-				<td><em class="nowrap"></em></td>
-				<td><p></p></td>
+				<th>beforeBuildInputs</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before build all custom input files. Its parameter receives the input files.</p></td>
+			</tr>
+			<tr>
+				<th>afterBuildInputs</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after build all custom input files. Its parameter receives the ui input files.</p></td>
+			</tr>
+			<tr>
+				<th>beforeConstroyInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before constroy each ui input file. Its parameter receives the input file element.</p></td>
+			</tr>
+			<tr>
+				<th>afterConstroyInput</th>
+				<td><code>Funciton</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after constroy each ui input file. Its parameter receives the ui input file element.</p></td>
+			</tr>
+			<tr>
+				<th>beforeDestroyInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before destroy each ui input file. Its parameter receives the ui input file element. The ui element is destroyed by <code>destroy()</code> method. See more at <a href="">Method</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>afterDestroyInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after destroy each ui input file. Its parameter receives the input file element. The ui element is destroyed by <code>destroy()</code> method. See more at <a href="">Method</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>beforeSelectFile</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before the file being selected. Its parameter receives the input file.</p></td>
+			</tr>
+			<tr>
+				<th>afterSelectFile</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after the file being selected. Its parameter receives the input file.</p></td>
+			</tr>
+			<tr>
+				<th>beforeClearInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before the input file being cleaned. Its parameter receives the input file. The input file is clean by <code>clear()</code> method. See more at <a href="">Methods</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>afterClearInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after the input file being cleaned. Its parameter receives the input file. The input file is clean by <code>clear()</code> method. See more at <a href="">Methods</a> section.</p></td>
 			</tr>
 		</tbody>
 	</table>
