@@ -179,25 +179,25 @@
 				<th>beforeDestroySelect</th>
 				<td><code>Function</code></td>
 				<td><em class="nowrap">null</em></td>
-				<td><p>Called before the ui select be destroyed. Its parameter receives the ui select element.</p></td>
+				<td><p>Called before the ui select be destroyed. Its parameter receives the ui select element.  The ui element is destroyed by <code>destroy()</code> method. See more at <a href="">Method</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>afterDestroySelect</th>
 				<td><code>Function</code></td>
 				<td><em class="nowrap">null</em></td>
-				<td><p>Called after the ui select be destroyed. Its parameter receives the select element.</p></td>
+				<td><p>Called after the ui select be destroyed. Its parameter receives the select element. The ui element is destroyed by <code>destroy()</code> method. See more at <a href="">Method</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>beforeAddNewOption</th>
 				<td><code>Function</code></td>
 				<td><em class="nowrap">null</em></td>
-				<td><p>Called before the new option be added. Its parameter receives the new option element. The new option is added by <code>addNewOption</code> method. See more at <a href="">Methods</a></p></td>
+				<td><p>Called before the new option be added. Its parameter receives the new option element. The new option is added by <code>addNewOption</code> method. See more at <a href="">Methods</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>afterAddNewOption</th>
 				<td><code>Function</code></td>
 				<td><em class="nowrap">null</em></td>
-				<td><p>Called after the new option be add. Its parameter receives the new ui option element. The new option is added by <code>addNewOption</code> method. See more at <a href="">Methods</a></p></td>
+				<td><p>Called after the new option be add. Its parameter receives the new ui option element. The new option is added by <code>addNewOption</code> method. See more at <a href="">Methods</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>beforeOpenSelect</th>
@@ -266,10 +266,52 @@
 		</thead>
 		<tbody>
 			<tr>
-				<th></th>
-				<td><code></code></td>
+				<th>beforeBuildInputs</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before build all custom checkbox and radio inputs. Its parameter receives the checkbox and radio elements</p></td>
+			</tr>
+			<tr>
+				<th>afterBuildInputs</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after build all custom checkbox and radio inputs. Its parameter receives the ui checkbox and radio elements.</p></td>
+			</tr>
+			<tr>
+				<th>beforeConstroyInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before constroy each checkbox or radio input. Its parameter receives the checkbox or tthe radio element.</p></td>
+			</tr>
+			<tr>
+				<th>afterConstroyInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after constroy each checkbox or radio input. Its parameter receives the ui checkbox or the ui radio element.</p></td>
+			</tr>
+			<tr>
+				<th>beforeDestroyInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before destroy the ui checkbox or ui radio element. Its parameter receives the ui checkbox or the ui radio element. The ui element is destroyed by <code>destroy()</code> method. See more at <a href="">Method</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>afterDestroyInput</th>
+				<td><code>Function</code></td>
 				<td><em class="nowrap"></em></td>
-				<td><p></p></td>
+				<td><p>Called after destroy the ui checkbox or ui radio element. Its parameter receives the checkbox or the radio element. The ui element is destroyed by <code>destroy()</code> method. See more at <a href="">Method</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>beforeCheckInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called before the checkbox or the radio element being checked. Its parameter receives the checkbox or the radio element.</p></td>
+			</tr>
+			<tr>
+				<th>afterCheckInput</th>
+				<td><code>Function</code></td>
+				<td><em class="nowrap">null</em></td>
+				<td><p>Called after the checkbox or the radio element being checked. Its parameter receives the checkbox or the radio element.</p></td>
 			</tr>
 		</tbody>
 	</table>
