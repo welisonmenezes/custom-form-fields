@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Custom Form Fields</title>
+	<meta name="description" content="Custom Form Fields - A pure Javascript plugin to customize selects, inputs radio, inputs checkbox and inputs file.">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="../assets/images/favicon.png">
+	<link rel="stylesheet" href="../assets/@fortawesome/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="../assets/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../assets/rainbow-master/themes/css/tomorrow-night.css">
+	<link rel="stylesheet" href="../assets/css/fonts.css">
+	<link rel="stylesheet" href="../assets/css/styles.css">
+	<style>
+		body{
+			-moz-opacity: 0.00;
+			-khtml-opacity: 0.00;
+			opacity: 0.00;
+		}
+	</style>
+</head>
+<body class="page-about">
+	
+	<!-- header-main -->
+	<header class="header-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="navbar navbar-dark navbar-expand-md">
+						<a href="https://welisonmenezes.github.io/" class="navbar-brand" title="Portfolio Welison Menezes">
+							<img src="../assets/images/mylogo.svg" alt="Logo">
+						</a>
+						<h1>Custom Form Fields <small>A pure Javascript plugin to customize selects, inputs radio, inputs checkbox and inputs file.</small></h1>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- end header-main -->
+
+	<!-- main -->
+	<main class="main">
+		<div class="container">
+		
+			<div class="row">
+				
+				<div class="col-md-4">
+					<!-- sidebar -->
+					<div class="sidebar">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="section-title">
+									<h4 class="title">Menu</h4>
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<a href="index.html" class="active">Basic Usage</a>
+									</li>
+									<li class="list-group-item">
+										<a href="configuration.html">Configurations</a>
+										<ul>
+											<li>
+												<a href="selectors.html">Selectors</a>
+											</li>
+											<li>
+												<a href="callbacks.html">Callbacks</a>
+											</li>
+											<li>
+												<a href="methods.html">Methods</a>
+											</li>
+										</ul>
+									</li>
+									<li class="list-group-item">
+										<a href="download.html">Download</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- end sidebar -->
+				</div>
+
+				<div class="col-md-8">
+					
+					<!-- main-post -->
+					<article class="main-post">
+
+
+<header>
+	<h2>Methods</h2>
+</header>
+
+<h3>Select methods</h3>
+
+<div class="table-wrap">
+	<table class="table table-dark">
+		<thead>
+			<tr>
+				<th>Method</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>selects.addNewOption('value', 'text', theSelect)</code></td>
+				<td><p>Add new option to a ui select element. Its parameters are: The value, the text and the select element where it will be added.</p></td>
+			</tr>
+			<tr>
+				<td><code>selects.selectItem(index, theSelect)</code></td>
+				<td><p>Select a specific select's option. Its parameters are: The option index and the select element.</p></td>
+			</tr>
+			<tr>
+				<td><code>selecs.destroy(theSelect)</code></td>
+				<td><p>Destroy a ui select element to make it a default html element. Its parameter is: The select element.</p></td>
+			</tr>
+			<tr>
+				<td><code>selects.constrou(TheSelect)</code></td>
+				<td><p>Constroy a ui select element from a default html select element. Its parameter is: The select element.</p></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<h4>Examples:</h4>
+<pre>
+<code data-language="javascript">
+const cff = CustomFormFields.init({});
+
+document.getElementById('addOpt').addEventListener('click', function() {
+  const select = document.getElementById('sel-1');
+  cff.selects.addNewOption('xxx', 'Xxx', select);
+});
+
+document.getElementById('selectOpt').addEventListener('click', function() {
+  const select = document.getElementById('sel-1');
+  cff.selects.selectItem(2, select);
+});
+
+document.getElementById('destroySelect').addEventListener('click', function() {
+  const select = document.getElementById('sel-1');
+  cff.selects.destroy(select);
+});
+
+document.getElementById('constroySelect').addEventListener('click', function() {
+  const select = document.getElementById('sel-1');
+  cff.selects.constroy(select);
+});
+</code>
+</pre>
+
+<hr>
+
+<h3>Checkbox and radio methods</h3>
+
+<div class="table-wrap">
+	<table class="table table-dark">
+		<thead>
+			<tr>
+				<th>Method</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>checkboxesRadios.destroy(theInput)</code></td>
+				<td><p>Destroy a ui checkbox or a ui radio element to make them dafault html element. Its parameter is: The input element.</p></td>
+			</tr>
+			<tr>
+				<td><code>checkboxesRadios.constroy(theInput)</code></td>
+				<td><p>Constroy a ui checkbox or a ui radio element from a default html input. Its parameter is: The input element.</p></td>
+			</tr>
+			<tr>
+				<td><code>checkboxesRadios.setChecked(theInput)</code></td>
+				<td><p>Set a specifc checkbox or radio as checked. Its parameter is: The input element.</p></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<h4>Examples:</h4>
+<pre>
+<code data-language="javascript">
+const cff = CustomFormFields.init({});
+
+document.getElementById('destroyCheckRadio').addEventListener('click', function() {
+  const inputs = document.querySelectorAll('input[name="r-1"]');
+  if (inputs && inputs.length) {
+    const total = inputs.length;
+    let i;
+    for (i = 0; i < total; i++) {
+      cff.checkboxesRadios.destroy(inputs[i]);
+    }
+  }
+});
+
+document.getElementById('constroyCheckRadio').addEventListener('click', function() {
+  const inputs = document.querySelectorAll('input[name="r-1"]');
+  if (inputs && inputs.length) {
+    const total = inputs.length;
+    let i;
+    for (i = 0; i < total; i++) {
+      cff.checkboxesRadios.constroy(inputs[i]);
+    }
+  }
+});
+
+document.getElementById('setChecked').addEventListener('click', function() {
+  const input = document.getElementById('radio-1');
+  cff.checkboxesRadios.setChecked(input);
+});
+</code>
+</pre>
+
+<hr>
+
+<h3>Input file methods</h3>
+
+<div class="table-wrap">
+	<table class="table table-dark">
+		<thead>
+			<tr>
+				<th>Method</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>inputsFile.destroy(theInput)</code></td>
+				<td><p>Destroy a ui input file element to make them dafault html element. Its parameter is: The input element.</p></td>
+			</tr>
+			<tr>
+				<td><code>inputsFile.constroy(theInput)</code></td>
+				<td><p>Constroy a ui input file element from a default html input. Its parameter is: The input element.</p></td>
+			</tr>
+			<tr>
+				<td><code>inputsFile.clear(theInput)</code></td>
+				<td><p>Remove all selected files from a given input file. Its parameter is: The input element.</p></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<h4>Examples:</h4>
+<pre>
+<code data-language="javascript">
+const cff = CustomFormFields.init({});
+
+document.getElementById('destroyInputFile').addEventListener('click', function() {
+  const input = document.getElementById('m-files');
+  cff.inputsFile.destroy(input);
+});
+
+document.getElementById('constroyInputFile').addEventListener('click', function() {
+  const input = document.getElementById('m-files');
+  cff.inputsFile.constroy(input);
+});
+
+document.getElementById('clearInputFile').addEventListener('click', function() {
+  const input = document.getElementById('m-files');
+  cff.inputsFile.clear(input);
+});
+</code>
+</pre>
+
+
+					</article>
+					<!-- end main-post -->
+
+				</div>
+			</div>
+
+		</div>
+	</main>
+	<!-- end main -->
+	
+	<!-- footer-main -->
+	<footer class="footer-main">
+		<div class="dark-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<p><small>Created by Welison Menezes</small></p>
+					</div>
+					<div class="col-sm-6">
+						<ul class="nav-footer text-right">
+							<li>
+								<a href="https://welisonmenezes.github.io/" target="_blank" title="Portfolio Welison Menezes">
+									<i class="fas fa-briefcase"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://github.com/welisonmenezes" target="_blank" title="Github Welison Menezes">
+									<i class="fab fa-github"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://www.linkedin.com/in/welisonmenezes/" target="_blank" title="Linkedin Welison Menezes">
+									<i class="fab fa-linkedin"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- end footer-main -->
+
+	<script src="../assets/jquery/dist/jquery.min.js"></script>
+	<script src="../assets/popper.js/dist/umd/popper.min.js"></script>
+	<script src="../assets/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../assets/rainbow-master/dist/rainbow.min.js"></script>
+    <script src="../assets/rainbow-master/src/language/generic.js"></script>
+    <script src="../assets/rainbow-master/src/language/html.js"></script>
+    <script src="../assets/rainbow-master/src/language/css.js"></script>
+    <script src="../assets/rainbow-master/src/language/javascript.js"></script>
+	<script src="../assets/js/app.js"></script>
+</body>
+</html>
