@@ -181,7 +181,7 @@
 
 	
 
-	&.cff-is-checkbox{
+	&.cff-checkbox{
 		.cff-ui-input{
 			&:before{}
 		}
@@ -200,7 +200,7 @@
 		}
 	}
 
-	&.cff-is-checked{
+	&.cff-checked{
 		&.cff-is-checkbox{
 			.cff-ui-input{
 				&:before{
@@ -285,7 +285,7 @@
 
 	.cff-select-button{
 		height: 40px;
-		width: 90px;
+		width: 100px;
 		background: #666;
 		display: block;
 		position: absolute;
@@ -297,6 +297,7 @@
 		text-align: center;
 		cursor: pointer;
 		border-radius: 2px;
+		white-space: nowrap;
 	}
 
 	&.cff-disabled{
